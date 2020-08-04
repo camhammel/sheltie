@@ -23,6 +23,10 @@ if (!global.atob) {
 
 const Stack = createStackNavigator();
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function App() {
   return (
     <TokenProvider>
@@ -61,7 +65,9 @@ function App() {
             <Stack.Screen
               name="PetDetail"
               component={PetDetailScreen}
-              options={({ route }) => ({ title: route.params.name })}
+              options={({ route }) => ({
+                title: capitalizeFirstLetter(route.params.name.toLowerCase()),
+              })}
             />
             <Stack.Screen
               name="Account"

@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
-import { View, Text, AsyncStorage } from "react-native";
+import React, { useState, useContext, useEffect } from "react";
+import { View, Text, AsyncStorage, StyleSheet } from "react-native";
 import ListComponent from "../components/ListComponent";
 import SearchHeader from "../components/SearchHeader";
-import petfinder, { setToken } from "../api/petfinder";
+import petfinder from "../api/petfinder";
 import { Context as TokenContext } from "../context/TokenContext";
 
 const ListScreen = ({ navigation }) => {
@@ -10,17 +10,15 @@ const ListScreen = ({ navigation }) => {
   const [term, setTerm] = useState("");
   const [results, setResults] = useState([]);
 
+  useEffect(() => {
+    searchApi();
+  }, []);
+
   const searchApi = async () => {
-    console.log("Got here...");
     update_token();
-    console.log("Got here too...");
     console.log(
       "Token value in storage is: " +
         (await AsyncStorage.getItem("token")).toString()
-    );
-
-    console.log(
-      "Retrieved this: " + (await AsyncStorage.getItem("token")).toString()
     );
     petfinder
       .get("animals?type=dog&limit=20&location=32312", {
@@ -66,8 +64,8 @@ const ListScreen = ({ navigation }) => {
         <SearchHeader searchApi={searchApi} term={term} setTerm={setTerm} />
       </View>
       <View style={{ flex: 1 }}>
-        <Text>
-          We have found {results.length} results for {term}.
+        <Text style={styles.resultStyle}>
+          {results.length} results found{term}
         </Text>
         <ListComponent results={results} />
       </View>
@@ -75,4 +73,16 @@ const ListScreen = ({ navigation }) => {
   );
 };
 
+const styles = StyleSheet.create({
+  resultStyle: {
+    backgroundColor: "#ffffff",
+    paddingLeft: 10,
+    paddingVertical: 5,
+    color: "grey",
+    fontSize: 16,
+    textAlign: "center",
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
+  },
+});
 export default ListScreen;

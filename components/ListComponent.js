@@ -1,17 +1,13 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  Text,
-} from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
 import { ListItem } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 
-const ListComponent = () => {
+const ListComponent = ({ results }) => {
   const navigation = useNavigation();
-
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
   const DATA = [
     {
       id: "1",
@@ -35,19 +31,19 @@ const ListComponent = () => {
 
   const renderItem = ({ item }) => (
     <ListItem
-      title={item.title}
-      titleStyle={{ fontWeight: "bold", color: "#FE96BE" }}
+      title={capitalizeFirstLetter(item.name.toLowerCase())}
+      titleStyle={styles.titleStyle}
       id={item.id}
-      subtitle={item.breed}
+      subtitle={item.breeds.primary}
       subtitleStyle={{ color: "grey" }}
-      leftAvatar={{ source: item.src, size: "large" }}
+      //leftAvatar={{ source: { uri: item.photos[0].small }, size: "medium" }}
       bottomDivider
       chevron
       onPress={() => {
         navigation.navigate("PetDetail", {
           item,
-          name: item.title,
-          breed: item.breed,
+          name: item.name,
+          breed: item.breeds.primary,
         });
       }}
     />
@@ -56,15 +52,19 @@ const ListComponent = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={DATA}
+        data={results}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
       />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  titleStyle: {
+    fontWeight: "bold",
+    color: "#FE96BE",
+  },
   container: {
     flex: 1,
     marginTop: 0,
@@ -74,9 +74,6 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
   },
 });
 

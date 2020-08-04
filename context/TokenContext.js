@@ -1,6 +1,5 @@
 import createDataContext from "./createDataContext";
 import { AsyncStorage } from "react-native";
-import * as RootNavigation from "../navigationRef";
 import requestAccess from "../api/requestAccess";
 
 const tokenReducer = (state, action) => {
@@ -16,7 +15,7 @@ const update_token = (dispatch) => async () => {
   //make request for new token
   try {
     await requestAccess();
-    console.log("Got it: " + AsyncStorage.getItem("token"));
+    //console.log("Got it: " + AsyncStorage.getItem("token"));
     dispatch({
       type: "update_token",
       payload: my_token,

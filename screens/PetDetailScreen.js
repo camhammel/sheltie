@@ -1,8 +1,10 @@
 import React from "react";
 import { View, StyleSheet, Image, Dimensions } from "react-native";
 import { Text } from "react-native-elements";
-import ListComponent from "../components/ListComponent";
-import SearchHeader from "../components/SearchHeader";
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 const PetDetailScreen = ({ route, navigation }) => {
   const screenWidth = Math.round(Dimensions.get("window").width);
@@ -12,15 +14,17 @@ const PetDetailScreen = ({ route, navigation }) => {
     <View>
       <View>
         <Image
-          source={item.src}
+          source={{ uri: item.photos[0].large }}
           style={{ height: screenWidth, width: screenWidth }}
         />
       </View>
       <View style={{}}>
         <Text h4 style={{ marginHorizontal: 10, marginVertical: 10 }}>
-          {item.title}
+          {capitalizeFirstLetter(item.name.toLowerCase())}
         </Text>
-        <Text style={{ fontSize: 18, marginLeft: 10 }}>{item.breed}</Text>
+        <Text style={{ fontSize: 18, marginLeft: 10 }}>
+          {item.breeds.primary}
+        </Text>
       </View>
     </View>
   );

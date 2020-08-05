@@ -2,32 +2,15 @@ import React from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import { ListItem } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
+import { Asset } from "expo-asset";
+
+const defaultURI = Asset.fromModule(require("../assets/icon.png")).uri;
 
 const ListComponent = ({ results }) => {
   const navigation = useNavigation();
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
-  const DATA = [
-    {
-      id: "1",
-      title: "Sparky",
-      breed: "Golden Retriever",
-      src: require("../assets/retriever.jpg"),
-    },
-    {
-      id: "2",
-      title: "Tucker",
-      breed: "Siberian Husky",
-      src: require("../assets/husky.jpg"),
-    },
-    {
-      id: "3",
-      title: "Toto",
-      breed: "Pomeranian",
-      src: require("../assets/pomeranian.jpg"),
-    },
-  ];
 
   const renderItem = ({ item }) => (
     <ListItem
@@ -36,7 +19,12 @@ const ListComponent = ({ results }) => {
       id={item.id}
       subtitle={item.breeds.primary}
       subtitleStyle={{ color: "grey" }}
-      //leftAvatar={{ source: { uri: item.photos[0].small }, size: "medium" }}
+      leftAvatar={{
+        source: {
+          uri: item?.photos?.[0]?.small ?? defaultURI,
+        },
+        size: "medium",
+      }}
       bottomDivider
       chevron
       onPress={() => {

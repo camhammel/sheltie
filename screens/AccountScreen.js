@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { Button, Text, Image } from "react-native-elements";
 import Spacer from "../components/Spacer";
 import { Context as AuthContext } from "../context/AuthContext";
-import Logo from "../assets/logo_notitle.png";
+import Logo from "../assets/icon.png";
 
 const AccountScreen = () => {
   const { signout } = useContext(AuthContext);
@@ -27,13 +27,6 @@ const AccountScreen = () => {
             start: { x: 0.25, y: 0.1 },
             end: { x: 0.25, y: 1 },
           }}
-        ></Button>
-      </Spacer>
-      <Spacer>
-        <Button
-          style={styles.buttonStyle}
-          type="outline"
-          title={"Request Shelter Account"}
         ></Button>
       </Spacer>
     </View>

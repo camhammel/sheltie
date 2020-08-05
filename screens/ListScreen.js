@@ -4,13 +4,25 @@ import ListComponent from "../components/ListComponent";
 import SearchHeader from "../components/SearchHeader";
 import petfinder from "../api/petfinder";
 import { Context as TokenContext } from "../context/TokenContext";
+import * as Location from "expo-location";
 
 const ListScreen = ({ navigation }) => {
   const { update_token } = useContext(TokenContext);
   const [term, setTerm] = useState("");
+  const [location, setLocation] = useState(null);
   const [results, setResults] = useState([]);
 
   useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      console.log(location);
+      setLocation(location);
+    })();
     searchApi();
   }, []);
 
@@ -20,14 +32,18 @@ const ListScreen = ({ navigation }) => {
       "Token value in storage is: " +
         (await AsyncStorage.getItem("token")).toString()
     );
+
     petfinder
-      .get("animals?type=dog&limit=20&location=32312", {
-        headers: {
-          Authorization: `Bearer ${(
-            await AsyncStorage.getItem("token")
-          ).toString()}`,
-        },
-      })
+      .get(
+        `animals?type=dog&limit=20&location=${location.coords.latitude},${location.coords.longitude}`,
+        {
+          headers: {
+            Authorization: `Bearer ${(
+              await AsyncStorage.getItem("token")
+            ).toString()}`,
+          },
+        }
+      )
       .then((response) => {
         setResults(response.data.animals);
         console.log(response.data.animals);

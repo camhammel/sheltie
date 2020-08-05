@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Button, Image, Text } from "react-native-elements";
-import Logo from "../assets/logo_notitle.png";
+import Logo from "../assets/icon.png";
 import { Context as AuthContext } from "../context/AuthContext";
 
 const WelcomeScreen = ({ navigation }) => {

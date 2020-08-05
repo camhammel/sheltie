@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { SearchBar, Button } from "react-native-elements";
 import * as RootNavigation from "../navigationRef";
+import Icon from "react-native-vector-icons/Entypo";
 
 const SearchHeader = ({ searchApi, term, setTerm }) => {
   return (
@@ -74,12 +75,38 @@ const SearchHeader = ({ searchApi, term, setTerm }) => {
         }}
       >
         <Button
-          buttonStyle={{ backgroundColor: "#FE96BE" }}
-          title="B1"
+          buttonStyle={{
+            backgroundColor: "#ffffff",
+            borderColor: "#FE96BE",
+            borderWidth: 1,
+            marginRight: 5,
+          }}
+          icon={
+            <Icon
+              name="map"
+              size={20}
+              color="#FE96BE"
+              borderWidth={1}
+              borderColor="#FE96BE"
+            />
+          }
         ></Button>
         <Button
-          buttonStyle={{ backgroundColor: "#FE96BE" }}
-          title="B2"
+          buttonStyle={{
+            backgroundColor: "#ffffff",
+            borderColor: "#FE96BE",
+            borderWidth: 1,
+            marginRight: 5,
+          }}
+          icon={
+            <Icon
+              name="user"
+              size={20}
+              color="#FE96BE"
+              borderWidth={1}
+              borderColor="#FE96BE"
+            />
+          }
           onPress={() => RootNavigation.navigate("Account")}
         ></Button>
       </View>

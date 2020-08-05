@@ -1,6 +1,9 @@
 import React from "react";
 import { View, StyleSheet, Image, Dimensions } from "react-native";
 import { Text } from "react-native-elements";
+import { Asset } from "expo-asset";
+
+const defaultURI = Asset.fromModule(require("../assets/logo.png")).uri;
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -14,7 +17,9 @@ const PetDetailScreen = ({ route, navigation }) => {
     <View>
       <View>
         <Image
-          source={{ uri: item.photos[0].large }}
+          source={{
+            uri: item?.photos?.[0]?.large ?? defaultURI,
+          }}
           style={{ height: screenWidth, width: screenWidth }}
         />
       </View>

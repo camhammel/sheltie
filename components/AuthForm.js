@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Image, Text, Input } from "react-native-elements";
 import { View, StyleSheet } from "react-native";
-import Logo from "../assets/logo_notitle.png";
+import Logo from "../assets/icon.png";
 import Spacer from "./Spacer";
 
 const AuthForm = ({ headerText, buttonLabel, errorMessage, onSubmit }) => {

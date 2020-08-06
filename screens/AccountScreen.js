@@ -4,6 +4,7 @@ import { Button, Text, Image } from "react-native-elements";
 import Spacer from "../components/Spacer";
 import { Context as AuthContext } from "../context/AuthContext";
 import Logo from "../assets/icon.png";
+import { COLORS } from "../assets/colors";
 
 const AccountScreen = () => {
   const { signout } = useContext(AuthContext);
@@ -28,6 +29,9 @@ const AccountScreen = () => {
             end: { x: 0.25, y: 1 },
           }}
         ></Button>
+        <Spacer>
+          <Text>Powered by the Petfinder API</Text>
+        </Spacer>
       </Spacer>
     </View>
   );

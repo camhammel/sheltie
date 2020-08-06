@@ -3,6 +3,7 @@ import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Button, Image, Text } from "react-native-elements";
 import Logo from "../assets/icon.png";
 import { Context as AuthContext } from "../context/AuthContext";
+import { COLORS } from "../assets/colors";
 
 const WelcomeScreen = ({ navigation }) => {
   return (
@@ -39,6 +40,7 @@ const WelcomeScreen = ({ navigation }) => {
         >
           <Text style={styles.linkStyle}>I already have an account</Text>
         </TouchableOpacity>
+        <Text>Powered by the Petfinder API</Text>
       </View>
     </View>
   );

@@ -5,6 +5,7 @@ import SearchHeader from "../components/SearchHeader";
 import petfinder from "../api/petfinder";
 import { Context as TokenContext } from "../context/TokenContext";
 import * as Location from "expo-location";
+import { COLORS } from "../assets/colors";
 
 const ListScreen = ({ navigation }) => {
   const { update_token } = useContext(TokenContext);
@@ -22,8 +23,8 @@ const ListScreen = ({ navigation }) => {
       let location = await Location.getCurrentPositionAsync({});
       console.log(location);
       setLocation(location);
+      searchApi();
     })();
-    searchApi();
   }, []);
 
   const searchApi = async () => {
@@ -35,7 +36,7 @@ const ListScreen = ({ navigation }) => {
 
     petfinder
       .get(
-        `animals?type=dog&limit=20&location=${location.coords.latitude},${location.coords.longitude}`,
+        `animals?&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance`,
         {
           headers: {
             Authorization: `Bearer ${(

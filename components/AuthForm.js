@@ -3,6 +3,7 @@ import { Button, Image, Text, Input } from "react-native-elements";
 import { View, StyleSheet } from "react-native";
 import Logo from "../assets/icon.png";
 import Spacer from "./Spacer";
+import { COLORS } from "../assets/colors";
 
 const AuthForm = ({ headerText, buttonLabel, errorMessage, onSubmit }) => {
   const [email, setEmail] = useState("");

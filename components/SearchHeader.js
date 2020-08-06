@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { SearchBar, Button } from "react-native-elements";
 import * as RootNavigation from "../navigationRef";
 import Icon from "react-native-vector-icons/Entypo";
+import { COLORS } from "../assets/colors";
 
 const SearchHeader = ({ searchApi, term, setTerm }) => {
   return (
@@ -39,12 +40,12 @@ const SearchHeader = ({ searchApi, term, setTerm }) => {
           inputContainerStyle={{
             height: 40,
             backgroundColor: "white",
-            borderTopColor: "#FE96BE",
-            borderBottomColor: "#FE96BE",
-            borderLeftColor: "#FE96BE",
-            borderRightColor: "#FE96BE",
-            borderStartColor: "#FE96BE",
-            borderEndColor: "#FE96BE",
+            borderTopColor: COLORS.primary,
+            borderBottomColor: COLORS.primary,
+            borderLeftColor: COLORS.primary,
+            borderRightColor: COLORS.primary,
+            borderStartColor: COLORS.primary,
+            borderEndColor: COLORS.primary,
             borderBottomWidth: 1,
             borderWidth: 1,
             borderRadius: 30,
@@ -77,7 +78,7 @@ const SearchHeader = ({ searchApi, term, setTerm }) => {
         <Button
           buttonStyle={{
             backgroundColor: "#ffffff",
-            borderColor: "#FE96BE",
+            borderColor: COLORS.primary,
             borderWidth: 1,
             marginRight: 5,
           }}
@@ -85,16 +86,16 @@ const SearchHeader = ({ searchApi, term, setTerm }) => {
             <Icon
               name="map"
               size={20}
-              color="#FE96BE"
+              color={COLORS.primary}
               borderWidth={1}
-              borderColor="#FE96BE"
+              borderColor={COLORS.primary}
             />
           }
         ></Button>
         <Button
           buttonStyle={{
             backgroundColor: "#ffffff",
-            borderColor: "#FE96BE",
+            borderColor: COLORS.primary,
             borderWidth: 1,
             marginRight: 5,
           }}
@@ -102,9 +103,9 @@ const SearchHeader = ({ searchApi, term, setTerm }) => {
             <Icon
               name="user"
               size={20}
-              color="#FE96BE"
+              color={COLORS.primary}
               borderWidth={1}
-              borderColor="#FE96BE"
+              borderColor={COLORS.white}
             />
           }
           onPress={() => RootNavigation.navigate("Account")}

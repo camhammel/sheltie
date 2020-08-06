@@ -3,6 +3,7 @@ import { View, StyleSheet, FlatList } from "react-native";
 import { ListItem } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { Asset } from "expo-asset";
+import { COLORS } from "../assets/colors";
 
 const defaultURI = Asset.fromModule(require("../assets/icon.png")).uri;
 
@@ -23,7 +24,7 @@ const ListComponent = ({ results }) => {
         source: {
           uri: item?.photos?.[0]?.small ?? defaultURI,
         },
-        size: "medium",
+        size: "large",
       }}
       bottomDivider
       chevron
@@ -51,7 +52,7 @@ const ListComponent = ({ results }) => {
 const styles = StyleSheet.create({
   titleStyle: {
     fontWeight: "bold",
-    color: "#FE96BE",
+    color: COLORS.primary,
   },
   container: {
     flex: 1,

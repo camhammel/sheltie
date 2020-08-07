@@ -38,6 +38,7 @@ const signup = (dispatch) => async ({ email, password }) => {
   try {
     const response = await sheltieApi.post("/signup", { email, password });
     await AsyncStorage.setItem("token", response.data.token);
+    //await AsyncStorage.setItem("email", email);
 
     dispatch({
       type: "signin",
@@ -56,6 +57,7 @@ const signin = (dispatch) => async ({ email, password }) => {
   try {
     const response = await sheltieApi.post("/signin", { email, password });
     await AsyncStorage.setItem("token", response.data.token);
+    //await AsyncStorage.setItem("email", email);
 
     dispatch({ type: "signin", payload: response.data.token });
     RootNavigation.reset("List");

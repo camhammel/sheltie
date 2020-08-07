@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { View, StyleSheet, AsyncStorage } from "react-native";
 import { Button, Text, Image } from "react-native-elements";
 import Spacer from "../components/Spacer";
 import { Context as AuthContext } from "../context/AuthContext";
@@ -15,7 +15,7 @@ const AccountScreen = () => {
         <Image source={Logo} style={{ width: 256, height: 256 }} />
       </Spacer>
       <Spacer>
-        <Text h4>Signed in as</Text>
+        <Text h4>You are currently signed in</Text>
       </Spacer>
       <Spacer>
         <Button
@@ -24,13 +24,13 @@ const AccountScreen = () => {
           title={"Sign Out"}
           onPress={() => signout()}
           linearGradientProps={{
-            colors: ["#FE96BE", "#F171A8"],
+            colors: [COLORS.primary, COLORS.light],
             start: { x: 0.25, y: 0.1 },
             end: { x: 0.25, y: 1 },
           }}
         ></Button>
         <Spacer>
-          <Text>Powered by the Petfinder API</Text>
+          <Text style={{ marginTop: 60 }}>Powered by the Petfinder API</Text>
         </Spacer>
       </Spacer>
     </View>

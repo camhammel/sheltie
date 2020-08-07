@@ -40,7 +40,9 @@ const WelcomeScreen = ({ navigation }) => {
         >
           <Text style={styles.linkStyle}>I already have an account</Text>
         </TouchableOpacity>
-        <Text>Powered by the Petfinder API</Text>
+        <Text style={{ textAlign: "center", marginTop: 60 }}>
+          Powered by the Petfinder API
+        </Text>
       </View>
     </View>
   );

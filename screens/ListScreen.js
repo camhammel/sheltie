@@ -21,11 +21,20 @@ const ListScreen = ({ navigation }) => {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      console.log(location);
+      console.log(
+        "location: " +
+          location.coords.latitude +
+          "," +
+          location.coords.longitude
+      );
       setLocation(location);
       searchApi();
     })();
   }, []);
+
+  useEffect(() => {
+    searchApi();
+  }, [location]);
 
   const searchApi = async () => {
     update_token();

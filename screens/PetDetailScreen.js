@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   View,
+  ScrollView,
   StyleSheet,
   AsyncStorage,
   Image,
@@ -12,8 +13,15 @@ import petfinder from "../api/petfinder";
 import Spacer from "../components/Spacer";
 import TagComponent from "../components/TagComponent";
 import { COLORS } from "../assets/colors";
+import NavLink from "../components/NavLink";
+import Carousel, {
+  Pagination,
+  ParallaxImage,
+} from "react-native-snap-carousel";
 
 const defaultURI = Asset.fromModule(require("../assets/logo.png")).uri;
+
+const screenWidth = Math.round(Dimensions.get("window").width);
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -21,7 +29,7 @@ function capitalizeFirstLetter(string) {
 
 const PetDetailScreen = ({ route, navigation }) => {
   const [results, setResults] = useState(null);
-  const screenWidth = Math.round(Dimensions.get("window").width);
+  const [page, setPage] = useState(0);
   const { item } = route.params;
 
   useEffect(() => {
@@ -68,20 +76,56 @@ const PetDetailScreen = ({ route, navigation }) => {
       });
   };
 
+  const renderItem = ({ item, index }, parallaxProps) => {
+    return (
+      <View style={{ width: screenWidth - 60, height: screenWidth }}>
+        <ParallaxImage
+          source={{ uri: item.large }}
+          containerStyle={styles.imageContainer}
+          style={styles.image}
+          parallaxFactor={0.4}
+          {...parallaxProps}
+        />
+      </View>
+    );
+  };
+
   return (
     <View>
       {results ? (
-        <View style={{ backgroundColor: "white" }}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ backgroundColor: "white" }}
+        >
           <View>
-            <Image
-              source={{
-                uri: results?.photos?.[0]?.large ?? defaultURI,
-              }}
-              style={{ height: screenWidth, width: screenWidth }}
+            <Carousel
+              sliderWidth={screenWidth}
+              sliderHeight={screenWidth}
+              itemWidth={screenWidth - 60}
+              data={results.photos}
+              renderItem={renderItem}
+              hasParallaxImages={true}
+              pagingEnabled={true}
+              onSnapToItem={(index) => setPage(index)}
+            />
+            <Pagination
+              dotsLength={results.photos.length}
+              activeDotIndex={page}
+              animatedDuration={100}
+              inactiveDotColor={COLORS.primarylight}
+              dotColor={COLORS.primary}
+              inactiveDotOpacity={0.4}
+              inactiveDotScale={0.6}
             />
           </View>
           <View>
-            <Text h4 style={{ marginHorizontal: 10, marginVertical: 10 }}>
+            <Text
+              h4
+              style={{
+                marginHorizontal: 10,
+                marginVertical: 10,
+              }}
+            >
               {capitalizeFirstLetter(results.name.toLowerCase())}
             </Text>
             <Text style={{ fontSize: 18, marginLeft: 10 }}>
@@ -95,14 +139,35 @@ const PetDetailScreen = ({ route, navigation }) => {
               <Text
                 style={{ fontSize: 16, marginLeft: 10, color: COLORS.primary }}
               >
-                {results.description}
+                {results.description.replace(/&amp;#39;/g, "'")}
               </Text>
+              <NavLink
+                text="More information available here via Petfinder.com"
+                routeName={results.url}
+              />
             </Spacer>
           </View>
-        </View>
+        </ScrollView>
       ) : null}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  item: {
+    width: screenWidth - 60,
+    height: screenWidth - 60,
+  },
+  imageContainer: {
+    flex: 1,
+    marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+    backgroundColor: "white",
+    borderRadius: 10,
+  },
+  image: {
+    ...StyleSheet.absoluteFillObject,
+    resizeMode: "contain",
+  },
+});
 
 export default PetDetailScreen;

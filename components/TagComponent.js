@@ -23,11 +23,12 @@ const styles = StyleSheet.create({
     borderColor: COLORS.primary,
     borderWidth: 1,
     borderRadius: 10,
-    backgroundColor: COLORS.extralight,
+    backgroundColor: COLORS.white,
     color: COLORS.light,
   },
   tagTextStyle: {
     color: COLORS.primary,
   },
 });
+
 export default TagComponent;

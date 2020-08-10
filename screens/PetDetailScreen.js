@@ -18,6 +18,8 @@ import Carousel, {
   Pagination,
   ParallaxImage,
 } from "react-native-snap-carousel";
+import Male from "../assets/male.png";
+import Female from "../assets/female.png";
 
 const defaultURI = Asset.fromModule(require("../assets/logo.png")).uri;
 
@@ -78,7 +80,9 @@ const PetDetailScreen = ({ route, navigation }) => {
 
   const renderItem = ({ item, index }, parallaxProps) => {
     return (
-      <View style={{ width: screenWidth - 60, height: screenWidth }}>
+      <View
+        style={{ width: screenWidth - 60, height: screenWidth, marginTop: 10 }}
+      >
         <ParallaxImage
           source={{ uri: item.large }}
           containerStyle={styles.imageContainer}
@@ -95,9 +99,9 @@ const PetDetailScreen = ({ route, navigation }) => {
       {results ? (
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={{ backgroundColor: "white" }}
+          backgroundColor="white"
         >
-          <View>
+          <View style={{ backgroundColor: COLORS.white }}>
             <Carousel
               sliderWidth={screenWidth}
               sliderHeight={screenWidth}
@@ -111,23 +115,30 @@ const PetDetailScreen = ({ route, navigation }) => {
             <Pagination
               dotsLength={results.photos.length}
               activeDotIndex={page}
-              animatedDuration={100}
-              inactiveDotColor={COLORS.primarylight}
-              dotColor={COLORS.primary}
+              //inactiveDotColor={COLORS.primarylight}
+              //dotColor={COLORS.primary}
               inactiveDotOpacity={0.4}
               inactiveDotScale={0.6}
+              height={50}
             />
           </View>
           <View>
-            <Text
-              h4
-              style={{
-                marginHorizontal: 10,
-                marginVertical: 10,
-              }}
-            >
-              {capitalizeFirstLetter(results.name.toLowerCase())}
-            </Text>
+            <View style={{ flexDirection: "row" }}>
+              <Text
+                h4
+                style={{
+                  marginHorizontal: 10,
+                  marginVertical: 10,
+                }}
+              >
+                {capitalizeFirstLetter(results.name.toLowerCase())}
+              </Text>
+              {results.gender == "Male" ? (
+                <Image source={Male} style={styles.genderStyle} />
+              ) : (
+                <Image source={Female} style={styles.genderStyle} />
+              )}
+            </View>
             <Text style={{ fontSize: 18, marginLeft: 10 }}>
               {results.breeds.primary} {results.breeds.mixed ? "Mix" : null}
             </Text>
@@ -142,7 +153,9 @@ const PetDetailScreen = ({ route, navigation }) => {
                 {results.description.replace(/&amp;#39;/g, "'")}
               </Text>
               <NavLink
-                text="More information available here via Petfinder.com"
+                text={`Find out more about ${capitalizeFirstLetter(
+                  results.name.toLowerCase()
+                )} here via Petfinder.com`}
                 routeName={results.url}
               />
             </Spacer>
@@ -161,12 +174,19 @@ const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
     marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-    backgroundColor: "white",
+    //backgroundColor: COLORS.extralight,
     borderRadius: 10,
   },
   image: {
     ...StyleSheet.absoluteFillObject,
     resizeMode: "contain",
+    borderRadius: 10,
+  },
+  genderStyle: {
+    height: 30,
+    width: 50,
+    resizeMode: "contain",
+    alignSelf: "center",
   },
 });
 

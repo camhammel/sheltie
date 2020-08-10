@@ -24,7 +24,7 @@ const AccountScreen = () => {
           title={"Sign Out"}
           onPress={() => signout()}
           linearGradientProps={{
-            colors: [COLORS.primary, COLORS.light],
+            colors: [COLORS.primary, COLORS.primarylight],
             start: { x: 0.25, y: 0.1 },
             end: { x: 0.25, y: 1 },
           }}

@@ -12,6 +12,7 @@ import { Provider as AuthProvider } from "./context/AuthContext";
 import { Provider as TokenProvider } from "./context/TokenContext";
 import { navigationRef } from "./navigationRef";
 import { decode, encode } from "base-64";
+import { COLORS } from "./assets/colors";
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -60,19 +61,31 @@ function App() {
             <Stack.Screen
               name="List"
               component={ListScreen}
-              options={{ title: "Nearby Pets for Adoption", headerLeft: null }}
+              options={{
+                title: "Nearby Pets for Adoption",
+                headerLeft: null,
+                headerTintColor: "black",
+                headerStyle: { backgroundColor: COLORS.primarylight },
+              }}
             />
             <Stack.Screen
               name="PetDetail"
               component={PetDetailScreen}
               options={({ route }) => ({
+                headerTintColor: "black",
+                headerStyle: { backgroundColor: COLORS.primarylight },
                 title: capitalizeFirstLetter(route.params.name.toLowerCase()),
               })}
             />
             <Stack.Screen
               name="Account"
               component={AccountScreen}
-              options={{ title: "Account", headerShown: true }}
+              options={{
+                title: "Account",
+                headerShown: true,
+                headerTintColor: "black",
+                headerStyle: { backgroundColor: COLORS.primarylight },
+              }}
             />
           </Stack.Navigator>
         </NavigationContainer>

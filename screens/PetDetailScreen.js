@@ -18,8 +18,8 @@ import Carousel, {
   Pagination,
   ParallaxImage,
 } from "react-native-snap-carousel";
-import Male from "../assets/male.png";
-import Female from "../assets/female.png";
+import Icon from "react-native-vector-icons/Entypo";
+import NameGender from "../components/NameGender";
 
 const defaultURI = Asset.fromModule(require("../assets/logo.png")).uri;
 
@@ -115,36 +115,49 @@ const PetDetailScreen = ({ route, navigation }) => {
             <Pagination
               dotsLength={results.photos.length}
               activeDotIndex={page}
-              //inactiveDotColor={COLORS.primarylight}
-              //dotColor={COLORS.primary}
+              inactiveDotColor={COLORS.primarylight}
+              dotColor={COLORS.primary}
               inactiveDotOpacity={0.4}
               inactiveDotScale={0.6}
-              height={50}
+              containerStyle={{ paddingVertical: 0, paddingTop: 20 }}
             />
           </View>
           <View>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                h4
-                style={{
-                  marginHorizontal: 10,
-                  marginVertical: 10,
-                }}
-              >
-                {capitalizeFirstLetter(results.name.toLowerCase())}
-              </Text>
-              {results.gender == "Male" ? (
-                <Image source={Male} style={styles.genderStyle} />
-              ) : (
-                <Image source={Female} style={styles.genderStyle} />
-              )}
+            <View
+              style={{ justifyContent: "space-between", flexDirection: "row" }}
+            >
+              <NameGender name={results.name} gender={results.gender} />
+              <View style={{ flexDirection: "row", alignSelf: "flex-end" }}>
+                <Icon
+                  name="share"
+                  size={40}
+                  color={COLORS.primary}
+                  style={{ marginLeft: 15 }}
+                />
+                <Icon
+                  name="heart"
+                  size={40}
+                  color={COLORS.primary}
+                  style={{ marginHorizontal: 20 }}
+                />
+              </View>
             </View>
-            <Text style={{ fontSize: 18, marginLeft: 10 }}>
-              {results.breeds.primary} {results.breeds.mixed ? "Mix" : null}
+            <Text style={{ fontSize: 18, marginLeft: 15 }}>
+              {results.age} {results.breeds.primary}{" "}
+              {results.breeds.mixed ? "Mix" : null}
             </Text>
-            <Text style={{ fontSize: 18, marginLeft: 10 }}>
-              {results.contact.address.city}, {results.contact.address.state}
-            </Text>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Icon
+                name="location-pin"
+                size={20}
+                color={COLORS.primary}
+                style={{ marginLeft: 15, alignSelf: "center" }}
+              />
+              <Text style={{ fontSize: 18, marginLeft: 5 }}>
+                {results.contact.address.city}, {results.contact.address.state}
+              </Text>
+            </View>
+
             <TagComponent tags={results.tags} />
             <Spacer>
               <Text
@@ -190,4 +203,10 @@ const styles = StyleSheet.create({
   },
 });
 
+PetDetailScreen.navigationOptions = {
+  headerStyle: {
+    color: COLORS.primary,
+    backgroundColor: COLORS.primary,
+  },
+};
 export default PetDetailScreen;

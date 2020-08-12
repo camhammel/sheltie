@@ -38,7 +38,7 @@ const signup = (dispatch) => async ({ email, password }) => {
   try {
     const response = await sheltieApi.post("/signup", { email, password });
     await AsyncStorage.setItem("token", response.data.token);
-    //await AsyncStorage.setItem("email", email);
+    await AsyncStorage.setItem("email", email);
 
     dispatch({
       type: "signin",
@@ -57,7 +57,7 @@ const signin = (dispatch) => async ({ email, password }) => {
   try {
     const response = await sheltieApi.post("/signin", { email, password });
     await AsyncStorage.setItem("token", response.data.token);
-    //await AsyncStorage.setItem("email", email);
+    await AsyncStorage.setItem("email", email);
 
     dispatch({ type: "signin", payload: response.data.token });
     RootNavigation.reset("List");
@@ -76,8 +76,27 @@ const signout = (dispatch) => async () => {
   RootNavigation.reset("Welcome");
 };
 
+const getfavs = (dispatch) => async (email) => {
+  try {
+    console.log(email);
+    const response = await sheltieApi.post("/getfavourites", {
+      email: email,
+    });
+    // const response = await sheltieApi.post("/getfavourites", {
+    //   email: "camhammel3@gmail.com",
+    // });
+    console.log("response: " + JSON.stringify(response.data));
+    await AsyncStorage.setItem("favourites", JSON.stringify(response.data));
+
+    //dispatch({ type: "getfavs", payload: response.data });
+    RootNavigation.navigate("List");
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 export const { Provider, Context } = createDataContext(
   authReducer,
-  { signup, signin, signout, clearErrorMessage, tryLocalSignin },
+  { signup, signin, signout, clearErrorMessage, tryLocalSignin, getfavs },
   { token: null, errorMessage: "" }
 );

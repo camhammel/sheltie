@@ -10,17 +10,18 @@ function capitalizeFirstLetter(string) {
 }
 
 const NameGender = ({ name, gender }) => {
-  if (name.length > 14) {
-    name = name.substring(0, 14) + "...";
+  if (name.length > 8) {
+    name = name.substring(0, 8) + "...";
   }
 
   return (
     <View style={{ flexDirection: "row", marginTop: 10 }}>
       <Text
-        h4
+        h3
         style={{
           marginLeft: 15,
           marginVertical: 10,
+          fontWeight: "bold",
         }}
         adjustsFontSizeToFit={true}
         numberOfLines={3}

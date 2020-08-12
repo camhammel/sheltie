@@ -20,6 +20,8 @@ import Carousel, {
 } from "react-native-snap-carousel";
 import Icon from "react-native-vector-icons/Entypo";
 import NameGender from "../components/NameGender";
+import FAIcon from "react-native-vector-icons/FontAwesome";
+import Attribute from "../components/Attribute";
 
 const defaultURI = Asset.fromModule(require("../assets/logo.png")).uri;
 
@@ -131,47 +133,82 @@ const PetDetailScreen = ({ route, navigation }) => {
                 <Icon
                   name="share"
                   size={40}
-                  color={COLORS.primary}
+                  color={COLORS.primarylight}
                   style={{ marginLeft: 15 }}
                 />
                 <Icon
                   name="heart"
                   size={40}
-                  color={COLORS.primary}
+                  color={COLORS.primarylight}
                   style={{ marginHorizontal: 20 }}
                 />
               </View>
             </View>
-            <Text style={{ fontSize: 18, marginLeft: 15 }}>
-              {results.age} {results.breeds.primary}{" "}
-              {results.breeds.mixed ? "Mix" : null}
-            </Text>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <FAIcon
+                name="paw"
+                size={30}
+                color={COLORS.primarylight}
+                style={{ marginLeft: 15, alignSelf: "center" }}
+              />
+              <Text style={{ fontSize: 20, marginLeft: 8 }}>
+                {results.breeds.primary} {results.breeds.mixed ? "Mix" : null}
+              </Text>
+            </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
               <Icon
                 name="location-pin"
-                size={20}
-                color={COLORS.primary}
+                size={30}
+                color={COLORS.primarylight}
                 style={{ marginLeft: 15, alignSelf: "center" }}
               />
-              <Text style={{ fontSize: 18, marginLeft: 5 }}>
+              <Text style={{ fontSize: 20, marginLeft: 5 }}>
                 {results.contact.address.city}, {results.contact.address.state}
               </Text>
             </View>
-
             <TagComponent tags={results.tags} />
             <Spacer>
               <Text
-                style={{ fontSize: 16, marginLeft: 10, color: COLORS.primary }}
+                style={{
+                  fontSize: 16,
+                  marginLeft: 10,
+                  color: COLORS.darkgrey,
+                }}
               >
                 {results.description.replace(/&amp;#39;/g, "'")}
               </Text>
-              <NavLink
-                text={`Find out more about ${capitalizeFirstLetter(
-                  results.name.toLowerCase()
-                )} here via Petfinder.com`}
-                routeName={results.url}
-              />
             </Spacer>
+            <Text
+              style={{
+                margin: 5,
+                marginLeft: 15,
+                marginTop: 10,
+                fontWeight: "bold",
+                fontSize: 18,
+                color: COLORS.primary,
+              }}
+            >
+              ATTRIBUTES
+            </Text>
+            <Attribute type="size" value={results.size} />
+            <Attribute type="age" value={results.age} />
+            <Attribute type="declawed" value={results.attributes.declawed} />
+            <Attribute
+              type="spayed"
+              value={results.attributes.spayed_neutered}
+              gender={results.gender}
+            />
+            <Attribute
+              type="house_trained"
+              value={results.attributes.house_trained}
+            />
+            <Attribute type="shots" value={results.attributes.shots_current} />
+            <NavLink
+              text={`Find out more about ${capitalizeFirstLetter(
+                results.name.toLowerCase()
+              )} here via Petfinder.com`}
+              routeName={results.url}
+            />
           </View>
         </ScrollView>
       ) : null}
@@ -203,10 +240,4 @@ const styles = StyleSheet.create({
   },
 });
 
-PetDetailScreen.navigationOptions = {
-  headerStyle: {
-    color: COLORS.primary,
-    backgroundColor: COLORS.primary,
-  },
-};
 export default PetDetailScreen;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   ScrollView,
@@ -6,6 +6,7 @@ import {
   AsyncStorage,
   Image,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { Asset } from "expo-asset";
@@ -22,6 +23,7 @@ import Icon from "react-native-vector-icons/Entypo";
 import NameGender from "../components/NameGender";
 import FAIcon from "react-native-vector-icons/FontAwesome";
 import Attribute from "../components/Attribute";
+import { Context } from "../context/AuthContext";
 
 const defaultURI = Asset.fromModule(require("../assets/logo.png")).uri;
 
@@ -32,13 +34,16 @@ function capitalizeFirstLetter(string) {
 }
 
 const PetDetailScreen = ({ route, navigation }) => {
+  const { togglefav } = useContext(Context);
   const [results, setResults] = useState(null);
   const [page, setPage] = useState(0);
+  const [email, setEmail] = useState("");
   const { item } = route.params;
 
   useEffect(() => {
     (async () => {
       detailApi(item.id);
+      setEmail(await AsyncStorage.getItem("email"));
     })();
   }, []);
 
@@ -136,12 +141,19 @@ const PetDetailScreen = ({ route, navigation }) => {
                   color={COLORS.primarylight}
                   style={{ marginLeft: 15 }}
                 />
-                <Icon
-                  name="heart"
-                  size={40}
-                  color={COLORS.primarylight}
-                  style={{ marginHorizontal: 20 }}
-                />
+                <TouchableOpacity
+                  onPress={() => {
+                    console.log("Heart Pressed");
+                    togglefav({ email, petid: results.id });
+                  }}
+                >
+                  <Icon
+                    name="heart"
+                    size={40}
+                    color={COLORS.primarylight}
+                    style={{ marginHorizontal: 20 }}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>

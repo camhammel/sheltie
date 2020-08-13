@@ -89,7 +89,17 @@ const getfavs = (dispatch) => async (email) => {
     await AsyncStorage.setItem("favourites", JSON.stringify(response.data));
 
     //dispatch({ type: "getfavs", payload: response.data });
-    RootNavigation.navigate("List");
+    RootNavigation.navigate("Favourites");
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+const togglefav = (dispatch) => async ({ email, petid }) => {
+  try {
+    console.log("email: " + email + ", id: " + petid);
+    const response = await sheltieApi.post("/togglefav", { email, petid });
+    console.log("response: " + JSON.stringify(response.data));
   } catch (err) {
     console.log(err.message);
   }
@@ -97,6 +107,14 @@ const getfavs = (dispatch) => async (email) => {
 
 export const { Provider, Context } = createDataContext(
   authReducer,
-  { signup, signin, signout, clearErrorMessage, tryLocalSignin, getfavs },
+  {
+    signup,
+    signin,
+    signout,
+    clearErrorMessage,
+    tryLocalSignin,
+    getfavs,
+    togglefav,
+  },
   { token: null, errorMessage: "" }
 );

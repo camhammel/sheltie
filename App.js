@@ -8,6 +8,7 @@ import ListScreen from "./screens/ListScreen";
 import PetDetailScreen from "./screens/PetDetailScreen";
 import LoadingScreen from "./screens/LoadingScreen";
 import AccountScreen from "./screens/AccountScreen";
+import FavouritesScreen from "./screens/FavouritesScreen";
 import { Provider as AuthProvider } from "./context/AuthContext";
 import { Provider as TokenProvider } from "./context/TokenContext";
 import { navigationRef } from "./navigationRef";
@@ -82,6 +83,16 @@ function App() {
               component={AccountScreen}
               options={{
                 title: "Account",
+                headerShown: true,
+                headerTintColor: "black",
+                headerStyle: { backgroundColor: COLORS.primarylight },
+              }}
+            />
+            <Stack.Screen
+              name="Favourites"
+              component={FavouritesScreen}
+              options={{
+                title: "Favourites",
                 headerShown: true,
                 headerTintColor: "black",
                 headerStyle: { backgroundColor: COLORS.primarylight },

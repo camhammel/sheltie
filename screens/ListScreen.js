@@ -28,7 +28,7 @@ const ListScreen = ({ navigation }) => {
           location.coords.longitude
       );
       setLocation(location);
-      searchApi();
+      //searchApi();
     })();
   }, []);
 
@@ -90,9 +90,7 @@ const ListScreen = ({ navigation }) => {
         <SearchHeader searchApi={searchApi} term={term} setTerm={setTerm} />
       </View>
       <View style={{ flex: 1 }}>
-        <Text style={styles.resultStyle}>
-          {results.length} results found{term}
-        </Text>
+        <Text style={styles.resultStyle}>{results.length} results found</Text>
         <ListComponent results={results} />
       </View>
     </View>

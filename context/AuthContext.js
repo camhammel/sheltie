@@ -92,6 +92,27 @@ const getfavs = (dispatch) => async (email) => {
   }
 };
 
+const checkfav = (dispatch) => async ({ email, petid }) => {
+  try {
+    console.log(email + ", " + petid);
+    const response = await sheltieApi.post("/getfavourites", {
+      email: email,
+    });
+    console.log("response: " + JSON.stringify(response.data));
+    await AsyncStorage.setItem("favourites", JSON.stringify(response.data));
+
+    if (response.data.includes(petid + "")) {
+      console.log("This animal was favourited.");
+      return true;
+    } else {
+      console.log("This animal was not favourited.");
+      return false;
+    }
+  } catch (err) {
+    console.log("Had to exit: " + err.message);
+  }
+};
+
 const togglefav = (dispatch) => async ({ email, petid }) => {
   try {
     console.log("email: " + email + ", id: " + petid);
@@ -115,6 +136,7 @@ export const { Provider, Context } = createDataContext(
     tryLocalSignin,
     getfavs,
     togglefav,
+    checkfav,
   },
   { token: null, errorMessage: "" }
 );

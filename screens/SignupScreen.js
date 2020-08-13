@@ -1,6 +1,5 @@
-import React, { useState, useContext } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { Button, Image, Text, Input } from "react-native-elements";
+import React, { useContext } from "react";
+import { View, StyleSheet } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Context as AuthContext } from "../context/AuthContext";
 import NavLink from "../components/NavLink";

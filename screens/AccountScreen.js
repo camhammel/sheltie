@@ -5,7 +5,6 @@ import Spacer from "../components/Spacer";
 import { Context as AuthContext } from "../context/AuthContext";
 import Logo from "../assets/icon.png";
 import { COLORS } from "../assets/colors";
-import sheltie from "../api/sheltie";
 
 const AccountScreen = () => {
   const { signout, getfavs } = useContext(AuthContext);

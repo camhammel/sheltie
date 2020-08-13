@@ -4,13 +4,13 @@ import {
   ScrollView,
   StyleSheet,
   AsyncStorage,
-  Image,
   Dimensions,
   TouchableOpacity,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { Asset } from "expo-asset";
 import petfinder from "../api/petfinder";
+import sheltieApi from "../api/sheltie";
 import Spacer from "../components/Spacer";
 import TagComponent from "../components/TagComponent";
 import { COLORS } from "../assets/colors";
@@ -34,11 +34,12 @@ function capitalizeFirstLetter(string) {
 }
 
 const PetDetailScreen = ({ route, navigation }) => {
-  const { togglefav } = useContext(Context);
+  const { togglefav, checkfav } = useContext(Context);
   const [results, setResults] = useState(null);
   const [page, setPage] = useState(0);
   const [email, setEmail] = useState("");
   const { item } = route.params;
+  const [favourited, setFavourited] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -46,6 +47,12 @@ const PetDetailScreen = ({ route, navigation }) => {
       setEmail(await AsyncStorage.getItem("email"));
     })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      setFavourited(await checkfav({ email, petid: item.id }));
+    })();
+  }, [email]);
 
   const detailApi = async (id) => {
     console.log(
@@ -145,10 +152,11 @@ const PetDetailScreen = ({ route, navigation }) => {
                   onPress={() => {
                     console.log("Heart Pressed");
                     togglefav({ email, petid: results.id });
+                    setFavourited(!favourited);
                   }}
                 >
                   <Icon
-                    name="heart"
+                    name={favourited ? "heart" : "heart-outlined"}
                     size={40}
                     color={COLORS.primarylight}
                     style={{ marginHorizontal: 20 }}

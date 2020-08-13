@@ -113,14 +113,31 @@ const checkfav = (dispatch) => async ({ email, petid }) => {
   }
 };
 
-const togglefav = (dispatch) => async ({ email, petid }) => {
+const addfav = (dispatch) => async ({ email, petid }) => {
   try {
     console.log("email: " + email + ", id: " + petid);
-    const response = await sheltieApi.post("/togglefav", {
+    const response = await sheltieApi.post("/addfav", {
       email: email,
       petid: petid,
     });
     console.log("response: " + JSON.stringify(response.data));
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+const removefav = (dispatch) => async ({ email, petid }) => {
+  try {
+    console.log("email: " + email + ", id: " + petid);
+    const response = await sheltieApi.post("/removefav", {
+      email: email,
+      petid: petid,
+    });
+    console.log("response: " + JSON.stringify(response.data.favourites));
+    await AsyncStorage.setItem(
+      "favourites",
+      JSON.stringify(response.data.favourites)
+    );
   } catch (err) {
     console.log(err.message);
   }
@@ -135,7 +152,8 @@ export const { Provider, Context } = createDataContext(
     clearErrorMessage,
     tryLocalSignin,
     getfavs,
-    togglefav,
+    addfav,
+    removefav,
     checkfav,
   },
   { token: null, errorMessage: "" }

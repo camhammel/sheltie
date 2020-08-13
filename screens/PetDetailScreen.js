@@ -10,7 +10,6 @@ import {
 import { Text } from "react-native-elements";
 import { Asset } from "expo-asset";
 import petfinder from "../api/petfinder";
-import sheltieApi from "../api/sheltie";
 import Spacer from "../components/Spacer";
 import TagComponent from "../components/TagComponent";
 import { COLORS } from "../assets/colors";
@@ -34,7 +33,7 @@ function capitalizeFirstLetter(string) {
 }
 
 const PetDetailScreen = ({ route, navigation }) => {
-  const { togglefav, checkfav } = useContext(Context);
+  const { addfav, checkfav, removefav } = useContext(Context);
   const [results, setResults] = useState(null);
   const [page, setPage] = useState(0);
   const [email, setEmail] = useState("");
@@ -151,7 +150,11 @@ const PetDetailScreen = ({ route, navigation }) => {
                 <TouchableOpacity
                   onPress={() => {
                     console.log("Heart Pressed");
-                    togglefav({ email, petid: results.id });
+                    {
+                      favourited
+                        ? removefav({ email, petid: results.id })
+                        : addfav({ email, petid: results.id });
+                    }
                     setFavourited(!favourited);
                   }}
                 >

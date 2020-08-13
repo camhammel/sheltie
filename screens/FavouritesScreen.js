@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, AsyncStorage } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 import ListComponent from "../components/ListComponent";
 import petfinder from "../api/petfinder";
 
@@ -7,20 +8,27 @@ const FavouritesScreen = () => {
   let favIds = [0];
   const [results, setResults] = useState([]);
 
+  // useEffect(() => {
+  //   (async () => {
+  //     favIds = await AsyncStorage.getItem("favourites");
+  //     let parsedIds = JSON.parse(favIds);
+  //     console.log("FavIds: " + parsedIds);
+  //     await searchFavs(parsedIds);
+  //   })();
+  // }, []);
+
+  const isFocused = useIsFocused();
   useEffect(() => {
     (async () => {
       favIds = await AsyncStorage.getItem("favourites");
-      favIds = JSON.parse(favIds);
-      console.log("FavIds: " + favIds);
-      await searchFavs(favIds);
+      let parsedIds = JSON.parse(favIds);
+      console.log("FavIds: " + parsedIds);
+      await searchFavs(parsedIds);
     })();
-  }, []);
+    //Update the state you want to be updated
+  }, [isFocused]);
 
-  useEffect(() => {
-    //searchFavs(favIds);
-  }, [favIds]);
-
-  const searchFavs = async (favIds) => {
+  const searchFavs = async (parsedIds) => {
     console.log(
       "Token value in storage is: " +
         (await AsyncStorage.getItem("token")).toString()
@@ -28,10 +36,10 @@ const FavouritesScreen = () => {
 
     let animals = [];
     let promises = [];
-    for (let i = 0; i < favIds.length; i++) {
+    for (let i = 0; i < parsedIds.length; i++) {
       promises.push(
         petfinder
-          .get(`animals/${favIds[i]}`, {
+          .get(`animals/${parsedIds[i]}`, {
             headers: {
               Authorization: `Bearer ${(
                 await AsyncStorage.getItem("token")

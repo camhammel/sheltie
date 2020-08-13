@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, AsyncStorage } from "react-native";
 import ListComponent from "../components/ListComponent";
-import { Context as AuthContext } from "../context/AuthContext";
 import petfinder from "../api/petfinder";
 
 const FavouritesScreen = () => {

@@ -82,9 +82,6 @@ const getfavs = (dispatch) => async (email) => {
     const response = await sheltieApi.post("/getfavourites", {
       email: email,
     });
-    // const response = await sheltieApi.post("/getfavourites", {
-    //   email: "camhammel3@gmail.com",
-    // });
     console.log("response: " + JSON.stringify(response.data));
     await AsyncStorage.setItem("favourites", JSON.stringify(response.data));
 
@@ -98,7 +95,10 @@ const getfavs = (dispatch) => async (email) => {
 const togglefav = (dispatch) => async ({ email, petid }) => {
   try {
     console.log("email: " + email + ", id: " + petid);
-    const response = await sheltieApi.post("/togglefav", { email, petid });
+    const response = await sheltieApi.post("/togglefav", {
+      email: email,
+      petid: petid,
+    });
     console.log("response: " + JSON.stringify(response.data));
   } catch (err) {
     console.log(err.message);

@@ -3,9 +3,10 @@ import { View, StyleSheet } from "react-native";
 import { SearchBar, Button } from "react-native-elements";
 import * as RootNavigation from "../navigationRef";
 import Icon from "react-native-vector-icons/Entypo";
+import FAIcon from "react-native-vector-icons/FontAwesome";
 import { COLORS } from "../assets/colors";
 
-const SearchHeader = ({ searchApi, term, setTerm }) => {
+const SearchHeader = ({ onPress }) => {
   return (
     <View
       style={{
@@ -22,11 +23,31 @@ const SearchHeader = ({ searchApi, term, setTerm }) => {
           backgroundColor: "white",
         }}
       >
-        <SearchBar
+        <Button
+          type="outline"
+          title={"Filter Search"}
+          titleStyle={{ color: "grey", paddingLeft: 10 }}
+          buttonStyle={styles.signoutButtonStyle}
+          onPress={() => {
+            onPress();
+          }}
+          icon={
+            <FAIcon
+              name="filter"
+              size={20}
+              color={COLORS.primary}
+              style={{ alignSelf: "center" }}
+            />
+          }
+        />
+        {/* <SearchBar
           placeholder="Search..."
-          onChangeText={setTerm}
-          onSubmitEditing={searchApi}
-          value={term}
+          //onChangeText={setTerm}
+          //onSubmitEditing={searchApi}
+          onPress={() => {
+            onPress();
+          }}
+          //value={term}
           round
           lightTheme
           containerStyle={{
@@ -58,7 +79,7 @@ const SearchHeader = ({ searchApi, term, setTerm }) => {
             borderBottomColor: "white",
             borderWidth: 1,
           }}
-        />
+        /> */}
       </View>
       <View
         style={{
@@ -128,6 +149,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+  },
+  signoutButtonStyle: {
+    borderColor: COLORS.primary,
+    borderWidth: 1,
+    borderRadius: 30,
+    marginHorizontal: 2,
   },
 });
 

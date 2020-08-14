@@ -78,7 +78,7 @@ const ShelterInfo = ({ results }) => {
           marginBottom: 20,
         }}
       />
-      <Text h3 style={{ textAlign: "center", paddingHorizontal: 5 }}>
+      <Text h3 style={{ textAlign: "center", paddingHorizontal: 10 }}>
         {shelter ? shelter.name : null}
       </Text>
       <Text

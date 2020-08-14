@@ -1,17 +1,30 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, Text, AsyncStorage, StyleSheet } from "react-native";
+import {
+  View,
+  AsyncStorage,
+  StyleSheet,
+  TouchableOpacity,
+  Button,
+} from "react-native";
+import { Text } from "react-native-elements";
 import ListComponent from "../components/ListComponent";
 import SearchHeader from "../components/SearchHeader";
 import petfinder from "../api/petfinder";
 import { Context as TokenContext } from "../context/TokenContext";
 import * as Location from "expo-location";
 import { COLORS } from "../assets/colors";
+import Modal from "react-native-modal";
 
 const ListScreen = ({ navigation }) => {
   const { update_token } = useContext(TokenContext);
   const [term, setTerm] = useState("");
   const [location, setLocation] = useState(null);
   const [results, setResults] = useState([]);
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
 
   useEffect(() => {
     (async () => {
@@ -37,7 +50,7 @@ const ListScreen = ({ navigation }) => {
   }, [location]);
 
   const searchApi = async () => {
-    update_token();
+    await update_token();
     console.log(
       "Token value in storage is: " +
         (await AsyncStorage.getItem("token")).toString()
@@ -80,6 +93,30 @@ const ListScreen = ({ navigation }) => {
 
   return (
     <View style={{ justifyContent: "flex-start", flex: 1, borderWidth: 0 }}>
+      <Modal
+        isVisible={isModalVisible}
+        hasBackdrop={true}
+        backdropOpacity={0.5}
+      >
+        <View
+          style={{
+            borderRadius: 15,
+            height: 600,
+            backgroundColor: "white",
+          }}
+        >
+          <Text h3 style={{ textAlign: "center", marginVertical: 15 }}>
+            Filters
+          </Text>
+          <Button
+            title="Save"
+            onPress={() => {
+              searchApi();
+              toggleModal();
+            }}
+          />
+        </View>
+      </Modal>
       <View
         style={{
           backgroundColor: "white",
@@ -87,7 +124,7 @@ const ListScreen = ({ navigation }) => {
           borderWidth: 0,
         }}
       >
-        <SearchHeader searchApi={searchApi} term={term} setTerm={setTerm} />
+        <SearchHeader onPress={toggleModal} />
       </View>
       <View style={{ flex: 1 }}>
         <Text style={styles.resultStyle}>{results.length} results found</Text>

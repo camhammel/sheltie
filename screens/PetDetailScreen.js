@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import {
   View,
   ScrollView,
@@ -23,9 +23,9 @@ import NameGender from "../components/NameGender";
 import FAIcon from "react-native-vector-icons/FontAwesome";
 import Attribute from "../components/Attribute";
 import { Context } from "../context/AuthContext";
+import ShelterInfo from "../components/ShelterInfo";
 
 const defaultURI = Asset.fromModule(require("../assets/logo.png")).uri;
-
 const screenWidth = Math.round(Dimensions.get("window").width);
 
 function capitalizeFirstLetter(string) {
@@ -226,6 +226,7 @@ const PetDetailScreen = ({ route, navigation }) => {
               value={results.attributes.house_trained}
             />
             <Attribute type="shots" value={results.attributes.shots_current} />
+            <ShelterInfo results={results} />
             <NavLink
               text={`Find out more about ${capitalizeFirstLetter(
                 results.name.toLowerCase()

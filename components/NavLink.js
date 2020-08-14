@@ -3,7 +3,10 @@ import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import * as RootNavigation from "../navigationRef";
 import * as Linking from "expo-linking";
 
-const NavLink = ({ text, routeName, clearErrorMessage }) => {
+let mb;
+
+const NavLink = ({ text, routeName, clearErrorMessage, marginBottom }) => {
+  mb = marginBottom;
   if (routeName.substring(0, 4) === "http") {
     return (
       <TouchableOpacity

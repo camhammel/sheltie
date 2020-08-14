@@ -5,6 +5,7 @@ import Spacer from "../components/Spacer";
 import { Context as AuthContext } from "../context/AuthContext";
 import Logo from "../assets/icon.png";
 import { COLORS } from "../assets/colors";
+import Icon from "react-native-vector-icons/Entypo";
 
 const AccountScreen = () => {
   const { signout, getfavs } = useContext(AuthContext);
@@ -40,25 +41,39 @@ const AccountScreen = () => {
       <Spacer>
         <Button
           style={styles.signoutStyle}
-          type="solid"
+          type="outline"
           title={"Sign Out"}
+          titleStyle={{ color: COLORS.darkgrey, paddingLeft: 10 }}
+          buttonStyle={styles.signoutButtonStyle}
           onPress={() => signout()}
-          linearGradientProps={{
-            colors: [COLORS.darkgrey, "grey"],
-            start: { x: 0.25, y: 0.1 },
-            end: { x: 0.25, y: 1 },
-          }}
+          icon={
+            <Icon
+              name="back"
+              size={18}
+              color={COLORS.darkgrey}
+              style={{ alignSelf: "flex-end" }}
+            />
+          }
         ></Button>
         <Button
           style={styles.favouritesStyle}
           type="solid"
           title={"My Favourites"}
+          titleStyle={{ paddingLeft: 10 }}
           onPress={() => getfavs(email)}
           linearGradientProps={{
             colors: [COLORS.primarylight, COLORS.primary],
             start: { x: 0.25, y: 0.1 },
             end: { x: 0.25, y: 1 },
           }}
+          icon={
+            <Icon
+              name="heart"
+              size={18}
+              color="white"
+              style={{ alignSelf: "flex-end" }}
+            />
+          }
         ></Button>
         <Spacer>
           <Text style={{ marginTop: 60 }}>Powered by the Petfinder API</Text>
@@ -76,6 +91,22 @@ const styles = StyleSheet.create({
   signoutStyle: {
     marginHorizontal: 40,
     marginBottom: 80,
+    borderColor: COLORS.darkgrey,
+    borderStartColor: COLORS.darkgrey,
+    borderTopColor: COLORS.darkgrey,
+    color: COLORS.darkgrey,
+  },
+  signoutContainerStyle: {
+    borderColor: COLORS.darkgrey,
+    borderStartColor: COLORS.darkgrey,
+    borderTopColor: COLORS.darkgrey,
+    color: COLORS.darkgrey,
+  },
+  signoutButtonStyle: {
+    borderColor: COLORS.darkgrey,
+    borderStartColor: COLORS.darkgrey,
+    borderTopColor: COLORS.darkgrey,
+    color: COLORS.darkgrey,
   },
   favouritesStyle: {
     marginHorizontal: 20,

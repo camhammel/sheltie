@@ -18,6 +18,7 @@ const FavouritesScreen = () => {
   // }, []);
 
   const isFocused = useIsFocused();
+
   useEffect(() => {
     (async () => {
       favIds = await AsyncStorage.getItem("favourites");

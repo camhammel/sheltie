@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, AsyncStorage } from "react-native";
-import { Button, Text, Image } from "react-native-elements";
+import { View, StyleSheet, AsyncStorage, Image } from "react-native";
+import { Button, Text } from "react-native-elements";
 import Spacer from "../components/Spacer";
 import { Context as AuthContext } from "../context/AuthContext";
 import Logo from "../assets/icon.png";
@@ -45,6 +45,7 @@ const AccountScreen = () => {
           title={"Sign Out"}
           titleStyle={{ color: COLORS.darkgrey, paddingLeft: 10 }}
           buttonStyle={styles.signoutButtonStyle}
+          containerStyle={styles.signoutContainerStyle}
           onPress={() => signout()}
           icon={
             <Icon
@@ -75,10 +76,12 @@ const AccountScreen = () => {
             />
           }
         ></Button>
-        <Spacer>
-          <Text style={{ marginTop: 60 }}>Powered by the Petfinder API</Text>
-        </Spacer>
       </Spacer>
+      <View style={{ flex: 1, justifyContent: "flex-end" }}>
+        <Text style={{ textAlign: "center", marginBottom: 20 }}>
+          Powered by the Petfinder API
+        </Text>
+      </View>
     </View>
   );
 };
@@ -89,8 +92,6 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   signoutStyle: {
-    marginHorizontal: 40,
-    marginBottom: 80,
     borderColor: COLORS.darkgrey,
     borderStartColor: COLORS.darkgrey,
     borderTopColor: COLORS.darkgrey,
@@ -101,6 +102,7 @@ const styles = StyleSheet.create({
     borderStartColor: COLORS.darkgrey,
     borderTopColor: COLORS.darkgrey,
     color: COLORS.darkgrey,
+    marginBottom: 40,
   },
   signoutButtonStyle: {
     borderColor: COLORS.darkgrey,
@@ -108,9 +110,7 @@ const styles = StyleSheet.create({
     borderTopColor: COLORS.darkgrey,
     color: COLORS.darkgrey,
   },
-  favouritesStyle: {
-    marginHorizontal: 20,
-  },
+  favouritesStyle: {},
   viewStyle: {
     flex: 1,
     flexDirection: "column",

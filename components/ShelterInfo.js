@@ -87,17 +87,25 @@ const ShelterInfo = ({ results }) => {
           fontSize: 18,
           color: COLORS.darkgrey,
           marginTop: 5,
+          marginBottom: 10,
         }}
       >
         {shelter ? shelterAddress() : null}
       </Text>
-      {results.contact.email ? (
+      {results.contact.email && results.contact.email.trim() ? (
         <Button
           title={results.contact.email}
           buttonStyle={styles.buttonStyle}
           titleStyle={styles.titleStyle}
           type="solid"
-          icon={<Icon name="mail" size={18} color={"white"} />}
+          icon={
+            <Icon
+              name="mail"
+              size={18}
+              color={"white"}
+              style={{ alignSelf: "center" }}
+            />
+          }
           onPress={() => {
             Linking.openURL(
               "mailto: " +
@@ -108,13 +116,20 @@ const ShelterInfo = ({ results }) => {
           }}
         />
       ) : null}
-      {results.contact.phone ? (
+      {results.contact.phone && results.contact.phone.trim() ? (
         <Button
           title={results.contact.phone}
           buttonStyle={styles.buttonStyle}
           titleStyle={styles.titleStyle}
           type="solid"
-          icon={<Icon name="phone" size={18} color={"white"} />}
+          icon={
+            <Icon
+              name="phone"
+              size={18}
+              color={"white"}
+              style={{ alignSelf: "center" }}
+            />
+          }
           onPress={() => {
             Linking.openURL("tel:" + results.contact.phone);
           }}
@@ -138,14 +153,15 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     alignSelf: "center",
-    margin: 10,
-    marginTop: 20,
+    marginTop: 10,
+    marginHorizontal: 10,
     borderRadius: 25,
     paddingHorizontal: 25,
     backgroundColor: COLORS.primary,
   },
   titleStyle: {
-    paddingLeft: 10,
+    paddingLeft: 5,
+    paddingRight: 10,
   },
 });
 

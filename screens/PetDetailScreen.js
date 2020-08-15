@@ -227,12 +227,14 @@ const PetDetailScreen = ({ route, navigation }) => {
             />
             <Attribute type="shots" value={results.attributes.shots_current} />
             <ShelterInfo results={results} />
-            <NavLink
-              text={`Find out more about ${capitalizeFirstLetter(
-                results.name.toLowerCase()
-              )} here via Petfinder.com`}
-              routeName={results.url}
-            />
+            <Spacer>
+              <NavLink
+                text={`Find out more about ${capitalizeFirstLetter(
+                  results.name.toLowerCase()
+                )} here via Petfinder.com`}
+                routeName={results.url}
+              />
+            </Spacer>
           </View>
         </ScrollView>
       ) : null}

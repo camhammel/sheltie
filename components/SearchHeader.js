@@ -40,46 +40,6 @@ const SearchHeader = ({ onPress }) => {
             />
           }
         />
-        {/* <SearchBar
-          placeholder="Search..."
-          //onChangeText={setTerm}
-          //onSubmitEditing={searchApi}
-          onPress={() => {
-            onPress();
-          }}
-          //value={term}
-          round
-          lightTheme
-          containerStyle={{
-            backgroundColor: "white",
-            borderWidth: 0,
-            borderTopColor: "transparent",
-            borderBottomColor: "transparent",
-            borderStartColor: "white",
-            borderEndColor: "white",
-          }}
-          inputContainerStyle={{
-            height: 40,
-            backgroundColor: "white",
-            borderTopColor: COLORS.primary,
-            borderBottomColor: COLORS.primary,
-            borderLeftColor: COLORS.primary,
-            borderRightColor: COLORS.primary,
-            borderStartColor: COLORS.primary,
-            borderEndColor: COLORS.primary,
-            borderBottomWidth: 1,
-            borderWidth: 1,
-            borderRadius: 30,
-          }}
-          inputStyle={{
-            color: "black",
-          }}
-          placeholderTextColor="grey"
-          style={{
-            borderBottomColor: "white",
-            borderWidth: 1,
-          }}
-        /> */}
       </View>
       <View
         style={{

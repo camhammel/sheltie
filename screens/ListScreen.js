@@ -22,6 +22,7 @@ const ListScreen = ({ navigation }) => {
   const [age, setAge] = useState(["Baby", "Young", "Adult", "Senior"]);
   const [type, setType] = useState("dog");
   const [breed, setBreed] = useState([]);
+  const [breedOptions, setBreedOptions] = useState([]);
   const [location, setLocation] = useState(null);
   const [results, setResults] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -59,9 +60,11 @@ const ListScreen = ({ navigation }) => {
         setAge(temp2.age);
         setDistance(temp2.distance);
         setType(temp2.type);
-        setBreed([]);
+        {
+          temp2.breed ? setBreed(temp2.breed) : null;
+        }
       }
-
+      getBreedOptions();
       searchApi();
     })();
   }, []);
@@ -117,6 +120,47 @@ const ListScreen = ({ navigation }) => {
       });
   };
 
+  const getBreedOptions = async () => {
+    var breedSearch = `types/${type}/breeds`;
+
+    petfinder
+      .get(breedSearch, {
+        headers: {
+          Authorization: `Bearer ${(
+            await AsyncStorage.getItem("token")
+          ).toString()}`,
+        },
+      })
+      .then((response) => {
+        const my_breeds = response.data.breeds.map((breed1) => {
+          return {
+            label: breed1.name,
+            value: breed1.name,
+          };
+        });
+        console.log("breeds: " + JSON.stringify(my_breeds));
+        setBreedOptions(my_breeds);
+      })
+      .catch(function (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          //console.log(error.response.status);
+          //console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+        }
+        //console.log(error.config);
+      });
+  };
+
   const searchApi = async () => {
     await update_token();
     console.log(
@@ -124,7 +168,7 @@ const ListScreen = ({ navigation }) => {
         (await AsyncStorage.getItem("token")).toString()
     );
 
-    var searchReq = `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}`;
+    var searchReq = `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`;
 
     const this_search = {
       type,
@@ -342,30 +386,13 @@ const ListScreen = ({ navigation }) => {
               ANIMAL BREEDS
             </Text>
             <DropDownPicker
-              items={[
-                {
-                  label: "Dog",
-                  value: "dog",
-                },
-                {
-                  label: "Cat",
-                  value: "cat",
-                },
-                {
-                  label: "Bird",
-                  value: "bird",
-                },
-                {
-                  label: "Rabbit",
-                  value: "rabbit",
-                },
-              ]}
-              defaultValue={breed}
+              items={breedOptions}
+              defaultValue={[]}
               placeholder="Any breed"
               multiple={true}
-              //multipleText={breed.toString()}
+              multipleText={breed.toString()}
               min={0}
-              max={10}
+              max={100}
               containerStyle={{ height: 40, marginHorizontal: 10 }}
               style={{ backgroundColor: "#fafafa" }}
               itemStyle={{

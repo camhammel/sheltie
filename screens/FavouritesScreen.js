@@ -8,15 +8,6 @@ const FavouritesScreen = () => {
   let favIds = [0];
   const [results, setResults] = useState([]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     favIds = await AsyncStorage.getItem("favourites");
-  //     let parsedIds = JSON.parse(favIds);
-  //     console.log("FavIds: " + parsedIds);
-  //     await searchFavs(parsedIds);
-  //   })();
-  // }, []);
-
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -78,26 +69,11 @@ const FavouritesScreen = () => {
   };
   return (
     <View style={{ flex: 1 }}>
-      {results ? (
-        <Text style={styles.resultStyle}>{results.length} results found</Text>
-      ) : null}
-
       <ListComponent results={results} />
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  resultStyle: {
-    backgroundColor: "#ffffff",
-    paddingLeft: 10,
-    paddingVertical: 5,
-    color: "grey",
-    fontSize: 16,
-    textAlign: "center",
-    borderBottomColor: "grey",
-    borderBottomWidth: 1,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default FavouritesScreen;

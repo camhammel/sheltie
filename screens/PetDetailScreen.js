@@ -198,7 +198,11 @@ const PetDetailScreen = ({ route, navigation }) => {
                   color: COLORS.darkgrey,
                 }}
               >
-                {results.description.replace(/&amp;#39;/g, "'")}
+                {results.description
+                  ? results.description
+                      .replace(/&#039;/g, "'")
+                      .replace(/&amp;#39;/g, "'")
+                  : null}
               </Text>
             </Spacer>
             <Text

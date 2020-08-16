@@ -1,5 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, AsyncStorage, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  AsyncStorage,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { Text, Button } from "react-native-elements";
 import ListComponent from "../components/ListComponent";
 import SearchHeader from "../components/SearchHeader";
@@ -19,7 +24,7 @@ function capitalizeFirstLetter(string) {
 const ListScreen = ({ navigation }) => {
   const { update_token } = useContext(TokenContext);
   const [distance, setDistance] = useState(100);
-  const [age, setAge] = useState(["Baby", "Young", "Adult", "Senior"]);
+  const [age, setAge] = useState([]);
   const [type, setType] = useState("dog");
   const [breed, setBreed] = useState([]);
   const [breedOptions, setBreedOptions] = useState([]);
@@ -35,6 +40,12 @@ const ListScreen = ({ navigation }) => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+  useEffect(() => {
+    (async () => {
+      getBreedOptions();
+    })();
+  }, [type]);
 
   useEffect(() => {
     (async () => {
@@ -79,7 +90,7 @@ const ListScreen = ({ navigation }) => {
   };
 
   const retrieveNewPage = async () => {
-    var searchReq = `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&page=${currentPage}`;
+    var searchReq = `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}&page=${currentPage}`;
 
     petfinder
       .get(searchReq, {
@@ -233,7 +244,7 @@ const ListScreen = ({ navigation }) => {
               fontWeight: "bold",
             }}
           >
-            Filters
+            Search Filters
           </Text>
           <View style={{ flex: 1 }}>
             <Text
@@ -305,7 +316,7 @@ const ListScreen = ({ navigation }) => {
               placeholder="Any age"
               multiple={true}
               multipleText={age.join(", ")}
-              min={1}
+              min={0}
               max={4}
               containerStyle={{ height: 40, marginHorizontal: 10 }}
               style={{ backgroundColor: "#fafafa" }}
@@ -361,7 +372,10 @@ const ListScreen = ({ navigation }) => {
                 justifyContent: "flex-start",
               }}
               dropDownStyle={{ backgroundColor: "#fafafa" }}
-              onChangeItem={(item) => setType(item.value)}
+              onChangeItem={(item) => {
+                setType(item.value);
+                setBreed([]);
+              }}
               isVisible={isTypeVisible}
               onOpen={() => {
                 setTypeVisible(true);
@@ -448,25 +462,11 @@ const ListScreen = ({ navigation }) => {
         <SearchHeader onPress={toggleModal} />
       </View>
       <View style={{ flex: 1 }}>
-        {results ? (
-          <Text style={styles.resultStyle}>{results.length} results found</Text>
-        ) : null}
         <ListComponent results={results} loadMoreResults={loadMoreResults} />
       </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  resultStyle: {
-    backgroundColor: "#ffffff",
-    paddingLeft: 10,
-    paddingVertical: 5,
-    color: "grey",
-    fontSize: 16,
-    textAlign: "center",
-    borderBottomColor: "grey",
-    borderBottomWidth: 1,
-  },
-});
+const styles = StyleSheet.create({});
 export default ListScreen;

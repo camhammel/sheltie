@@ -25,7 +25,7 @@ const SearchHeader = ({ onPress }) => {
       >
         <Button
           type="outline"
-          title={"Filter Search"}
+          title={"Search Filters"}
           titleStyle={{ color: "grey", paddingLeft: 10 }}
           buttonStyle={styles.signoutButtonStyle}
           onPress={() => {

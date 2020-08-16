@@ -1,11 +1,18 @@
 import React from "react";
-import { View, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Text,
+  ActivityIndicator,
+} from "react-native";
 import { ListItem } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { Asset } from "expo-asset";
 import { COLORS } from "../assets/colors";
 
 const defaultURI = Asset.fromModule(require("../assets/default.png")).uri;
+let isLoading = false;
 
 const ListComponent = ({ results, loadMoreResults }) => {
   const navigation = useNavigation();
@@ -18,7 +25,9 @@ const ListComponent = ({ results, loadMoreResults }) => {
       title={capitalizeFirstLetter(item.name.toLowerCase())}
       titleStyle={styles.titleStyle}
       id={item.id}
-      subtitle={item.breeds.primary}
+      subtitle={
+        item.breeds.mixed ? item.breeds.primary + " Mix" : item.breeds.primary
+      }
       subtitleStyle={{ color: "grey" }}
       leftAvatar={{
         source: {
@@ -46,9 +55,14 @@ const ListComponent = ({ results, loadMoreResults }) => {
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           onEndReachedThreshold={0.01}
-          onEndReached={() => {
-            loadMoreResults();
+          onEndReached={async () => {
+            isLoading = true;
+            await loadMoreResults();
+            isLoading = false;
           }}
+          ListFooterComponent={
+            isLoading ? <ActivityIndicator size="small" /> : null
+          }
         />
       </View>
     );

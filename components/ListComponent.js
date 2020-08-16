@@ -38,19 +38,31 @@ const ListComponent = ({ results, loadMoreResults }) => {
     />
   );
 
-  return (
-    <View style={styles.container}>
-      <FlatList
-        data={results}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        onEndReachedThreshold={0.01}
-        onEndReached={() => {
-          loadMoreResults();
-        }}
-      />
-    </View>
-  );
+  if (loadMoreResults != null) {
+    return (
+      <View style={styles.container}>
+        <FlatList
+          data={results}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+          onEndReachedThreshold={0.01}
+          onEndReached={() => {
+            loadMoreResults();
+          }}
+        />
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <FlatList
+          data={results}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
+    );
+  }
 };
 
 const styles = StyleSheet.create({

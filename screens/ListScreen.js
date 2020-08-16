@@ -55,11 +55,11 @@ const ListScreen = ({ navigation }) => {
       setLocation(location);
 
       let temp2 = JSON.parse(await AsyncStorage.getItem("lastsearch"));
-      if ((await temp2) != null) {
-        setAge(await temp2.age);
-        setDistance(await temp2.distance);
-        setType(await temp2.type);
-        setBreed(await temp2.breed);
+      if (temp2 != null) {
+        setAge(temp2.age);
+        setDistance(temp2.distance);
+        setType(temp2.type);
+        setBreed([]);
       }
 
       searchApi();
@@ -423,7 +423,9 @@ const ListScreen = ({ navigation }) => {
         <SearchHeader onPress={toggleModal} />
       </View>
       <View style={{ flex: 1 }}>
-        <Text style={styles.resultStyle}>{results.length} results found</Text>
+        {results ? (
+          <Text style={styles.resultStyle}>{results.length} results found</Text>
+        ) : null}
         <ListComponent results={results} loadMoreResults={loadMoreResults} />
       </View>
     </View>

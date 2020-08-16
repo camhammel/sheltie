@@ -5,9 +5,9 @@ import { useNavigation } from "@react-navigation/native";
 import { Asset } from "expo-asset";
 import { COLORS } from "../assets/colors";
 
-const defaultURI = Asset.fromModule(require("../assets/icon.png")).uri;
+const defaultURI = Asset.fromModule(require("../assets/default.png")).uri;
 
-const ListComponent = ({ results }) => {
+const ListComponent = ({ results, loadMoreResults }) => {
   const navigation = useNavigation();
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -43,7 +43,11 @@ const ListComponent = ({ results }) => {
       <FlatList
         data={results}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item, index) => index.toString()}
+        onEndReachedThreshold={0.01}
+        onEndReached={() => {
+          loadMoreResults();
+        }}
       />
     </View>
   );

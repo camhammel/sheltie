@@ -28,6 +28,8 @@ const ListScreen = ({ navigation }) => {
   const [isTypeVisible, setTypeVisible] = useState(false);
   const [isBreedVisible, setBreedVisible] = useState(false);
   const [isAgeVisible, setAgeVisible] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [currentPage, setCurrentPage] = useState(2);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -36,6 +38,9 @@ const ListScreen = ({ navigation }) => {
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
+      let temp = JSON.parse(await AsyncStorage.getItem("lastpets"));
+
+      setResults(temp);
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
       }
@@ -48,13 +53,69 @@ const ListScreen = ({ navigation }) => {
           location.coords.longitude
       );
       setLocation(location);
-      //searchApi();
+
+      let temp2 = JSON.parse(await AsyncStorage.getItem("lastsearch"));
+      if ((await temp2) != null) {
+        setAge(await temp2.age);
+        setDistance(await temp2.distance);
+        setType(await temp2.type);
+        setBreed(await temp2.breed);
+      }
+
+      searchApi();
     })();
   }, []);
 
-  useEffect(() => {
-    searchApi();
-  }, [location]);
+  const loadMoreResults = async () => {
+    if (loadingMore) {
+      return;
+    }
+    setLoadingMore(true);
+    console.log(currentPage);
+    retrieveNewPage();
+    setCurrentPage(currentPage + 1);
+    setLoadingMore(false);
+  };
+
+  const retrieveNewPage = async () => {
+    var searchReq = `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&page=${currentPage}`;
+
+    petfinder
+      .get(searchReq, {
+        headers: {
+          Authorization: `Bearer ${(
+            await AsyncStorage.getItem("token")
+          ).toString()}`,
+        },
+      })
+      .then((response) => {
+        let temp3 = results;
+        for (let item of response.data.animals) {
+          if (!temp3.includes(item)) {
+            temp3.push(item);
+          }
+        }
+        setResults(temp3);
+      })
+      .catch(function (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          //console.log(error.response.status);
+          //console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+        }
+        //console.log(error.config);
+      });
+  };
 
   const searchApi = async () => {
     await update_token();
@@ -65,10 +126,12 @@ const ListScreen = ({ navigation }) => {
 
     var searchReq = `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}`;
 
-    //if (age.length > 0) {
-    //  searchReq.concat(`&age=${age.toString()}`);
-    //}
-    //if (breed) searchReq.concat(`&breed=${breed.toString()}`);
+    const this_search = {
+      type,
+      age,
+      distance,
+      breed,
+    };
 
     petfinder
       .get(searchReq, {
@@ -80,7 +143,9 @@ const ListScreen = ({ navigation }) => {
       })
       .then((response) => {
         setResults(response.data.animals);
-        console.log(response.data.animals);
+        AsyncStorage.setItem("lastpets", JSON.stringify(response.data.animals));
+        AsyncStorage.setItem("lastsearch", JSON.stringify(this_search));
+        //console.log(response.data.animals);
       })
       .catch(function (error) {
         if (error.response) {
@@ -359,7 +424,7 @@ const ListScreen = ({ navigation }) => {
       </View>
       <View style={{ flex: 1 }}>
         <Text style={styles.resultStyle}>{results.length} results found</Text>
-        <ListComponent results={results} />
+        <ListComponent results={results} loadMoreResults={loadMoreResults} />
       </View>
     </View>
   );

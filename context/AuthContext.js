@@ -23,7 +23,7 @@ const clearErrorMessage = (dispatch) => () => {
 };
 
 const tryLocalSignin = (dispatch) => async () => {
-  const token = await AsyncStorage.getItem("token");
+  const token = await AsyncStorage.getItem("authtoken");
 
   if (token) {
     dispatch({ type: "signin", payload: token });
@@ -37,7 +37,7 @@ const signup = (dispatch) => async ({ email, password }) => {
   //make API request to sign-up with that email and password
   try {
     const response = await sheltieApi.post("/signup", { email, password });
-    await AsyncStorage.setItem("token", response.data.token);
+    await AsyncStorage.setItem("authtoken", response.data.token);
     await AsyncStorage.setItem("email", email);
 
     dispatch({
@@ -56,7 +56,7 @@ const signup = (dispatch) => async ({ email, password }) => {
 const signin = (dispatch) => async ({ email, password }) => {
   try {
     const response = await sheltieApi.post("/signin", { email, password });
-    await AsyncStorage.setItem("token", response.data.token);
+    await AsyncStorage.setItem("authtoken", response.data.token);
     await AsyncStorage.setItem("email", email);
 
     dispatch({ type: "signin", payload: response.data.token });

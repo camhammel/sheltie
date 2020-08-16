@@ -60,9 +60,7 @@ const ListScreen = ({ navigation }) => {
         setAge(temp2.age);
         setDistance(temp2.distance);
         setType(temp2.type);
-        {
-          temp2.breed ? setBreed(temp2.breed) : null;
-        }
+        setBreed(temp2.breed);
       }
       getBreedOptions();
       searchApi();
@@ -387,10 +385,10 @@ const ListScreen = ({ navigation }) => {
             </Text>
             <DropDownPicker
               items={breedOptions}
-              defaultValue={[]}
+              defaultValue={breed}
               placeholder="Any breed"
               multiple={true}
-              multipleText={breed.toString()}
+              multipleText={breed.join(", ")}
               min={0}
               max={100}
               containerStyle={{ height: 40, marginHorizontal: 10 }}

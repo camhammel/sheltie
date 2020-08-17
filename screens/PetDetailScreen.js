@@ -6,6 +6,8 @@ import {
   AsyncStorage,
   Dimensions,
   TouchableOpacity,
+  Share,
+  Platform,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { Asset } from "expo-asset";
@@ -24,7 +26,7 @@ import FAIcon from "react-native-vector-icons/FontAwesome";
 import Attribute from "../components/Attribute";
 import { Context } from "../context/AuthContext";
 import ShelterInfo from "../components/ShelterInfo";
-import Share from "react-native-share";
+import * as Sharing from "expo-sharing";
 
 const defaultURI = Asset.fromModule(require("../assets/logo.png")).uri;
 const screenWidth = Math.round(Dimensions.get("window").width);
@@ -92,6 +94,43 @@ const PetDetailScreen = ({ route, navigation }) => {
       });
   };
 
+  const onShare = async () => {
+    if (Platform.OS === "android") {
+      try {
+        const result = await Share.share({
+          message: `I was browsing Sheltie and found ${results.name}! ${results.url}`,
+          title: `Meet ${results.name}`,
+        });
+
+        if (result.action === Share.sharedAction) {
+          //alert("Post Shared");
+        } else if (result.action === Share.dismissedAction) {
+          // dismissed
+          //alert("Post cancelled");
+        }
+      } catch (error) {
+        alert(error.message);
+      }
+    } else if (Platform.OS === "ios") {
+      try {
+        const result = await Share.share({
+          message: `I was browsing Sheltie and found ${results.name}!`,
+          title: `Meet ${results.name}`,
+          url: `${results.url}`,
+        });
+
+        if (result.action === Share.sharedAction) {
+          //alert("Post Shared");
+        } else if (result.action === Share.dismissedAction) {
+          // dismissed
+          //alert("Post cancelled");
+        }
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+  };
+
   const renderItem = ({ item, index }, parallaxProps) => {
     return (
       <View
@@ -142,7 +181,11 @@ const PetDetailScreen = ({ route, navigation }) => {
             >
               <NameGender name={results.name} gender={results.gender} />
               <View style={{ flexDirection: "row", alignSelf: "flex-end" }}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    onShare();
+                  }}
+                >
                   <Icon
                     name="share"
                     size={40}

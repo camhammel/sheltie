@@ -19,7 +19,7 @@ const SearchHeader = ({ onPress }) => {
     >
       <View
         style={{
-          flex: 6,
+          flex: 9,
           backgroundColor: "white",
         }}
       >
@@ -56,7 +56,7 @@ const SearchHeader = ({ onPress }) => {
           paddingVertical: 9,
         }}
       >
-        <Button
+        {/* <Button
           buttonStyle={{
             backgroundColor: "#ffffff",
             borderColor: COLORS.primary,
@@ -72,18 +72,18 @@ const SearchHeader = ({ onPress }) => {
               borderColor={COLORS.primary}
             />
           }
-        ></Button>
+        ></Button> */}
         <Button
           buttonStyle={{
             backgroundColor: "#ffffff",
-            borderColor: COLORS.primary,
+            borderColor: "transparent",
             borderWidth: 1,
-            marginRight: 5,
+            marginRight: 10,
           }}
           icon={
             <Icon
               name="user"
-              size={20}
+              size={30}
               color={COLORS.primary}
               borderWidth={1}
               borderColor={COLORS.white}

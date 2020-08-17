@@ -49,6 +49,12 @@ const ListScreen = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
+      searchApi();
+    })();
+  }, [location]);
+
+  useEffect(() => {
+    (async () => {
       let { status } = await Location.requestPermissionsAsync();
       let temp = JSON.parse(await AsyncStorage.getItem("lastpets"));
 

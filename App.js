@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import { AppLoading } from "expo";
+import { Asset } from "expo-asset";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import WelcomeScreen from "./screens/WelcomeScreen";
@@ -30,6 +32,30 @@ function capitalizeFirstLetter(string) {
 }
 
 function App() {
+  const [isReady, setIsReady] = useState(false);
+
+  const _cacheResourcesAsync = async () => {
+    const images = [
+      require("./assets/logo.png"),
+      require("./assets/icon.png"),
+      require("./assets/default.png"),
+    ];
+    const cacheImages = images.map((image) => {
+      return Asset.fromModule(image).downloadAsync();
+    });
+    return Promise.all(cacheImages);
+  };
+
+  if (!isReady) {
+    return (
+      <AppLoading
+        startAsync={_cacheResourcesAsync}
+        onFinish={() => setIsReady(true)}
+        onError={console.warn}
+      />
+    );
+  }
+
   return (
     <TokenProvider>
       <AuthProvider>

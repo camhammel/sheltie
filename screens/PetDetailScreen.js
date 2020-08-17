@@ -24,6 +24,7 @@ import FAIcon from "react-native-vector-icons/FontAwesome";
 import Attribute from "../components/Attribute";
 import { Context } from "../context/AuthContext";
 import ShelterInfo from "../components/ShelterInfo";
+import Share from "react-native-share";
 
 const defaultURI = Asset.fromModule(require("../assets/logo.png")).uri;
 const screenWidth = Math.round(Dimensions.get("window").width);
@@ -141,12 +142,14 @@ const PetDetailScreen = ({ route, navigation }) => {
             >
               <NameGender name={results.name} gender={results.gender} />
               <View style={{ flexDirection: "row", alignSelf: "flex-end" }}>
-                <Icon
-                  name="share"
-                  size={40}
-                  color={COLORS.primarylight}
-                  style={{ marginLeft: 15 }}
-                />
+                <TouchableOpacity>
+                  <Icon
+                    name="share"
+                    size={40}
+                    color={COLORS.primarylight}
+                    style={{ marginLeft: 15 }}
+                  />
+                </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
                     console.log("Heart Pressed");

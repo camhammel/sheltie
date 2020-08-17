@@ -73,7 +73,8 @@ const ListScreen = ({ navigation }) => {
         setType(temp2.type);
         setBreed(temp2.breed);
       }
-      getBreedOptions();
+      setCurrentPage(2);
+      await getBreedOptions();
       searchApi();
     })();
   }, []);
@@ -462,11 +463,27 @@ const ListScreen = ({ navigation }) => {
         <SearchHeader onPress={toggleModal} />
       </View>
       <View style={{ flex: 1 }}>
-        <ListComponent results={results} loadMoreResults={loadMoreResults} />
+        {results ? (
+          <Text style={styles.resultStyle}>{results.length} results</Text>
+        ) : null}
+        <ListComponent
+          results={results}
+          loadMoreResults={loadMoreResults}
+          refresh={searchApi}
+        />
       </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  resultStyle: {
+    height: 30,
+    backgroundColor: "white",
+    textAlign: "center",
+    fontSize: 16,
+    color: "grey",
+    paddingTop: 5,
+  },
+});
 export default ListScreen;

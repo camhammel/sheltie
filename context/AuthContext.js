@@ -71,7 +71,9 @@ const signin = (dispatch) => async ({ email, password }) => {
 };
 
 const signout = (dispatch) => async () => {
-  await AsyncStorage.removeItem("token");
+  await AsyncStorage.getAllKeys()
+    .then((keys) => AsyncStorage.multiRemove(keys))
+    .then(() => alert("success"));
   dispatch({ type: "signout" });
   RootNavigation.reset("Welcome");
 };

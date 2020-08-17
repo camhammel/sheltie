@@ -14,7 +14,7 @@ import { COLORS } from "../assets/colors";
 const defaultURI = Asset.fromModule(require("../assets/default.png")).uri;
 let isLoading = false;
 
-const ListComponent = ({ results, loadMoreResults }) => {
+const ListComponent = ({ results, loadMoreResults, refresh }) => {
   const navigation = useNavigation();
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -56,13 +56,21 @@ const ListComponent = ({ results, loadMoreResults }) => {
           keyExtractor={(item, index) => index.toString()}
           onEndReachedThreshold={0.01}
           onEndReached={async () => {
-            isLoading = true;
-            await loadMoreResults();
-            isLoading = false;
+            if (results.length >= 50) {
+              isLoading = true;
+              await loadMoreResults();
+              isLoading = false;
+            }
           }}
           ListFooterComponent={
             isLoading ? <ActivityIndicator size="small" /> : null
           }
+          onRefresh={async () => {
+            isLoading = true;
+            await refresh();
+            isLoading = false;
+          }}
+          refreshing={isLoading}
         />
       </View>
     );

@@ -6,6 +6,7 @@ import petfinder from "../api/petfinder";
 
 const FavouritesScreen = () => {
   let favIds = [0];
+  let parsedIds;
   const [results, setResults] = useState([]);
 
   const isFocused = useIsFocused();
@@ -13,14 +14,16 @@ const FavouritesScreen = () => {
   useEffect(() => {
     (async () => {
       favIds = await AsyncStorage.getItem("favourites");
-      let parsedIds = JSON.parse(favIds);
+      parsedIds = JSON.parse(favIds);
       console.log("FavIds: " + parsedIds);
-      await searchFavs(parsedIds);
+      await searchFavs();
     })();
+
+    return () => {};
     //Update the state you want to be updated
   }, [isFocused]);
 
-  const searchFavs = async (parsedIds) => {
+  const searchFavs = async () => {
     console.log(
       "Token value in storage is: " +
         (await AsyncStorage.getItem("token")).toString()
@@ -69,7 +72,7 @@ const FavouritesScreen = () => {
   };
   return (
     <View style={{ flex: 1 }}>
-      <ListComponent results={results} />
+      <ListComponent results={results} refresh={searchFavs()} />
     </View>
   );
 };

@@ -20,42 +20,13 @@ const AccountScreen = () => {
   return (
     <View style={styles.viewStyle}>
       <Spacer>
-        <Image source={Logo} style={{ width: 256, height: 256 }} />
+        <Image
+          source={Logo}
+          style={{ width: 256, height: 256, marginBottom: 30 }}
+        />
       </Spacer>
-      <Spacer>
-        <Text h4 style={{ textAlign: "center" }}>
-          You are currently signed in as
-        </Text>
-        <Text
-          style={{
-            fontSize: 22,
-            marginTop: 10,
-            color: COLORS.primary,
-            textAlign: "center",
-            fontWeight: "bold",
-          }}
-        >
-          {email}
-        </Text>
-      </Spacer>
-      <Spacer>
-        <Button
-          style={styles.signoutStyle}
-          type="outline"
-          title={"Sign Out"}
-          titleStyle={{ color: COLORS.darkgrey, paddingLeft: 10 }}
-          buttonStyle={styles.signoutButtonStyle}
-          containerStyle={styles.signoutContainerStyle}
-          onPress={() => signout()}
-          icon={
-            <Icon
-              name="back"
-              size={18}
-              color={COLORS.darkgrey}
-              style={{ alignSelf: "flex-end" }}
-            />
-          }
-        ></Button>
+
+      <View style={{ flex: 1, justifyContent: "flex-start" }}>
         <Button
           style={styles.favouritesStyle}
           type="solid"
@@ -72,13 +43,54 @@ const AccountScreen = () => {
               name="heart"
               size={18}
               color="white"
-              style={{ alignSelf: "flex-end" }}
+              style={{ alignSelf: "center" }}
             />
           }
         ></Button>
-      </Spacer>
+      </View>
+
       <View style={{ flex: 1, justifyContent: "flex-end" }}>
-        <Text style={{ textAlign: "center", marginBottom: 20 }}>
+        <Text
+          style={{
+            fontSize: 24,
+            marginTop: 20,
+            marginBottom: 5,
+            color: COLORS.darkgrey,
+            textAlign: "center",
+            fontWeight: "normal",
+          }}
+        >
+          Currently signed in as
+        </Text>
+        <Text
+          style={{
+            fontSize: 26,
+            marginBottom: 30,
+            color: COLORS.darkgrey,
+            textAlign: "center",
+            fontWeight: "bold",
+          }}
+        >
+          {email}
+        </Text>
+        <Button
+          style={styles.signoutStyle}
+          type="outline"
+          title={"Sign Out"}
+          titleStyle={{ color: COLORS.darkgrey, paddingLeft: 10 }}
+          buttonStyle={styles.signoutButtonStyle}
+          containerStyle={styles.signoutContainerStyle}
+          onPress={() => signout()}
+          icon={
+            <Icon
+              name="back"
+              size={18}
+              color={COLORS.darkgrey}
+              style={{ alignSelf: "center" }}
+            />
+          }
+        ></Button>
+        <Text style={{ textAlign: "center", marginVertical: 20 }}>
           Powered by the Petfinder API
         </Text>
       </View>

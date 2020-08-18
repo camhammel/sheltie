@@ -55,12 +55,25 @@ const ListScreen = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestPermissionsAsync();
       let temp = JSON.parse(await AsyncStorage.getItem("lastpets"));
-
       setResults(temp);
+      let temp2 = JSON.parse(await AsyncStorage.getItem("lastsearch"));
+      if ((await temp2) != null) {
+        setAge(await temp2.age);
+        setDistance(await temp2.distance);
+        setType(await temp2.type);
+        setBreed(await temp2.breed);
+      }
+
+      let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
-        alert("Permission to access location was denied");
+        alert("Permission to access location was denied. Try again.");
+        const { newstatus, permissions } = await Permissions.askAsync(
+          Permissions.LOCATION
+        );
+        if (!newstatus === "granted") {
+          throw new Error("Location permissions not granted.");
+        }
       }
 
       let location = await Location.getCurrentPositionAsync({});
@@ -71,15 +84,7 @@ const ListScreen = ({ navigation }) => {
           location.coords.longitude
       );
       setLocation(location);
-
-      let temp2 = JSON.parse(await AsyncStorage.getItem("lastsearch"));
-      if ((await temp2) != null) {
-        setAge(await temp2.age);
-        setDistance(await temp2.distance);
-        setType(await temp2.type);
-        setBreed(await temp2.breed);
-      }
-      setCurrentPage(2);
+      setCurrentPage(1);
       await getBreedOptions();
       searchApi();
     })();
@@ -90,9 +95,9 @@ const ListScreen = ({ navigation }) => {
       return;
     }
     setLoadingMore(true);
-    console.log(currentPage);
-    await retrieveNewPage();
     setCurrentPage(currentPage + 1);
+    console.log("rendering page " + currentPage + "...");
+    await retrieveNewPage();
     setLoadingMore(false);
   };
 

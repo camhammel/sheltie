@@ -87,11 +87,10 @@ const AccountScreen = () => {
               the configuration of the app when utilizing my Service, the time
               and date of your use of the Service, and other statistics. {"\n"}
               {"\n"}Cookies{"\n"}
-              {"\n"}
-              Cookies are files with a small amount of data that are commonly
-              used as anonymous unique identifiers. These are sent to your
-              browser from the websites that you visit and are stored on your
-              device's internal memory. This Service does not use these
+              {"\n"}Cookies are files with a small amount of data that are
+              commonly used as anonymous unique identifiers. These are sent to
+              your browser from the websites that you visit and are stored on
+              your device's internal memory. This Service does not use these
               “cookies” explicitly. However, the app may use third party code
               and libraries that use “cookies” to collect information and
               improve their services. You have the option to either accept or
@@ -108,14 +107,14 @@ const AccountScreen = () => {
               to them on our behalf. However, they are obligated not to disclose
               or use the information for any other purpose. {"\n"}
               {"\n"}Security{"\n"}
-              {"\n"} I value your trust in providing us your Personal
+              {"\n"}I value your trust in providing us your Personal
               Information, thus we are striving to use commercially acceptable
               means of protecting it. But remember that no method of
               transmission over the internet, or method of electronic storage is
               100% secure and reliable, and I cannot guarantee its absolute
               security. {"\n"}
               {"\n"}Links to Other Sites{"\n"}
-              {"\n"} This Service may contain links to other sites. If you click
+              {"\n"}This Service may contain links to other sites. If you click
               on a third-party link, you will be directed to that site. Note
               that these external sites are not operated by me. Therefore, I
               strongly advise you to review the Privacy Policy of these
@@ -124,7 +123,7 @@ const AccountScreen = () => {
               sites or services.
               {"\n"}
               {"\n"}Children’s Privacy{"\n"}
-              {"\n"} These Services do not address anyone under the age of 13. I
+              {"\n"}These Services do not address anyone under the age of 13. I
               do not knowingly collect personally identifiable information from
               children under 13. In the case I discover that a child under 13
               has provided me with personal information, I immediately delete
@@ -133,12 +132,12 @@ const AccountScreen = () => {
               please contact me so that I will be able to do necessary actions.{" "}
               {"\n"}
               {"\n"}Changes to This Privacy Policy{"\n"}
-              {"\n"} I may update our Privacy Policy from time to time. Thus,
-              you are advised to review this page periodically for any changes.
-              I will notify you of any changes by posting the new Privacy Policy
+              {"\n"}I may update our Privacy Policy from time to time. Thus, you
+              are advised to review this page periodically for any changes. I
+              will notify you of any changes by posting the new Privacy Policy
               on this page. This policy is effective as of 2020-08-17 {"\n"}
               {"\n"}Contact Us{"\n"}
-              {"\n"} If you have any questions or suggestions about my Privacy
+              {"\n"}If you have any questions or suggestions about my Privacy
               Policy, do not hesitate to contact me at help@sheltie.app.
             </Text>
             <Text
@@ -223,43 +222,37 @@ const AccountScreen = () => {
               terms will end; (b) you must stop using the app, and (if needed)
               delete it from your device. {"\n"}
               {"\n"}Changes to This Terms and Conditions{"\n"}
-              {"\n"} I may update our Terms and Conditions from time to time.
+              {"\n"}I may update our Terms and Conditions from time to time.
               Thus, you are advised to review this page periodically for any
               changes. I will notify you of any changes by posting the new Terms
               and Conditions on this page. These terms and conditions are
               effective as of 2020-08-17 {"\n"}
               {"\n"}Contact Us{"\n"}
-              {"\n"} If you have any questions or suggestions about my Terms and
+              {"\n"}If you have any questions or suggestions about my Terms and
               Conditions, do not hesitate to contact me at help@sheltie.app.
             </Text>
-            <TouchableOpacity
+            <Button
+              buttonStyle={{
+                backgroundColor: COLORS.primary,
+                marginTop: 15,
+                marginBottom: 20,
+              }}
+              title="Close"
               onPress={() => {
                 toggleModal();
               }}
-            >
-              <Text
-                style={{
-                  fontSize: 22,
-                  textAlign: "center",
-                  color: "blue",
-                  marginTop: 15,
-                  marginBottom: 15,
-                }}
-              >
-                Close
-              </Text>
-            </TouchableOpacity>
+            />
           </ScrollView>
         </View>
       </Modal>
       <Spacer>
         <Image
           source={Logo}
-          style={{ width: 256, height: 256, marginBottom: 30 }}
+          style={{ width: 256, height: 256, marginBottom: 20 }}
         />
       </Spacer>
 
-      <View style={{ flex: 1, justifyContent: "flex-start" }}>
+      <View>
         <Button
           style={styles.favouritesStyle}
           type="solid"
@@ -282,7 +275,7 @@ const AccountScreen = () => {
         ></Button>
       </View>
 
-      <View style={{ flex: 3, justifyContent: "flex-end" }}>
+      <View style={{ flex: 6, justifyContent: "flex-end" }}>
         <Text
           style={{
             fontSize: 24,
@@ -307,7 +300,6 @@ const AccountScreen = () => {
           {email}
         </Text>
         <Button
-          style={styles.signoutStyle}
           type="outline"
           title={"Sign Out"}
           titleStyle={{ color: COLORS.darkgrey, paddingLeft: 10 }}
@@ -324,28 +316,21 @@ const AccountScreen = () => {
           }
         ></Button>
         <View style={{ flex: 1, justifyContent: "flex-end" }}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
+          <TouchableOpacity
+            onPress={() => {
+              Linking.openURL("mailto: help@sheltie.app");
             }}
           >
-            <TouchableOpacity
-              onPress={() => {
-                Linking.openURL("mailto: help@sheltie.app");
+            <Text
+              style={{
+                textAlign: "center",
+                color: "blue",
+                marginBottom: 5,
               }}
             >
-              <Text
-                style={{
-                  textAlign: "center",
-                  color: "blue",
-                  marginBottom: 5,
-                }}
-              >
-                Contact: help@sheltie.app
-              </Text>
-            </TouchableOpacity>
-          </View>
+              Contact: help@sheltie.app
+            </Text>
+          </TouchableOpacity>
           <Text style={{ textAlign: "center", marginBottom: 5 }}>
             Powered by the Petfinder API
           </Text>
@@ -354,9 +339,7 @@ const AccountScreen = () => {
               toggleModal();
             }}
           >
-            <Text
-              style={{ textAlign: "center", marginBottom: 10, color: "blue" }}
-            >
+            <Text style={{ textAlign: "center", color: "blue" }}>
               Privacy Policy
             </Text>
           </TouchableOpacity>
@@ -375,6 +358,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.darkgrey,
     borderStartColor: COLORS.darkgrey,
     borderTopColor: COLORS.darkgrey,
+    borderBottomColor: COLORS.darkgrey,
     color: COLORS.darkgrey,
   },
   signoutContainerStyle: {
@@ -388,7 +372,9 @@ const styles = StyleSheet.create({
     borderColor: COLORS.darkgrey,
     borderStartColor: COLORS.darkgrey,
     borderTopColor: COLORS.darkgrey,
+    borderBottomColor: COLORS.darkgrey,
     color: COLORS.darkgrey,
+    marginBottom: 5,
   },
   favouritesStyle: {},
   viewStyle: {

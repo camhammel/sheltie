@@ -60,7 +60,7 @@ const ListScreen = ({ navigation }) => {
 
       setResults(temp);
       if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
+        alert("Permission to access location was denied");
       }
 
       let location = await Location.getCurrentPositionAsync({});

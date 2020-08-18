@@ -4,6 +4,7 @@ import {
   AsyncStorage,
   StyleSheet,
   ActivityIndicator,
+  useWindowDimensions,
 } from "react-native";
 import { Text, Button } from "react-native-elements";
 import ListComponent from "../components/ListComponent";
@@ -13,7 +14,7 @@ import { Context as TokenContext } from "../context/TokenContext";
 import * as Location from "expo-location";
 import { COLORS } from "../assets/colors";
 import Modal from "react-native-modal";
-import { SliderPicker } from "react-native-slider-picker";
+import MySlider from "../components/MySlider";
 import DropDownPicker from "react-native-dropdown-picker";
 import Spacer from "../components/Spacer";
 
@@ -259,40 +260,7 @@ const ListScreen = ({ navigation }) => {
             Search Filters
           </Text>
           <View style={{ flex: 1 }}>
-            <Text
-              style={{
-                fontWeight: "bold",
-                fontSize: 20,
-                color: COLORS.primary,
-                marginLeft: 15,
-                marginBottom: 5,
-              }}
-            >
-              DISTANCE ({distance}mi)
-            </Text>
-            <SliderPicker
-              minLabel={"0"}
-              midLabel={"150"}
-              maxLabel={"300"}
-              maxValue={300}
-              labelFontColor={"#6c7682"}
-              labelFontWeight={"50"}
-              labelFontSize={20}
-              fontSize={18}
-              showFill={true}
-              fillColor={COLORS.light}
-              buttonBackgroundColor={COLORS.primarylight}
-              buttonBorderColor={COLORS.primary}
-              buttonBorderWidth={1}
-              scaleNumberFontWeight={"300"}
-              buttonDimensionsPercentage={6}
-              heightPercentage={1}
-              widthPercentage={70}
-              callback={(position) => {
-                setDistance(position);
-              }}
-              defaultValue={distance}
-            />
+            <MySlider distance={distance} setDistance={setDistance} />
             <Text
               style={{
                 fontWeight: "bold",

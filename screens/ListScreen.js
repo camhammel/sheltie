@@ -85,7 +85,6 @@ const ListScreen = ({ navigation }) => {
           location.coords.longitude
       );
       setLocation(location);
-      setCurrentPage(1);
       await getBreedOptions();
       searchApi();
     })();
@@ -184,6 +183,7 @@ const ListScreen = ({ navigation }) => {
   };
 
   const searchApi = async () => {
+    setCurrentPage(1);
     await update_token();
     console.log(
       "Token value in storage is: " +

@@ -248,6 +248,7 @@ const PetDetailScreen = ({ route, navigation }) => {
                   ? results.description
                       .replace(/&#039;/g, "'")
                       .replace(/&amp;#39;/g, "'")
+                      .replace(/&amp;#34;/g, '"')
                   : null}
               </Text>
             </Spacer>

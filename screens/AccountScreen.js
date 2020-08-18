@@ -6,6 +6,7 @@ import {
   Image,
   Linking,
   ScrollView,
+  useWindowDimensions,
 } from "react-native";
 import { Button, Text } from "react-native-elements";
 import Spacer from "../components/Spacer";
@@ -32,7 +33,13 @@ const AccountScreen = () => {
   }, []);
 
   return (
-    <View style={styles.viewStyle}>
+    <ScrollView
+      style={styles.viewStyle}
+      contentContainerStyle={{
+        alignItems: "center",
+        justifyContent: "flex-start",
+      }}
+    >
       <Modal
         isVisible={isModalVisible}
         hasBackdrop={true}
@@ -248,13 +255,18 @@ const AccountScreen = () => {
       <Spacer>
         <Image
           source={Logo}
-          style={{ width: 256, height: 256, marginBottom: 20 }}
+          style={{
+            width: useWindowDimensions().width - 40,
+            height: useWindowDimensions().height / 3,
+            marginBottom: 20,
+          }}
+          resizeMode="contain"
         />
       </Spacer>
 
       <View>
         <Button
-          style={styles.favouritesStyle}
+          containerStyle={{ marginBottom: 15 }}
           type="solid"
           title={"My Favourites"}
           titleStyle={{ paddingLeft: 10 }}
@@ -291,7 +303,7 @@ const AccountScreen = () => {
         <Text
           style={{
             fontSize: 26,
-            marginBottom: 30,
+            marginBottom: 20,
             color: COLORS.darkgrey,
             textAlign: "center",
             fontWeight: "bold",
@@ -299,23 +311,24 @@ const AccountScreen = () => {
         >
           {email}
         </Text>
-        <Button
-          type="outline"
-          title={"Sign Out"}
-          titleStyle={{ color: COLORS.darkgrey, paddingLeft: 10 }}
-          buttonStyle={styles.signoutButtonStyle}
-          containerStyle={styles.signoutContainerStyle}
-          onPress={() => signout()}
-          icon={
-            <Icon
-              name="back"
-              size={18}
-              color={COLORS.darkgrey}
-              style={{ alignSelf: "center" }}
-            />
-          }
-        ></Button>
+
         <View style={{ flex: 1, justifyContent: "flex-end" }}>
+          <Button
+            type="outline"
+            title={"Sign Out"}
+            titleStyle={{ color: COLORS.darkgrey, paddingLeft: 10 }}
+            buttonStyle={styles.signoutButtonStyle}
+            containerStyle={styles.signoutContainerStyle}
+            onPress={() => signout()}
+            icon={
+              <Icon
+                name="back"
+                size={18}
+                color={COLORS.darkgrey}
+                style={{ alignSelf: "center" }}
+              />
+            }
+          ></Button>
           <TouchableOpacity
             onPress={() => {
               Linking.openURL("mailto: help@sheltie.app");
@@ -339,13 +352,15 @@ const AccountScreen = () => {
               toggleModal();
             }}
           >
-            <Text style={{ textAlign: "center", color: "blue" }}>
+            <Text
+              style={{ textAlign: "center", color: "blue", marginBottom: 15 }}
+            >
               Privacy Policy
             </Text>
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -374,17 +389,14 @@ const styles = StyleSheet.create({
     borderTopColor: COLORS.darkgrey,
     borderBottomColor: COLORS.darkgrey,
     color: COLORS.darkgrey,
-    marginBottom: 5,
   },
   favouritesStyle: {},
   viewStyle: {
     flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
     paddingBottom: 20,
-    justifyContent: "flex-start",
+    flexDirection: "column",
     backgroundColor: "#ffffff",
   },
 });
-const privacypolicy = "";
+
 export default AccountScreen;

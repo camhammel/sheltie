@@ -49,7 +49,7 @@ const ListScreen = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
-      searchApi();
+      await searchApi();
     })();
   }, [location]);
 
@@ -73,11 +73,11 @@ const ListScreen = ({ navigation }) => {
       setLocation(location);
 
       let temp2 = JSON.parse(await AsyncStorage.getItem("lastsearch"));
-      if (temp2 != null) {
-        setAge(temp2.age);
-        setDistance(temp2.distance);
-        setType(temp2.type);
-        setBreed(temp2.breed);
+      if ((await temp2) != null) {
+        setAge(await temp2.age);
+        setDistance(await temp2.distance);
+        setType(await temp2.type);
+        setBreed(await temp2.breed);
       }
       setCurrentPage(2);
       await getBreedOptions();
@@ -91,7 +91,7 @@ const ListScreen = ({ navigation }) => {
     }
     setLoadingMore(true);
     console.log(currentPage);
-    retrieveNewPage();
+    await retrieveNewPage();
     setCurrentPage(currentPage + 1);
     setLoadingMore(false);
   };

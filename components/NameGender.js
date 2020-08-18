@@ -2,7 +2,7 @@ import React from "react";
 import Male from "../assets/male.png";
 import Female from "../assets/female.png";
 import { Text } from "react-native-elements";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, Dimensions } from "react-native";
 
 function capitalizeFirstLetter(string) {
   string = string.toLowerCase();
@@ -10,21 +10,29 @@ function capitalizeFirstLetter(string) {
 }
 
 const NameGender = ({ name, gender }) => {
-  if (name.length > 8) {
-    name = name.substring(0, 8) + "...";
-  }
+  // if (name.length > 8) {
+  //   name = name.substring(0, 8) + "...";
+  // }
 
   return (
-    <View style={{ flexDirection: "row", marginTop: 10 }}>
+    <View
+      style={{
+        flexDirection: "row",
+        marginTop: 10,
+        justifyContent: "flex-start",
+      }}
+    >
       <Text
         h3
         style={{
           marginLeft: 15,
           marginVertical: 10,
           fontWeight: "bold",
+          width: Dimensions.get("screen").width - 240,
         }}
-        adjustsFontSizeToFit={true}
-        numberOfLines={3}
+        //adjustsFontSizeToFit={true}
+        numberOfLines={1}
+        ellipsizeMode="tail"
       >
         {capitalizeFirstLetter(name)}
       </Text>
@@ -40,9 +48,10 @@ const NameGender = ({ name, gender }) => {
 const styles = StyleSheet.create({
   genderStyle: {
     height: 30,
-    width: 50,
+    width: 30,
     resizeMode: "contain",
     alignSelf: "center",
+    marginLeft: 0,
   },
 });
 

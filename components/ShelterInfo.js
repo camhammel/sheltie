@@ -154,9 +154,9 @@ const styles = StyleSheet.create({
   buttonStyle: {
     alignSelf: "center",
     marginTop: 10,
-    marginHorizontal: 10,
+    marginHorizontal: 20,
     borderRadius: 25,
-    paddingHorizontal: 25,
+    paddingHorizontal: 20,
     backgroundColor: COLORS.primary,
   },
   titleStyle: {

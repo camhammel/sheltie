@@ -36,7 +36,7 @@ const ListScreen = ({ navigation }) => {
   const [isBreedVisible, setBreedVisible] = useState(false);
   const [isAgeVisible, setAgeVisible] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [currentPage, setCurrentPage] = useState(2);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);

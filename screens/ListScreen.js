@@ -236,6 +236,11 @@ const ListScreen = ({ navigation }) => {
         backdropOpacity={0.5}
       >
         <View
+          onStartShouldSetResponder={() => {
+            setAgeVisible(false);
+            setBreedVisible(false);
+            setTypeVisible(false);
+          }}
           style={{
             borderRadius: 15,
             height: 600,

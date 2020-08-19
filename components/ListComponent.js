@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
@@ -12,10 +12,15 @@ import { Asset } from "expo-asset";
 import { COLORS } from "../assets/colors";
 
 const defaultURI = Asset.fromModule(require("../assets/default.png")).uri;
-let isLoading = false;
 let isRefreshing = false;
 
 const ListComponent = ({ results, loadMoreResults, refresh }) => {
+  const [
+    onEndReachedCalledDuringMomentum,
+    setOnEndReachedCalledDuringMomentum,
+  ] = useState(true);
+  const [lastLoadCount, setLastLoadCount] = useState(0);
+
   const navigation = useNavigation();
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -48,6 +53,29 @@ const ListComponent = ({ results, loadMoreResults, refresh }) => {
     />
   );
 
+  const _loadMoreData = () => {
+    if (!onEndReachedCalledDuringMomentum) {
+      setOnEndReachedCalledDuringMomentum(true);
+
+      setTimeout(() => {
+        console.log("Got here...");
+        loadMoreResults();
+      }, 500);
+    }
+  };
+
+  const _onMomentumScrollBegin = () => {
+    setOnEndReachedCalledDuringMomentum(false);
+  };
+
+  const _renderSearchResultsFooter = () => {
+    return onEndReachedCalledDuringMomentum && results.length >= 50 ? (
+      <View style={{ marginBottom: 30, marginTop: -50, alignItems: "center" }}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
+    ) : null;
+  };
+
   if (loadMoreResults != null) {
     return (
       <View style={styles.container}>
@@ -55,19 +83,19 @@ const ListComponent = ({ results, loadMoreResults, refresh }) => {
           data={results}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
-          onEndReachedThreshold={0.5}
-          onEndReached={async () => {
+          keyboardShouldPersistTaps="always"
+          showsVerticalScrollIndicator={false}
+          //bounces={false}
+          onEndReachedThreshold={0.01}
+          onEndReached={() => {
             if (results.length >= 50) {
-              if (!isLoading) {
-                isLoading = true;
-                await loadMoreResults();
-                isLoading = false;
-              }
+              _loadMoreData();
             }
           }}
-          ListFooterComponent={
-            isLoading ? <ActivityIndicator size="small" /> : null
-          }
+          onMomentumScrollBegin={() => {
+            _onMomentumScrollBegin();
+          }}
+          ListFooterComponent={_renderSearchResultsFooter()}
           onRefresh={async () => {
             if (!isRefreshing) {
               isRefreshing = true;

@@ -95,9 +95,7 @@ const ListScreen = ({ navigation }) => {
     if (!loadingMore) {
       setLoadingMore(true);
       console.log("rendering page " + nextPage + "...");
-      setTimeout(() => {
-        retrieveNewPage();
-      }, 3000);
+      retrieveNewPage();
       setNextPage(nextPage + 1);
       setLoadingMore(false);
     }

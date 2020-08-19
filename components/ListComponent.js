@@ -61,9 +61,7 @@ const ListComponent = ({ results, loadMoreResults, refresh }) => {
               if (!isLoading) {
                 isLoading = true;
                 await loadMoreResults();
-                setTimeout(() => {
-                  isLoading = false;
-                }, 3000);
+                isLoading = false;
               }
             }
           }}

@@ -184,10 +184,6 @@ const ListScreen = ({ navigation }) => {
 
   const searchApi = async () => {
     setNextPage(2);
-    console.log(
-      "Token value in storage is: " +
-        (await AsyncStorage.getItem("token")).toString()
-    );
 
     var searchReq = `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`;
 

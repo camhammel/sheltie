@@ -13,6 +13,7 @@ import { COLORS } from "../assets/colors";
 
 const defaultURI = Asset.fromModule(require("../assets/default.png")).uri;
 let isLoading = false;
+let isRefreshing = false;
 
 const ListComponent = ({ results, loadMoreResults, refresh }) => {
   const navigation = useNavigation();
@@ -54,23 +55,29 @@ const ListComponent = ({ results, loadMoreResults, refresh }) => {
           data={results}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
-          onEndReachedThreshold={0.01}
+          onEndReachedThreshold={0.5}
           onEndReached={async () => {
             if (results.length >= 50) {
-              isLoading = true;
-              await loadMoreResults();
-              isLoading = false;
+              if (!isLoading) {
+                isLoading = true;
+                await loadMoreResults();
+                setTimeout(() => {
+                  isLoading = false;
+                }, 3000);
+              }
             }
           }}
           ListFooterComponent={
             isLoading ? <ActivityIndicator size="small" /> : null
           }
           onRefresh={async () => {
-            isLoading = true;
-            await refresh();
-            isLoading = false;
+            if (!isRefreshing) {
+              isRefreshing = true;
+              await refresh();
+              isRefreshing = false;
+            }
           }}
-          refreshing={isLoading}
+          refreshing={isRefreshing}
         />
       </View>
     );

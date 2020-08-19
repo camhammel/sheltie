@@ -36,7 +36,7 @@ const ListScreen = ({ navigation }) => {
   const [isBreedVisible, setBreedVisible] = useState(false);
   const [isAgeVisible, setAgeVisible] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [nextPage, setNextPage] = useState(2);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -50,6 +50,7 @@ const ListScreen = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
+      await update_token();
       await searchApi();
     })();
   }, [location]);
@@ -91,18 +92,19 @@ const ListScreen = ({ navigation }) => {
   }, []);
 
   const loadMoreResults = async () => {
-    if (loadingMore) {
-      return;
+    if (!loadingMore) {
+      setLoadingMore(true);
+      console.log("rendering page " + nextPage + "...");
+      setTimeout(() => {
+        retrieveNewPage();
+      }, 3000);
+      setNextPage(nextPage + 1);
+      setLoadingMore(false);
     }
-    setLoadingMore(true);
-    setCurrentPage(currentPage + 1);
-    console.log("rendering page " + currentPage + "...");
-    await retrieveNewPage();
-    setLoadingMore(false);
   };
 
   const retrieveNewPage = async () => {
-    var searchReq = `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}&page=${currentPage}`;
+    var searchReq = `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}&page=${nextPage}`;
 
     petfinder
       .get(searchReq, {
@@ -183,8 +185,7 @@ const ListScreen = ({ navigation }) => {
   };
 
   const searchApi = async () => {
-    setCurrentPage(1);
-    await update_token();
+    setNextPage(2);
     console.log(
       "Token value in storage is: " +
         (await AsyncStorage.getItem("token")).toString()

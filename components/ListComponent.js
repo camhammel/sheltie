@@ -19,7 +19,6 @@ const ListComponent = ({ results, loadMoreResults, refresh }) => {
     onEndReachedCalledDuringMomentum,
     setOnEndReachedCalledDuringMomentum,
   ] = useState(true);
-  const [lastLoadCount, setLastLoadCount] = useState(0);
 
   const navigation = useNavigation();
   function capitalizeFirstLetter(string) {
@@ -69,7 +68,7 @@ const ListComponent = ({ results, loadMoreResults, refresh }) => {
   };
 
   const _renderSearchResultsFooter = () => {
-    return onEndReachedCalledDuringMomentum && results.length >= 50 ? (
+    return onEndReachedCalledDuringMomentum ? (
       <View style={{ marginBottom: 30, marginTop: -50, alignItems: "center" }}>
         <ActivityIndicator size="large" color={COLORS.primary} />
       </View>
@@ -85,7 +84,6 @@ const ListComponent = ({ results, loadMoreResults, refresh }) => {
           keyExtractor={(item, index) => index.toString()}
           keyboardShouldPersistTaps="always"
           showsVerticalScrollIndicator={false}
-          //bounces={false}
           onEndReachedThreshold={0.01}
           onEndReached={() => {
             if (results.length >= 50) {

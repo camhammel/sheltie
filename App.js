@@ -76,7 +76,6 @@ function App() {
               component={SignupScreen}
               options={{
                 title: "Sign Up",
-                animationTypeForReplace: "pop",
                 headerShown: false,
               }}
             />

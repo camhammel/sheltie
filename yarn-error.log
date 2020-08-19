@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js add @react-native-community/slider@3.0.0
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js add react-native-fast-image
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/Users/cameronhammel/react/sheltie/node_modules/.bin/browserslist'
+  Error: EACCES: permission denied, unlink '/Users/cameronhammel/react/sheltie/node_modules/.bin/atob'
 
 npm manifest: 
   {
@@ -29,7 +29,7 @@ npm manifest:
     "dependencies": {
       "@react-native-community/geolocation": "^2.0.2",
       "@react-native-community/masked-view": "0.1.10",
-      "@react-native-community/slider": "^3.0.3",
+      "@react-native-community/slider": "3.0.0",
       "@react-navigation/native": "^5.7.1",
       "@react-navigation/stack": "^5.7.1",
       "axios": "^0.19.2",
@@ -45,6 +45,7 @@ npm manifest:
       "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
       "react-native-dropdown-picker": "^3.1.11",
       "react-native-elements": "^2.0.4",
+      "react-native-fast-image": "^8.3.2",
       "react-native-gesture-handler": "~1.6.0",
       "react-native-get-location": "^1.4.2",
       "react-native-keyboard-aware-scroll-view": "^0.9.1",
@@ -68,7 +69,23 @@ npm manifest:
       "@babel/core": "^7.8.6",
       "babel-preset-expo": "~8.1.0"
     },
-    "private": true
+    "private": true,
+    "name": "sheltie",
+    "version": "1.0.0",
+    "description": "sheltie package",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/camhammel/sheltie.git"
+    },
+    "keywords": [
+      "sheltie"
+    ],
+    "author": "Cameron Hammel",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/camhammel/sheltie/issues"
+    },
+    "homepage": "https://github.com/camhammel/sheltie#readme"
   }
 
 yarn manifest: 
@@ -1293,6 +1310,11 @@ Lockfile:
     version "0.1.10"
     resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.10.tgz#5dda643e19e587793bc2034dd9bf7398ad43d401"
     integrity sha512-rk4sWFsmtOw8oyx8SD3KSvawwaK7gRBSEIy2TAwURyGt+3TizssXP1r8nx3zY+R7v2vYYHXZ+k2/GULAT/bcaQ==
+  
+  "@react-native-community/slider@3.0.0":
+    version "3.0.0"
+    resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-3.0.0.tgz#ffbf78689fc0572fb5c1e2ccb61b2ef074d3dcd2"
+    integrity sha512-deNc3JHBHz24YN+0DTAocXfrYFIFc1DvsIriMJSsJlR/MvsLzoq2+qwaEN+0/LJ37pstv85wZWY0pNugk4e41g==
   
   "@react-navigation/core@^3.7.6":
     version "3.7.6"

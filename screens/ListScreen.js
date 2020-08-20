@@ -158,6 +158,9 @@ const ListScreen = ({ navigation }) => {
   };
 
   const getBreedOptions = async () => {
+    if (type == "") {
+      setTimeout(() => {}, 1000);
+    }
     var breedSearch = `types/${type}/breeds`;
 
     petfinder
@@ -435,7 +438,7 @@ const ListScreen = ({ navigation }) => {
                   setDistance(150);
                   setBreed([]);
                   setAge([]);
-                  setType("dog");
+                  setType("Dog");
                 }}
                 zIndex={2000}
                 containerStyle={{

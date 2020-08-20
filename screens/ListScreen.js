@@ -4,9 +4,10 @@ import {
   AsyncStorage,
   StyleSheet,
   ActivityIndicator,
+  ScrollView,
   useWindowDimensions,
 } from "react-native";
-import { Text, Button } from "react-native-elements";
+import { Text, Button, Input } from "react-native-elements";
 import ListComponent from "../components/ListComponent";
 import SearchHeader from "../components/SearchHeader";
 import petfinder from "../api/petfinder";
@@ -16,6 +17,7 @@ import { COLORS } from "../assets/colors";
 import Modal from "react-native-modal";
 import MySlider from "../components/MySlider";
 import DropDownPicker from "react-native-dropdown-picker";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -23,12 +25,14 @@ function capitalizeFirstLetter(string) {
 
 const ListScreen = ({ navigation }) => {
   const { update_token } = useContext(TokenContext);
+  const [searchReq, setSearchReq] = useState("");
   const [distance, setDistance] = useState(150);
   const [age, setAge] = useState([]);
   const [type, setType] = useState("");
   const [breed, setBreed] = useState([]);
   const [breedOptions, setBreedOptions] = useState([]);
   const [location, setLocation] = useState(null);
+  const [customLocation, setCustomLocation] = useState(null);
   const [results, setResults] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isTypeVisible, setTypeVisible] = useState(false);
@@ -52,15 +56,17 @@ const ListScreen = ({ navigation }) => {
   }, [type]);
 
   useEffect(() => {
-    (async () => {
-      await update_token();
+    if (customLocation != null) {
+      (async () => {
+        await update_token();
 
-      let promise = new Promise((resolve, reject) => {
-        setTimeout(() => searchApi(), 1000);
-      });
+        let promise = new Promise((resolve, reject) => {
+          setTimeout(() => searchApi(), 1000);
+        });
 
-      await promise;
-    })();
+        await promise;
+      })();
+    }
   }, [location]);
 
   useEffect(() => {
@@ -69,6 +75,7 @@ const ListScreen = ({ navigation }) => {
       setResults(temp);
       let temp2 = JSON.parse(await AsyncStorage.getItem("lastsearch"));
       if ((await temp2) != null) {
+        setCustomLocation(temp2.customLocation);
         setAge(temp2.age);
         setDistance(temp2.distance);
         setType(await temp2.type);
@@ -118,10 +125,10 @@ const ListScreen = ({ navigation }) => {
   };
 
   const retrieveNewPage = async () => {
-    var searchReq = `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}&page=${nextPage}`;
+    const newpagesearch = searchReq.concat(`&page=${nextPage}`);
 
     petfinder
-      .get(searchReq, {
+      .get(newpagesearch, {
         headers: {
           Authorization: `Bearer ${(
             await AsyncStorage.getItem("token")
@@ -204,9 +211,17 @@ const ListScreen = ({ navigation }) => {
   const searchApi = async () => {
     setNextPage(2);
 
-    var searchReq = `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`;
-
+    if (customLocation) {
+      setSearchReq(
+        `animals?type=${type}&limit=50&location=${customLocation}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`
+      );
+    } else {
+      setSearchReq(
+        `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`
+      );
+    }
     const this_search = {
+      customLocation,
       type,
       age,
       distance,
@@ -267,211 +282,196 @@ const ListScreen = ({ navigation }) => {
           }}
           style={{
             borderRadius: 15,
-            height: 600,
+            height: useWindowDimensions().height * 0.85,
             backgroundColor: "white",
           }}
         >
-          <Text
-            h3
-            style={{
-              textAlign: "center",
-              marginTop: 15,
-              marginBottom: 25,
-              color: "grey",
-              fontWeight: "bold",
-            }}
-          >
-            Search Filters
-          </Text>
-          <View style={{ flex: 1 }}>
-            <MySlider distance={distance} setDistance={setDistance} />
+          <ScrollView>
             <Text
+              h3
               style={{
+                textAlign: "center",
+                marginTop: 15,
+                marginBottom: 25,
+                color: "grey",
                 fontWeight: "bold",
-                fontSize: 20,
-                color: COLORS.primary,
-                marginLeft: 15,
-                marginBottom: 5,
-                marginTop: 20,
               }}
             >
-              AGE
+              Search Filters
             </Text>
-            <DropDownPicker
-              items={[
-                {
-                  label: "Baby",
-                  value: "Baby",
-                },
-                {
-                  label: "Young",
-                  value: "Young",
-                },
-                {
-                  label: "Adult",
-                  value: "Adult",
-                },
-                {
-                  label: "Senior",
-                  value: "Senior",
-                },
-              ]}
-              defaultValue={age}
-              placeholder="Any age"
-              multiple={true}
-              multipleText={age.join(", ")}
-              min={0}
-              max={4}
-              containerStyle={{ height: 40, marginHorizontal: 10 }}
-              style={{ backgroundColor: "#fafafa" }}
-              itemStyle={{
-                justifyContent: "flex-start",
-              }}
-              dropDownStyle={{ backgroundColor: "#fafafa", marginBottom: 40 }}
-              onChangeItem={(item) => setAge(item)}
-              isVisible={isAgeVisible}
-              onOpen={() => {
-                setAgeVisible(true);
-                setTypeVisible(false);
-                setBreedVisible(false);
-              }}
-              onClose={() => setAgeVisible(false)}
-              zIndex={5000}
-            />
-            <Text
-              style={{
-                fontWeight: "bold",
-                fontSize: 20,
-                color: COLORS.primary,
-                marginLeft: 15,
-                marginBottom: 5,
-                marginTop: 20,
-              }}
-            >
-              ANIMAL TYPE
-            </Text>
-            <DropDownPicker
-              items={[
-                {
-                  label: "Dog",
-                  value: "Dog",
-                },
-                {
-                  label: "Cat",
-                  value: "Cat",
-                },
-                {
-                  label: "Bird",
-                  value: "Bird",
-                },
-                {
-                  label: "Rabbit",
-                  value: "Rabbit",
-                },
-              ]}
-              defaultValue={type}
-              containerStyle={{ height: 40, marginHorizontal: 10 }}
-              style={{ backgroundColor: "#fafafa" }}
-              itemStyle={{
-                justifyContent: "flex-start",
-              }}
-              dropDownStyle={{ backgroundColor: "#fafafa" }}
-              onChangeItem={(item) => {
-                setType(item.value);
-                setBreed([]);
-              }}
-              isVisible={isTypeVisible}
-              onOpen={() => {
-                setTypeVisible(true);
-                setBreedVisible(false);
-                setAgeVisible(false);
-              }}
-              onClose={() => setTypeVisible(false)}
-              zIndex={4000}
-            />
-            <Text
-              style={{
-                fontWeight: "bold",
-                fontSize: 20,
-                color: COLORS.primary,
-                marginLeft: 15,
-                marginBottom: 5,
-                marginTop: 20,
-              }}
-            >
-              ANIMAL BREEDS
-            </Text>
-            <DropDownPicker
-              items={breedOptions}
-              defaultValue={breed}
-              placeholder="Any breed"
-              multiple={true}
-              multipleText={breed.join(", ")}
-              min={0}
-              max={100}
-              containerStyle={{ height: 40, marginHorizontal: 10 }}
-              style={{ backgroundColor: "#fafafa" }}
-              itemStyle={{
-                justifyContent: "flex-start",
-              }}
-              dropDownStyle={{ backgroundColor: "#fafafa", marginBottom: 40 }}
-              onChangeItem={(item) => setBreed(item)}
-              isVisible={isBreedVisible}
-              onOpen={() => {
-                setBreedVisible(true);
-                setTypeVisible(false);
-                setAgeVisible(false);
-              }}
-              onClose={() => setBreedVisible(false)}
-              zIndex={3000}
-            />
-
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "flex-end",
-              }}
-            >
-              <Button
-                title="Clear Search"
-                onPress={() => {
-                  setDistance(150);
+            <View style={{ flex: 1 }}>
+              <Input
+                label="CUSTOM LOCATION"
+                labelStyle={({ marginLeft: -25 }, styles.labelStyle)}
+                placeholder="Use Current Location"
+                leftIcon={{
+                  type: "font-awesome",
+                  name: "globe",
+                  color: COLORS.primary,
+                  marginHorizontal: 5,
+                }}
+                onChangeText={(value) => {
+                  setCustomLocation(value);
+                }}
+                defaultValue={customLocation}
+                textContentType="addressCityAndState"
+              />
+              <MySlider distance={distance} setDistance={setDistance} />
+              <Text style={styles.labelStyle}>AGE</Text>
+              <DropDownPicker
+                items={[
+                  {
+                    label: "Baby",
+                    value: "Baby",
+                  },
+                  {
+                    label: "Young",
+                    value: "Young",
+                  },
+                  {
+                    label: "Adult",
+                    value: "Adult",
+                  },
+                  {
+                    label: "Senior",
+                    value: "Senior",
+                  },
+                ]}
+                defaultValue={age}
+                placeholder="Any age"
+                multiple={true}
+                multipleText={age.join(", ")}
+                min={0}
+                max={4}
+                containerStyle={{ height: 40, marginHorizontal: 10 }}
+                style={{ backgroundColor: "#fafafa" }}
+                itemStyle={{
+                  justifyContent: "flex-start",
+                }}
+                dropDownStyle={{ backgroundColor: "#fafafa", marginBottom: 40 }}
+                onChangeItem={(item) => setAge(item)}
+                isVisible={isAgeVisible}
+                onOpen={() => {
+                  setAgeVisible(true);
+                  setTypeVisible(false);
+                  setBreedVisible(false);
+                }}
+                onClose={() => setAgeVisible(false)}
+                zIndex={5000}
+              />
+              <Text style={styles.labelStyle}>ANIMAL TYPE</Text>
+              <DropDownPicker
+                items={[
+                  {
+                    label: "Dog",
+                    value: "Dog",
+                  },
+                  {
+                    label: "Cat",
+                    value: "Cat",
+                  },
+                  {
+                    label: "Bird",
+                    value: "Bird",
+                  },
+                  {
+                    label: "Rabbit",
+                    value: "Rabbit",
+                  },
+                ]}
+                defaultValue={type}
+                containerStyle={{ height: 40, marginHorizontal: 10 }}
+                style={{ backgroundColor: "#fafafa" }}
+                itemStyle={{
+                  justifyContent: "flex-start",
+                }}
+                dropDownStyle={{ backgroundColor: "#fafafa" }}
+                onChangeItem={(item) => {
+                  setType(item.value);
                   setBreed([]);
-                  setAge([]);
-                  setType("Dog");
                 }}
-                zIndex={2000}
-                containerStyle={{
-                  marginTop: 20,
-                  marginHorizontal: 20,
+                isVisible={isTypeVisible}
+                onOpen={() => {
+                  setTypeVisible(true);
+                  setBreedVisible(false);
+                  setAgeVisible(false);
                 }}
-                buttonStyle={{
-                  borderRadius: 15,
-                  backgroundColor: "grey",
-                }}
+                onClose={() => setTypeVisible(false)}
+                zIndex={4000}
               />
-              <Button
-                title="Save"
-                onPress={() => {
-                  console.log(
-                    "Age: " + age + ", Type: " + type + ", Breeds: " + breed
-                  );
-                  searchApi();
-                  toggleModal();
+              <Text style={styles.labelStyle}>ANIMAL BREEDS</Text>
+              <DropDownPicker
+                items={breedOptions}
+                defaultValue={breed}
+                placeholder="Any breed"
+                multiple={true}
+                multipleText={breed.join(", ")}
+                min={0}
+                max={100}
+                containerStyle={{ height: 40, marginHorizontal: 10 }}
+                style={{ backgroundColor: "#fafafa" }}
+                itemStyle={{
+                  justifyContent: "flex-start",
                 }}
-                zIndex={2000}
-                containerStyle={{
-                  marginTop: 20,
-                  marginBottom: 20,
-                  marginHorizontal: 20,
+                dropDownStyle={{ backgroundColor: "#fafafa", marginBottom: 40 }}
+                onChangeItem={(item) => setBreed(item)}
+                isVisible={isBreedVisible}
+                onOpen={() => {
+                  setBreedVisible(true);
+                  setTypeVisible(false);
+                  setAgeVisible(false);
                 }}
-                buttonStyle={{
-                  borderRadius: 15,
-                  backgroundColor: COLORS.primary,
-                }}
+                onClose={() => setBreedVisible(false)}
+                zIndex={3000}
               />
+
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "flex-end",
+                }}
+              >
+                <Button
+                  title="Clear Search"
+                  onPress={() => {
+                    setDistance(150);
+                    setBreed([]);
+                    setAge([]);
+                    setType("Dog");
+                  }}
+                  zIndex={2000}
+                  containerStyle={{
+                    marginTop: 20,
+                    marginHorizontal: 20,
+                  }}
+                  buttonStyle={{
+                    borderRadius: 15,
+                    backgroundColor: "grey",
+                  }}
+                />
+                <Button
+                  title="Save"
+                  onPress={() => {
+                    console.log(
+                      "Age: " + age + ", Type: " + type + ", Breeds: " + breed
+                    );
+                    searchApi();
+                    toggleModal();
+                  }}
+                  zIndex={2000}
+                  containerStyle={{
+                    marginTop: 20,
+                    marginBottom: 20,
+                    marginHorizontal: 20,
+                  }}
+                  buttonStyle={{
+                    borderRadius: 15,
+                    backgroundColor: COLORS.primary,
+                  }}
+                />
+              </View>
             </View>
-          </View>
+          </ScrollView>
         </View>
       </Modal>
       <View
@@ -506,6 +506,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "grey",
     paddingTop: 5,
+  },
+  labelStyle: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: COLORS.primary,
+    marginLeft: 15,
+    marginBottom: 5,
+    marginTop: 20,
   },
 });
 export default ListScreen;

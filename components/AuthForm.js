@@ -26,6 +26,7 @@ const AuthForm = ({ headerText, buttonLabel, errorMessage, onSubmit }) => {
           placeholder="email@address.com"
           autoCapitalize="none"
           autoCorrect={false}
+          textContentType="emailAddress"
         ></Input>
         <Input
           value={password}
@@ -36,6 +37,7 @@ const AuthForm = ({ headerText, buttonLabel, errorMessage, onSubmit }) => {
           autoCapitalize="none"
           autoCorrect={false}
           secureTextEntry
+          textContentType="password"
         ></Input>
       </View>
       {errorMessage != "" ? (

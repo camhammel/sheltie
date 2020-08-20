@@ -25,7 +25,7 @@ const ListScreen = ({ navigation }) => {
   const { update_token } = useContext(TokenContext);
   const [distance, setDistance] = useState(150);
   const [age, setAge] = useState([]);
-  const [type, setType] = useState("dog");
+  const [type, setType] = useState("");
   const [breed, setBreed] = useState([]);
   const [breedOptions, setBreedOptions] = useState([]);
   const [location, setLocation] = useState(null);
@@ -44,6 +44,9 @@ const ListScreen = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
+      if (type == "") {
+        setType("Dog");
+      }
       getBreedOptions();
     })();
   }, [type]);
@@ -51,7 +54,12 @@ const ListScreen = ({ navigation }) => {
   useEffect(() => {
     (async () => {
       await update_token();
-      await searchApi();
+
+      let promise = new Promise((resolve, reject) => {
+        setTimeout(() => searchApi(), 1000);
+      });
+
+      await promise;
     })();
   }, [location]);
 
@@ -61,10 +69,18 @@ const ListScreen = ({ navigation }) => {
       setResults(temp);
       let temp2 = JSON.parse(await AsyncStorage.getItem("lastsearch"));
       if ((await temp2) != null) {
-        setAge(await temp2.age);
-        setDistance(await temp2.distance);
+        setAge(temp2.age);
+        setDistance(temp2.distance);
         setType(await temp2.type);
-        setBreed(await temp2.breed);
+        if (temp2.type === type) {
+          setBreed(await temp2.breed);
+        } else if (temp2.type === "Cat") {
+          console.log("Setting type: " + "Cat");
+          setType("Cat");
+          console.log("Type set: " + type);
+          console.log("Setting breed: " + temp2.breed);
+          setBreed(temp2.breed);
+        }
       }
 
       let { status } = await Location.requestPermissionsAsync();
@@ -159,7 +175,7 @@ const ListScreen = ({ navigation }) => {
             value: breed1.name,
           };
         });
-        console.log("breeds: " + JSON.stringify(my_breeds));
+        //console.log("breeds: " + JSON.stringify(my_breeds));
         setBreedOptions(my_breeds);
       })
       .catch(function (error) {
@@ -335,19 +351,19 @@ const ListScreen = ({ navigation }) => {
               items={[
                 {
                   label: "Dog",
-                  value: "dog",
+                  value: "Dog",
                 },
                 {
                   label: "Cat",
-                  value: "cat",
+                  value: "Cat",
                 },
                 {
                   label: "Bird",
-                  value: "bird",
+                  value: "Bird",
                 },
                 {
                   label: "Rabbit",
-                  value: "rabbit",
+                  value: "Rabbit",
                 },
               ]}
               defaultValue={type}

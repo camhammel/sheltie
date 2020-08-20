@@ -32,7 +32,7 @@ const ListScreen = ({ navigation }) => {
   const [breed, setBreed] = useState([]);
   const [breedOptions, setBreedOptions] = useState([]);
   const [location, setLocation] = useState(null);
-  const [customLocation, setCustomLocation] = useState(null);
+  const [customLocation, setCustomLocation] = useState("");
   const [results, setResults] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isTypeVisible, setTypeVisible] = useState(false);
@@ -56,7 +56,7 @@ const ListScreen = ({ navigation }) => {
   }, [type]);
 
   useEffect(() => {
-    if (customLocation != null) {
+    if (customLocation != "") {
       (async () => {
         await update_token();
 
@@ -315,6 +315,7 @@ const ListScreen = ({ navigation }) => {
                 }}
                 defaultValue={customLocation}
                 textContentType="addressCityAndState"
+                clearButtonMode="always"
               />
               <MySlider distance={distance} setDistance={setDistance} />
               <Text style={styles.labelStyle}>AGE</Text>
@@ -434,6 +435,7 @@ const ListScreen = ({ navigation }) => {
                 <Button
                   title="Clear Search"
                   onPress={() => {
+                    setCustomLocation("");
                     setDistance(150);
                     setBreed([]);
                     setAge([]);

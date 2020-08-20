@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import {
   View,
   AsyncStorage,
@@ -24,7 +24,7 @@ function capitalizeFirstLetter(string) {
 
 const ListScreen = ({ navigation }) => {
   const { update_token } = useContext(TokenContext);
-  const [distance, setDistance] = useState(100);
+  const [distance, setDistance] = useState(150);
   const [age, setAge] = useState([]);
   const [type, setType] = useState("dog");
   const [breed, setBreed] = useState([]);
@@ -37,6 +37,7 @@ const ListScreen = ({ navigation }) => {
   const [isAgeVisible, setAgeVisible] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [nextPage, setNextPage] = useState(2);
+  const flatListRef = useRef();
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -226,6 +227,7 @@ const ListScreen = ({ navigation }) => {
         }
         //console.log(error.config);
       });
+    flatListRef.current?.scrollToOffset({ x: 0, y: 0, animated: true });
   };
 
   return (
@@ -409,6 +411,24 @@ const ListScreen = ({ navigation }) => {
               }}
             >
               <Button
+                title="Clear Search"
+                onPress={() => {
+                  setDistance(150);
+                  setBreed([]);
+                  setAge([]);
+                  setType("dog");
+                }}
+                zIndex={2000}
+                containerStyle={{
+                  marginTop: 20,
+                  marginHorizontal: 20,
+                }}
+                buttonStyle={{
+                  borderRadius: 15,
+                  backgroundColor: "grey",
+                }}
+              />
+              <Button
                 title="Save"
                 onPress={() => {
                   console.log(
@@ -449,6 +469,7 @@ const ListScreen = ({ navigation }) => {
           results={results}
           loadMoreResults={loadMoreResults}
           refresh={searchApi}
+          ref={flatListRef}
         />
       </View>
     </View>

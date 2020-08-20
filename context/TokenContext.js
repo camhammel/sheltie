@@ -15,12 +15,11 @@ const update_token = (dispatch) => async () => {
   //make request for new token
   try {
     await requestAccess();
-    //console.log("Got it: " + AsyncStorage.getItem("token"));
+    console.log("Got it: " + AsyncStorage.getItem("token"));
     dispatch({
       type: "update_token",
       payload: my_token,
     });
-    //RootNavigation.reset("List");
   } catch (err) {
     dispatch({
       type: "update_token",

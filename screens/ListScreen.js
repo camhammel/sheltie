@@ -16,7 +16,6 @@ import { COLORS } from "../assets/colors";
 import Modal from "react-native-modal";
 import MySlider from "../components/MySlider";
 import DropDownPicker from "react-native-dropdown-picker";
-import Spacer from "../components/Spacer";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -224,6 +223,10 @@ const ListScreen = ({ navigation }) => {
         } else {
           // Something happened in setting up the request that triggered an Error
           console.log("Error", error.message);
+        }
+        //setSearchError(error.status);
+        if (error.status == "401") {
+          update_token();
         }
         //console.log(error.config);
       });

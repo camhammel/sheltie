@@ -251,12 +251,19 @@ const PetDetailScreen = ({ route, navigation }) => {
                       .replace(/&amp;#34;/g, '"')
                   : null}
               </Text>
+
+              <NavLink
+                text={`Read more about ${capitalizeFirstLetter(
+                  results.name.toLowerCase()
+                )} here via Petfinder.com`}
+                routeName={results.url}
+              />
             </Spacer>
             <Text
               style={{
                 margin: 5,
                 marginLeft: 15,
-                marginTop: 10,
+                marginTop: -50,
                 fontWeight: "bold",
                 fontSize: 18,
                 color: COLORS.primary,
@@ -278,14 +285,6 @@ const PetDetailScreen = ({ route, navigation }) => {
             />
             <Attribute type="shots" value={results.attributes.shots_current} />
             <ShelterInfo results={results} />
-            <Spacer>
-              <NavLink
-                text={`Find out more about ${capitalizeFirstLetter(
-                  results.name.toLowerCase()
-                )} here via Petfinder.com`}
-                routeName={results.url}
-              />
-            </Spacer>
           </View>
         </ScrollView>
       ) : null}

@@ -6,8 +6,9 @@ import {
   ActivityIndicator,
   ScrollView,
   useWindowDimensions,
+  TextInput,
 } from "react-native";
-import { Text, Button, Input } from "react-native-elements";
+import { Text, Button } from "react-native-elements";
 import ListComponent from "../components/ListComponent";
 import SearchHeader from "../components/SearchHeader";
 import petfinder from "../api/petfinder";
@@ -21,6 +22,12 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function delay(t, v) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve.bind(null, v), t);
+  });
 }
 
 const ListScreen = ({ navigation }) => {
@@ -39,6 +46,7 @@ const ListScreen = ({ navigation }) => {
   const [isBreedVisible, setBreedVisible] = useState(false);
   const [isAgeVisible, setAgeVisible] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [inputVal, setInputVal] = useState("");
   const [nextPage, setNextPage] = useState(2);
   const flatListRef = useRef();
 
@@ -48,25 +56,13 @@ const ListScreen = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
-      if (type == "") {
-        setType("Dog");
-      }
       getBreedOptions();
     })();
   }, [type]);
 
   useEffect(() => {
-    if (customLocation != "") {
-      (async () => {
-        await update_token();
-
-        let promise = new Promise((resolve, reject) => {
-          setTimeout(() => searchApi(), 1000);
-        });
-
-        await promise;
-      })();
-    }
+    update_token();
+    searchApi();
   }, [location, customLocation]);
 
   useEffect(() => {
@@ -93,22 +89,20 @@ const ListScreen = ({ navigation }) => {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
         alert("Permission to access location was denied. Try again.");
-        const { newstatus, permissions } = await Permissions.askAsync(
-          Permissions.LOCATION
-        );
+        const { newstatus } = await Permissions.askAsync(Permissions.LOCATION);
         if (!newstatus === "granted") {
           throw new Error("Location permissions not granted.");
         }
       }
 
-      let location = await Location.getCurrentPositionAsync({});
+      let location2 = await Location.getCurrentPositionAsync({});
       console.log(
         "location: " +
-          location.coords.latitude +
+          location2.coords.latitude +
           "," +
-          location.coords.longitude
+          location2.coords.longitude
       );
-      setLocation(location);
+      setLocation(location2);
       await getBreedOptions();
       searchApi();
     })();
@@ -166,8 +160,13 @@ const ListScreen = ({ navigation }) => {
 
   const getBreedOptions = async () => {
     if (type == "") {
-      setTimeout(() => {}, 1000);
+      setTimeout(() => {
+        if (type == "") {
+          setType("Dog");
+        }
+      }, 800);
     }
+
     var breedSearch = `types/${type}/breeds`;
 
     petfinder
@@ -211,7 +210,7 @@ const ListScreen = ({ navigation }) => {
   const searchApi = async () => {
     setNextPage(2);
 
-    if (customLocation) {
+    if (customLocation != "") {
       setSearchReq(
         `animals?type=${type}&limit=50&location=${customLocation}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`
       );
@@ -262,6 +261,7 @@ const ListScreen = ({ navigation }) => {
         if (error.status == "401") {
           update_token();
         }
+        alert(error.status + ": That search failed...");
         //console.log(error.config);
       });
     flatListRef.current?.scrollToOffset({ x: 0, y: 0, animated: true });
@@ -300,22 +300,25 @@ const ListScreen = ({ navigation }) => {
               Search Filters
             </Text>
             <View style={{ flex: 1 }}>
-              <Input
-                label="CUSTOM LOCATION"
-                labelStyle={({ marginLeft: -25 }, styles.labelStyle)}
+              <Text style={styles.labelStyle}>CUSTOM LOCATION</Text>
+              <TextInput
+                style={{
+                  marginLeft: 20,
+                  marginTop: 10,
+                  marginBottom: 30,
+                  fontSize: 18,
+                }}
                 placeholder="Use Current Location"
-                leftIcon={{
-                  type: "font-awesome",
-                  name: "globe",
-                  color: COLORS.primary,
-                  marginHorizontal: 5,
+                onEndEditing={() => {
+                  setCustomLocation(inputVal);
                 }}
-                onChangeText={(value) => {
-                  setCustomLocation(value);
-                }}
-                defaultValue={customLocation}
+                defaultValue={customLocation ? customLocation : ""}
                 textContentType="addressCityAndState"
                 clearButtonMode="always"
+                onChangeText={(text) => {
+                  setInputVal(text);
+                }}
+                value={inputVal}
               />
               <MySlider distance={distance} setDistance={setDistance} />
               <Text style={styles.labelStyle}>AGE</Text>
@@ -453,11 +456,35 @@ const ListScreen = ({ navigation }) => {
                 />
                 <Button
                   title="Save"
-                  onPress={() => {
-                    console.log(
-                      "Age: " + age + ", Type: " + type + ", Breeds: " + breed
-                    );
-                    searchApi();
+                  onPress={async () => {
+                    if (customLocation == "") {
+                      console.log(
+                        "Age: " +
+                          age +
+                          ", Type: " +
+                          type +
+                          ", Breeds: " +
+                          breed +
+                          ", Location: " +
+                          location
+                      );
+                    } else {
+                      console.log(
+                        "Age: " +
+                          age +
+                          ", Type: " +
+                          type +
+                          ", Breeds: " +
+                          breed +
+                          ", Location: " +
+                          customLocation
+                      );
+                    }
+
+                    setTimeout(() => {
+                      searchApi();
+                    }, 1000);
+
                     toggleModal();
                   }}
                   zIndex={2000}

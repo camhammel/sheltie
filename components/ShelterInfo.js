@@ -120,7 +120,6 @@ const ShelterInfo = ({ results }) => {
         <Button
           title={results.contact.phone}
           buttonStyle={styles.buttonStyle}
-          containerStyle={{ marginBottom: 40 }}
           titleStyle={styles.titleStyle}
           type="solid"
           icon={

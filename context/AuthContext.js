@@ -46,10 +46,12 @@ const signup = (dispatch) => async ({ email, password }) => {
     });
     RootNavigation.reset("List");
   } catch (err) {
-    dispatch({
-      type: "add_error",
-      payload: "Something went wrong during signup.",
-    });
+    if (err.message == "Request failed with status code 422") {
+      dispatch({
+        type: "add_error",
+        payload: "That email is already in use.",
+      });
+    }
   }
 };
 

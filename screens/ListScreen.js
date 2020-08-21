@@ -67,7 +67,7 @@ const ListScreen = ({ navigation }) => {
         await promise;
       })();
     }
-  }, [location]);
+  }, [location, customLocation]);
 
   useEffect(() => {
     (async () => {

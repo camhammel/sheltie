@@ -258,10 +258,15 @@ const ListScreen = ({ navigation }) => {
           console.log("Error", error.message);
         }
         //setSearchError(error.status);
-        if (error.status == "401") {
+        if (error.response.data.status == 401) {
           update_token();
+        } else if (error.response.data.status == 400) {
+          alert(
+            error.status +
+              ": Invalid location. Use the [city, state] format, such as Orlando, FL"
+          );
         }
-        alert(error.status + ": That search failed...");
+
         //console.log(error.config);
       });
     flatListRef.current?.scrollToOffset({ x: 0, y: 0, animated: true });
@@ -439,6 +444,7 @@ const ListScreen = ({ navigation }) => {
                   title="Clear Search"
                   onPress={() => {
                     setCustomLocation("");
+                    setInputVal("");
                     setDistance(150);
                     setBreed([]);
                     setAge([]);

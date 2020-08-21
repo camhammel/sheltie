@@ -285,6 +285,7 @@ const PetDetailScreen = ({ route, navigation }) => {
             />
             <Attribute type="shots" value={results.attributes.shots_current} />
             <ShelterInfo results={results} />
+            <View style={{ marginBottom: 40 }} />
           </View>
         </ScrollView>
       ) : null}

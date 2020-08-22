@@ -24,12 +24,6 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function delay(t, v) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve.bind(null, v), t);
-  });
-}
-
 const ListScreen = ({ navigation }) => {
   const { update_token } = useContext(TokenContext);
   const [searchReq, setSearchReq] = useState("");
@@ -58,7 +52,7 @@ const ListScreen = ({ navigation }) => {
     (async () => {
       getBreedOptions();
     })();
-  }, [type]);
+  }, [type, breed]);
 
   useEffect(() => {
     update_token();
@@ -72,17 +66,32 @@ const ListScreen = ({ navigation }) => {
       let temp2 = JSON.parse(await AsyncStorage.getItem("lastsearch"));
       if ((await temp2) != null) {
         setCustomLocation(temp2.customLocation);
+        setInputVal(temp2.customLocation);
         setAge(temp2.age);
         setDistance(temp2.distance);
         setType(await temp2.type);
+
         if (temp2.type === type) {
-          setBreed(await temp2.breed);
+          setBreed(temp2.breed ? temp2.breed : "");
+          console.log("Correct type recovered");
         } else if (temp2.type === "Cat") {
           console.log("Setting type: " + "Cat");
           setType("Cat");
           console.log("Type set: " + type);
           console.log("Setting breed: " + temp2.breed);
-          setBreed(temp2.breed);
+          setBreed(temp2.breed ? temp2.breed : "");
+        } else if (temp2.type === "Bird") {
+          console.log("Setting type: " + "Bird");
+          setType("Bird");
+          console.log("Type set: " + type);
+          console.log("Setting breed: " + temp2.breed);
+          setBreed(temp2.breed ? temp2.breed : "");
+        } else if (temp2.type === "Rabbit") {
+          console.log("Setting type: " + "Rabbit");
+          setType("Rabbit");
+          console.log("Type set: " + type);
+          console.log("Setting breed: " + temp2.breed);
+          setBreed(temp2.breed ? temp2.breed : "");
         }
       }
 
@@ -103,7 +112,7 @@ const ListScreen = ({ navigation }) => {
           location2.coords.longitude
       );
       setLocation(location2);
-      await getBreedOptions();
+      //getBreedOptions();
       searchApi();
     })();
   }, []);
@@ -209,15 +218,18 @@ const ListScreen = ({ navigation }) => {
 
   const searchApi = async () => {
     setNextPage(2);
+    let search = "";
 
     if (customLocation != "") {
       setSearchReq(
         `animals?type=${type}&limit=50&location=${customLocation}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`
       );
+      search = `animals?type=${type}&limit=50&location=${customLocation}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`;
     } else {
       setSearchReq(
         `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`
       );
+      search = `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`;
     }
     const this_search = {
       customLocation,
@@ -227,8 +239,19 @@ const ListScreen = ({ navigation }) => {
       breed,
     };
 
+    console.log(
+      "GET: Age: " +
+        age +
+        ", Type: " +
+        type +
+        ", Breeds: " +
+        breed +
+        ", Location: " +
+        customLocation
+    );
+
     petfinder
-      .get(searchReq, {
+      .get(search, {
         headers: {
           Authorization: `Bearer ${(
             await AsyncStorage.getItem("token")
@@ -410,7 +433,7 @@ const ListScreen = ({ navigation }) => {
               />
               <Text style={styles.labelStyle}>ANIMAL BREEDS</Text>
               <DropDownPicker
-                items={breedOptions}
+                items={breedOptions ? breedOptions : ""}
                 defaultValue={breed}
                 placeholder="Any breed"
                 multiple={true}
@@ -462,7 +485,7 @@ const ListScreen = ({ navigation }) => {
                 />
                 <Button
                   title="Save"
-                  onPress={async () => {
+                  onPress={() => {
                     if (customLocation == "") {
                       console.log(
                         "Age: " +
@@ -487,10 +510,7 @@ const ListScreen = ({ navigation }) => {
                       );
                     }
 
-                    setTimeout(() => {
-                      searchApi();
-                    }, 1000);
-
+                    searchApi();
                     toggleModal();
                   }}
                   zIndex={2000}

@@ -52,7 +52,7 @@ const ListScreen = ({ navigation }) => {
     (async () => {
       getBreedOptions();
     })();
-  }, [type, breed]);
+  }, [type]);
 
   useEffect(() => {
     update_token();
@@ -63,37 +63,6 @@ const ListScreen = ({ navigation }) => {
     (async () => {
       let temp = JSON.parse(await AsyncStorage.getItem("lastpets"));
       setResults(temp);
-      let temp2 = JSON.parse(await AsyncStorage.getItem("lastsearch"));
-      if ((await temp2) != null) {
-        setCustomLocation(temp2.customLocation);
-        setInputVal(temp2.customLocation);
-        setAge(temp2.age);
-        setDistance(temp2.distance);
-        setType(await temp2.type);
-
-        if (temp2.type === type) {
-          setBreed(temp2.breed ? temp2.breed : "");
-          console.log("Correct type recovered");
-        } else if (temp2.type === "Cat") {
-          console.log("Setting type: " + "Cat");
-          setType("Cat");
-          console.log("Type set: " + type);
-          console.log("Setting breed: " + temp2.breed);
-          setBreed(temp2.breed ? temp2.breed : "");
-        } else if (temp2.type === "Bird") {
-          console.log("Setting type: " + "Bird");
-          setType("Bird");
-          console.log("Type set: " + type);
-          console.log("Setting breed: " + temp2.breed);
-          setBreed(temp2.breed ? temp2.breed : "");
-        } else if (temp2.type === "Rabbit") {
-          console.log("Setting type: " + "Rabbit");
-          setType("Rabbit");
-          console.log("Type set: " + type);
-          console.log("Setting breed: " + temp2.breed);
-          setBreed(temp2.breed ? temp2.breed : "");
-        }
-      }
 
       let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
@@ -112,6 +81,28 @@ const ListScreen = ({ navigation }) => {
           location2.coords.longitude
       );
       setLocation(location2);
+
+      let temp2 = JSON.parse(await AsyncStorage.getItem("lastsearch"));
+      if ((await temp2) != null) {
+        console.log();
+        setCustomLocation(temp2.customLocation);
+        setInputVal(temp2.customLocation);
+        setAge(temp2.age);
+        setDistance(temp2.distance);
+        setType(temp2.type);
+        setBreed(temp2.breed);
+        console.log(
+          "Initial GET: Age: " +
+            age +
+            ", Type: " +
+            type +
+            ", Breeds: " +
+            breed +
+            ", Location: " +
+            customLocation
+        );
+      }
+
       //getBreedOptions();
       searchApi();
     })();
@@ -168,14 +159,6 @@ const ListScreen = ({ navigation }) => {
   };
 
   const getBreedOptions = async () => {
-    if (type == "") {
-      setTimeout(() => {
-        if (type == "") {
-          setType("Dog");
-        }
-      }, 800);
-    }
-
     var breedSearch = `types/${type}/breeds`;
 
     petfinder
@@ -285,8 +268,9 @@ const ListScreen = ({ navigation }) => {
           update_token();
         } else if (error.response.data.status == 400) {
           alert(
-            error.status +
-              ": Invalid location. Use the [city, state] format, such as Orlando, FL"
+            "Error " +
+              error.response.data.status +
+              ": Invalid search. Be sure to use the [city, state] format when specifying a custom location, such as Orlando, FL"
           );
         }
 
@@ -420,7 +404,7 @@ const ListScreen = ({ navigation }) => {
                 dropDownStyle={{ backgroundColor: "#fafafa" }}
                 onChangeItem={(item) => {
                   setType(item.value);
-                  setBreed([]);
+                  //setBreed([]);
                 }}
                 isVisible={isTypeVisible}
                 onOpen={() => {
@@ -434,7 +418,7 @@ const ListScreen = ({ navigation }) => {
               <Text style={styles.labelStyle}>ANIMAL BREEDS</Text>
               <DropDownPicker
                 items={breedOptions ? breedOptions : ""}
-                defaultValue={breed}
+                defaultValue={breed ? breed : ""}
                 placeholder="Any breed"
                 multiple={true}
                 multipleText={breed.join(", ")}
@@ -509,7 +493,6 @@ const ListScreen = ({ navigation }) => {
                           customLocation
                       );
                     }
-
                     searchApi();
                     toggleModal();
                   }}

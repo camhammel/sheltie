@@ -257,6 +257,7 @@ const PetDetailScreen = ({ route, navigation }) => {
                   results.name.toLowerCase()
                 )} here via Petfinder.com`}
                 routeName={results.url}
+                custStyle={{ marginBottom: 60 }}
               />
             </Spacer>
             <Text

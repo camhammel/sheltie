@@ -13,7 +13,17 @@ const NavLink = ({ text, routeName, clearErrorMessage, custStyle }) => {
           Linking.openURL(routeName);
         }}
       >
-        <Text style={styles.linkStyle}>{text}</Text>
+        <Text
+          style={{
+            marginTop: 20,
+            marginBottom: 60,
+            textAlign: "center",
+            color: "blue",
+            fontSize: 16,
+          }}
+        >
+          {text}
+        </Text>
       </TouchableOpacity>
     );
   } else {

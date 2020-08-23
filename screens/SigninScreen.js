@@ -1,22 +1,48 @@
 import React, { useContext } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Image, useWindowDimensions } from "react-native";
+import { Text } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Context } from "../context/AuthContext";
 import NavLink from "../components/NavLink";
 import AuthForm from "../components/AuthForm";
+import SignInComponent from "../components/SignInComponent";
+import { COLORS } from "../assets/colors";
+import Spacer from "../components/Spacer";
+import Logo from "../assets/logo.png";
 
 const SigninScreen = ({ navigation }) => {
   const { state, signin, clearErrorMessage } = useContext(Context);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.primary }}>
       <KeyboardAwareScrollView behaviour="padding" style={styles.scrollStyle}>
-        <AuthForm
+        {/* <AuthForm
           headerText="Sign In to Sheltie"
           buttonLabel="Sign In"
           errorMessage={state.errorMessage}
           onSubmit={signin}
-        />
+        /> */}
+        <Spacer>
+          <Text
+            h2
+            style={{
+              color: COLORS.white,
+              alignSelf: "center",
+              marginBottom: 10,
+            }}
+          >
+            Sign In
+          </Text>
+          <Image
+            source={Logo}
+            style={{
+              width: useWindowDimensions().width / 3,
+              height: useWindowDimensions().height / 4,
+              alignSelf: "center",
+            }}
+          />
+        </Spacer>
+        <SignInComponent state={state} clearErrorMessage={clearErrorMessage} />
         <NavLink
           text="Don't have an account? Sign up here."
           routeName="Signup"

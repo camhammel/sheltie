@@ -366,26 +366,6 @@ const ListScreen = ({ navigation }) => {
                 value={inputVal}
                 ref={customLocationRef}
               />
-              {/* <TextInput
-                style={{
-                  marginLeft: 20,
-                  marginTop: 10,
-                  marginBottom: 30,
-                  fontSize: 18,
-                }}
-                placeholder="Use Current Location"
-                onEndEditing={() => {
-                  setCustomLocation(inputVal);
-                }}
-                defaultValue={customLocation ? customLocation : ""}
-                textContentType="addressCityAndState"
-                clearButtonMode="always"
-                onChangeText={(text) => {
-                  setInputVal(text);
-                }}
-                value={inputVal}
-                ref={customLocationRef}
-              /> */}
               <MySlider distance={distance} setDistance={setDistance} />
               <Text style={styles.labelStyle}>AGE</Text>
               <DropDownPicker

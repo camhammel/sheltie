@@ -10,6 +10,7 @@ import ListScreen from "./screens/ListScreen";
 import PetDetailScreen from "./screens/PetDetailScreen";
 import LoadingScreen from "./screens/LoadingScreen";
 import AccountScreen from "./screens/AccountScreen";
+import ForgotPasswordScreen from "./screens/ForgotPasswordScreen";
 import FavouritesScreen from "./screens/FavouritesScreen";
 import { Provider as AuthProvider } from "./context/AuthContext";
 import { Provider as TokenProvider } from "./context/TokenContext";
@@ -83,6 +84,16 @@ function App() {
               name="Signin"
               component={SigninScreen}
               options={{ title: "Sign In", headerShown: false }}
+            />
+            <Stack.Screen
+              name="ForgotPassword"
+              component={ForgotPasswordScreen}
+              options={{
+                title: "Forgot Password",
+                headerShown: true,
+                headerTintColor: "black",
+                headerStyle: { backgroundColor: COLORS.primarylight },
+              }}
             />
             <Stack.Screen
               name="List"

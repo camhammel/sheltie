@@ -29,6 +29,7 @@ const SigninScreen = ({ navigation }) => {
               color: COLORS.white,
               alignSelf: "center",
               marginBottom: 10,
+              marginTop: 15,
             }}
           >
             Sign In
@@ -43,10 +44,17 @@ const SigninScreen = ({ navigation }) => {
           />
         </Spacer>
         <SignInComponent state={state} clearErrorMessage={clearErrorMessage} />
+        {/* <NavLink
+          text="Forgot Password"
+          routeName="ForgotPassword"
+          clearErrorMessage={clearErrorMessage}
+          custStyle={{ marginBottom: 0, marginTop: 60 }}
+        /> */}
         <NavLink
           text="Don't have an account? Sign up here."
           routeName="Signup"
           clearErrorMessage={clearErrorMessage}
+          custStyle={{ marginBottom: 60 }}
         />
       </KeyboardAwareScrollView>
     </View>

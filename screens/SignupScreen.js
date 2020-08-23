@@ -29,6 +29,7 @@ const SignupScreen = ({ navigation }) => {
               color: COLORS.white,
               alignSelf: "center",
               marginBottom: 10,
+              marginTop: 15,
             }}
           >
             Sign Up

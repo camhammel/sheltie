@@ -5,8 +5,7 @@ import * as Linking from "expo-linking";
 
 let mb;
 
-const NavLink = ({ text, routeName, clearErrorMessage, marginBottom }) => {
-  mb = marginBottom;
+const NavLink = ({ text, routeName, clearErrorMessage, custStyle }) => {
   if (routeName.substring(0, 4) === "http") {
     return (
       <TouchableOpacity
@@ -25,20 +24,23 @@ const NavLink = ({ text, routeName, clearErrorMessage, marginBottom }) => {
           RootNavigation.navigate(routeName);
         }}
       >
-        <Text style={styles.linkStyle}>{text}</Text>
+        <Text
+          style={[
+            {
+              marginTop: 20,
+              marginBottom: 60,
+              textAlign: "center",
+              color: "blue",
+              fontSize: 16,
+            },
+            custStyle,
+          ]}
+        >
+          {text}
+        </Text>
       </TouchableOpacity>
     );
   }
 };
-
-const styles = StyleSheet.create({
-  linkStyle: {
-    marginTop: 20,
-    marginBottom: 60,
-    textAlign: "center",
-    color: "blue",
-    fontSize: 16,
-  },
-});
 
 export default NavLink;

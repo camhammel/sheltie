@@ -18,6 +18,10 @@ const authReducer = (state, action) => {
   }
 };
 
+const clearAsyncStorage = async () => {
+  AsyncStorage.clear();
+};
+
 const clearErrorMessage = (dispatch) => () => {
   dispatch({ type: "clear_error_message", payload: "" });
 };
@@ -73,12 +77,11 @@ const signin = (dispatch) => async ({ email, password }) => {
 };
 
 const signout = (dispatch) => async () => {
-  await AsyncStorage.getAllKeys()
-    .then((keys) => AsyncStorage.multiRemove(keys))
-    .then(() => {
-      dispatch({ type: "signout" });
-      RootNavigation.reset("Welcome");
-    });
+  await clearAsyncStorage().then(() => {
+    console.log("AsyncStorage cleared.");
+    dispatch({ type: "signout" });
+    RootNavigation.reset("Welcome");
+  });
 };
 
 const getfavs = (dispatch) => async (email) => {

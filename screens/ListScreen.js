@@ -8,7 +8,7 @@ import {
   useWindowDimensions,
   TextInput,
 } from "react-native";
-import { Text, Button } from "react-native-elements";
+import { Text, Button, Input } from "react-native-elements";
 import ListComponent from "../components/ListComponent";
 import SearchHeader from "../components/SearchHeader";
 import petfinder from "../api/petfinder";
@@ -34,6 +34,9 @@ const ListScreen = ({ navigation }) => {
   const [breedOptions, setBreedOptions] = useState([]);
   const [location, setLocation] = useState(null);
   const [customLocation, setCustomLocation] = useState("");
+  const [CustomLocationErrorMessage, setCustomLocationErrorMessage] = useState(
+    ""
+  );
   const [results, setResults] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isTypeVisible, setTypeVisible] = useState(false);
@@ -43,6 +46,7 @@ const ListScreen = ({ navigation }) => {
   const [inputVal, setInputVal] = useState("");
   const [nextPage, setNextPage] = useState(2);
   const flatListRef = useRef();
+  const customLocationRef = useRef();
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -56,7 +60,7 @@ const ListScreen = ({ navigation }) => {
 
   useEffect(() => {
     update_token();
-    searchApi();
+    //searchApi();
   }, [location, customLocation]);
 
   useEffect(() => {
@@ -203,80 +207,95 @@ const ListScreen = ({ navigation }) => {
     setNextPage(2);
     let search = "";
 
-    if (customLocation != "") {
-      setSearchReq(
-        `animals?type=${type}&limit=50&location=${customLocation}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`
-      );
-      search = `animals?type=${type}&limit=50&location=${customLocation}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`;
-    } else {
-      setSearchReq(
-        `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`
-      );
-      search = `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`;
-    }
-    const this_search = {
-      customLocation,
-      type,
-      age,
-      distance,
-      breed,
-    };
+    if (type != "") {
+      if (customLocation != "") {
+        setSearchReq(
+          `animals?type=${type}&limit=50&location=${customLocation}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`
+        );
+        search = `animals?type=${type}&limit=50&location=${customLocation}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`;
+      } else {
+        setSearchReq(
+          `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`
+        );
+        search = `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`;
+      }
+      const this_search = {
+        customLocation,
+        type,
+        age,
+        distance,
+        breed,
+      };
 
-    console.log(
-      "GET: Age: " +
-        age +
-        ", Type: " +
-        type +
-        ", Breeds: " +
-        breed +
-        ", Location: " +
-        customLocation
-    );
+      console.log(
+        "GET: Age: " +
+          age +
+          ", Type: " +
+          type +
+          ", Breeds: " +
+          breed +
+          ", Location: " +
+          customLocation
+      );
 
-    petfinder
-      .get(search, {
-        headers: {
-          Authorization: `Bearer ${(
-            await AsyncStorage.getItem("token")
-          ).toString()}`,
-        },
-      })
-      .then((response) => {
-        setResults(response.data.animals);
-        AsyncStorage.setItem("lastpets", JSON.stringify(response.data.animals));
-        AsyncStorage.setItem("lastsearch", JSON.stringify(this_search));
-        //console.log(response.data.animals);
-      })
-      .catch(function (error) {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-          //console.log(error.response.status);
-          //console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log("Error", error.message);
-        }
-        //setSearchError(error.status);
-        if (error.response.data.status == 401) {
-          update_token();
-        } else if (error.response.data.status == 400) {
-          alert(
-            "Error " +
-              error.response.data.status +
-              ": Invalid search. Be sure to use the [city, state] format when specifying a custom location, such as Orlando, FL"
+      petfinder
+        .get(search, {
+          headers: {
+            Authorization: `Bearer ${(
+              await AsyncStorage.getItem("token")
+            ).toString()}`,
+          },
+        })
+        .then((response) => {
+          setResults(response.data.animals);
+          AsyncStorage.setItem(
+            "lastpets",
+            JSON.stringify(response.data.animals)
           );
-        }
+          AsyncStorage.setItem("lastsearch", JSON.stringify(this_search));
+          //console.log(response.data.animals);
+        })
+        .catch(function (error) {
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            //console.log(error.response.status);
+            //console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+          }
+          //setSearchError(error.status);
+          if (error.response.data.status == 401) {
+            update_token();
+          } else if (error.response.data.status == 400) {
+            setCustomLocationErrorMessage(
+              "Invalid location. Be sure to use the [city, state] format, such as Orlando, FL"
+            );
+            setTimeout(() => {
+              setModalVisible(true);
+              customLocationRef?.current?.focus();
+            }, 500);
+          }
 
-        //console.log(error.config);
-      });
-    flatListRef.current?.scrollToOffset({ x: 0, y: 0, animated: true });
+          //console.log(error.config);
+        });
+      flatListRef.current?.scrollToOffset({ x: 0, y: 0, animated: true });
+    } else {
+      //flatListRef.current?.refreshing;
+      setTimeout(() => {
+        if (type === "") {
+          setType("Dog");
+          setBreed([]);
+        }
+      }, 3000);
+    }
   };
 
   return (
@@ -313,7 +332,41 @@ const ListScreen = ({ navigation }) => {
             </Text>
             <View style={{ flex: 1 }}>
               <Text style={styles.labelStyle}>CUSTOM LOCATION</Text>
-              <TextInput
+              <Input
+                inputStyle={{
+                  marginLeft: 10,
+                  marginTop: 0,
+                  marginBottom: 0,
+                  fontSize: 18,
+                  color: COLORS.darkgrey,
+                }}
+                inputContainerStyle={styles.inputContainerStyle}
+                placeholder="Use Current Location"
+                leftIcon={{
+                  type: "font-awesome",
+                  name: "globe",
+                  color: COLORS.primary,
+                }}
+                leftIconContainerStyle={{ marginLeft: 10 }}
+                onEndEditing={() => {
+                  setCustomLocation(inputVal);
+                }}
+                defaultValue={customLocation ? customLocation : ""}
+                textContentType="addressCityAndState"
+                clearButtonMode="always"
+                onChangeText={(text) => {
+                  setInputVal(text);
+                  setCustomLocationErrorMessage("");
+                }}
+                errorMessage={CustomLocationErrorMessage}
+                errorStyle={{
+                  marginLeft: 15,
+                  marginBottom: 10,
+                }}
+                value={inputVal}
+                ref={customLocationRef}
+              />
+              {/* <TextInput
                 style={{
                   marginLeft: 20,
                   marginTop: 10,
@@ -331,7 +384,8 @@ const ListScreen = ({ navigation }) => {
                   setInputVal(text);
                 }}
                 value={inputVal}
-              />
+                ref={customLocationRef}
+              /> */}
               <MySlider distance={distance} setDistance={setDistance} />
               <Text style={styles.labelStyle}>AGE</Text>
               <DropDownPicker
@@ -552,6 +606,23 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginBottom: 5,
     marginTop: 20,
+  },
+  inputStyle: {
+    //backgroundColor: "white",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    color: COLORS.darkgrey,
+  },
+  inputContainerStyle: {
+    borderRadius: 8,
+    //marginHorizontal: 5,
+    //padding: 5,
+    borderBottomWidth: 0,
+  },
+  inputLabelStyle: {
+    marginLeft: 10,
+    marginBottom: 5,
+    marginTop: 5,
   },
 });
 export default ListScreen;

@@ -21,7 +21,7 @@ const AccountScreen = ({ navigation }) => {
   const { signout, getfavs } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
-  const [guest, setGuest] = useState("false");
+  const [guest, setGuest] = useState("true");
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);

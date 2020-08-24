@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   ScrollView,
@@ -26,7 +26,6 @@ import FAIcon from "react-native-vector-icons/FontAwesome";
 import Attribute from "../components/Attribute";
 import { Context } from "../context/AuthContext";
 import ShelterInfo from "../components/ShelterInfo";
-import * as Sharing from "expo-sharing";
 
 const defaultURI = Asset.fromModule(require("../assets/logo.png")).uri;
 const screenWidth = Math.round(Dimensions.get("window").width);
@@ -42,7 +41,7 @@ const PetDetailScreen = ({ route, navigation }) => {
   const [email, setEmail] = useState("");
   const { item } = route.params;
   const [favourited, setFavourited] = useState(false);
-  const [guest, setGuest] = useState("false");
+  const [guest, setGuest] = useState("true");
 
   useEffect(() => {
     (async () => {
@@ -50,6 +49,7 @@ const PetDetailScreen = ({ route, navigation }) => {
       if ((await AsyncStorage.getItem("guest")) == "true") {
         setGuest("true");
       } else {
+        setGuest("false");
         setEmail(await AsyncStorage.getItem("email"));
       }
     })();

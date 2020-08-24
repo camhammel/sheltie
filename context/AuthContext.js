@@ -2,6 +2,7 @@ import createDataContext from "./createDataContext";
 import sheltieApi from "../api/sheltie";
 import { AsyncStorage } from "react-native";
 import * as RootNavigation from "../navigationRef";
+import * as SecureStore from "expo-secure-store";
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -43,7 +44,8 @@ const updatePassword = (dispatch) => async ({ email, password }) => {
 const sendCodeToEmail = (dispatch) => async (email) => {
   let prng = Math.random();
   prng = prng.toString().substring(3, 9);
-  AsyncStorage.setItem("fpcode", prng);
+  await SecureStore.setItemAsync("fpcode", prng);
+  //AsyncStorage.setItem("fpcode", prng);
 
   try {
     await sheltieApi.post("/sendEmailCode", {

@@ -1,22 +1,10 @@
 import React, { useState, useRef } from "react";
-import { Text, Input, Button } from "react-native-elements";
+import { Text, Button } from "react-native-elements";
 import { View, StyleSheet, AsyncStorage } from "react-native";
-import { Formik } from "formik";
-import * as yup from "yup";
 import { COLORS } from "../assets/colors";
 import CodeInput from "../components/CodeInput";
 import Icon from "react-native-vector-icons/FontAwesome";
-
-const resetSchema = yup.object({
-  code: yup
-    .number()
-    .required()
-    .test(
-      "len",
-      "Must be exactly 6 characters",
-      (val) => val.toString().length === 6
-    ),
-});
+import * as SecureStore from "expo-secure-store";
 
 const CodeForm = ({ switchStage }) => {
   const [value, setValue] = useState(null);
@@ -38,23 +26,6 @@ const CodeForm = ({ switchStage }) => {
       >
         Input the code sent to your email address
       </Text>
-      {/* <Input
-            label="Code"
-            placeholder=""
-            onChangeText={props.handleChange("code")}
-            onTextInput={() => {
-              setErrorMessage("");
-            }}
-            value={props.values.code}
-            keyboardType="phone-pad"
-            errorMessage={
-              props.touched.code && (props.errors.code || errorMessage)
-            }
-            errorStyle={{
-              marginLeft: 15,
-              marginBottom: 10,
-            }}
-          /> */}
       <View style={{ flex: 1 }}>
         <CodeInput value={value} setValue={setValue} cellCount={6} />
       </View>
@@ -71,14 +42,14 @@ const CodeForm = ({ switchStage }) => {
           onPress={() => {
             setLoading(true);
             setTimeout(async () => {
-              if (value == (await AsyncStorage.getItem("fpcode"))) {
+              if (value == (await SecureStore.getItemAsync("fpcode"))) {
                 setLoading(false);
                 switchStage();
               } else {
                 setLoading(false);
                 alert("Incorrect Code.");
               }
-            }, 1000);
+            }, 600);
           }}
         />
       </View>

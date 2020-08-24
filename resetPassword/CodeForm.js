@@ -57,5 +57,3 @@ const CodeForm = ({ switchStage }) => {
 };
 
 export default CodeForm;
-
-const styles = StyleSheet.create({});

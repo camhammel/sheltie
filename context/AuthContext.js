@@ -80,7 +80,7 @@ const tryLocalSignin = (dispatch) => async () => {
 
   if (token) {
     dispatch({ type: "signin", payload: token });
-    AsyncStorage.setItem("guest", false);
+    AsyncStorage.setItem("guest", "false");
     RootNavigation.reset("List");
   } else {
     RootNavigation.reset("Signup");

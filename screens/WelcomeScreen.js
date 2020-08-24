@@ -5,6 +5,10 @@ import Logo from "../assets/icon.png";
 import { COLORS } from "../assets/colors";
 
 const WelcomeScreen = ({ navigation }) => {
+  (async () => {
+    await AsyncStorage.setItem("guest", "true");
+  })();
+
   return (
     <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <View style={styles.viewStyle}>

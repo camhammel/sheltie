@@ -4,24 +4,17 @@ import { Text } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Context } from "../context/AuthContext";
 import NavLink from "../components/NavLink";
-import AuthForm from "../components/AuthForm";
 import SignInComponent from "../components/SignInComponent";
 import { COLORS } from "../assets/colors";
 import Spacer from "../components/Spacer";
 import Logo from "../assets/logo.png";
 
 const SigninScreen = ({ navigation }) => {
-  const { state, signin, clearErrorMessage } = useContext(Context);
+  const { state, clearErrorMessage } = useContext(Context);
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.primary }}>
       <KeyboardAwareScrollView behaviour="padding" style={styles.scrollStyle}>
-        {/* <AuthForm
-          headerText="Sign In to Sheltie"
-          buttonLabel="Sign In"
-          errorMessage={state.errorMessage}
-          onSubmit={signin}
-        /> */}
         <Spacer>
           <Text
             h2

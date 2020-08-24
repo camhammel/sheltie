@@ -11,8 +11,7 @@ const WelcomeScreen = ({ navigation }) => {
       <View style={styles.viewStyle}>
         <Image
           source={Logo}
-          style={{ width: 256, height: 256 }}
-          //marginTop={40}
+          style={{ width: 256, height: 256, marginTop: 40 }}
         />
         <Text h1 style={styles.headerStyle}>
           Sheltie
@@ -25,7 +24,7 @@ const WelcomeScreen = ({ navigation }) => {
           type="solid"
           title="Sign Up"
           linearGradientProps={{
-            colors: ["#FE96BE", "#F171A8"],
+            colors: [COLORS.primarylight, COLORS.primary],
             start: { x: 0.25, y: 0.1 },
             end: { x: 0.25, y: 1 },
           }}

@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Text, Button } from "react-native-elements";
-import { View, StyleSheet, AsyncStorage } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { COLORS } from "../assets/colors";
 import CodeInput from "../components/CodeInput";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -8,7 +8,6 @@ import * as SecureStore from "expo-secure-store";
 
 const CodeForm = ({ switchStage }) => {
   const [value, setValue] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   return (

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { View } from "react-native";
 import ResetForm from "../resetPassword/ResetForm";
 import CodeForm from "../resetPassword/CodeForm";
 import NewPasswordForm from "../resetPassword/NewPasswordForm";

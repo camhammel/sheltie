@@ -44,12 +44,12 @@ const SigninScreen = ({ navigation }) => {
           />
         </Spacer>
         <SignInComponent state={state} clearErrorMessage={clearErrorMessage} />
-        {/* <NavLink
+        <NavLink
           text="Forgot Password"
           routeName="ForgotPassword"
           clearErrorMessage={clearErrorMessage}
           custStyle={{ marginBottom: 0, marginTop: 60 }}
-        /> */}
+        />
         <NavLink
           text="Don't have an account? Sign up here."
           routeName="Signup"

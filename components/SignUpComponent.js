@@ -27,7 +27,10 @@ export default function SignUpComponent({ state, clearErrorMessage }) {
           let my_email = values.email;
           let my_pass = values.password;
           try {
-            signup({ email: my_email, password: my_pass });
+            signup({
+              email: my_email.toString().toLowerCase(),
+              password: my_pass,
+            });
           } catch (err) {
             alert(err.status);
           }

@@ -54,154 +54,10 @@ const ListScreen = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
-      getBreedOptions();
+      setBreed([]);
+      await getBreedOptions();
     })();
   }, [type]);
-
-  useEffect(() => {
-    update_token();
-    //searchApi();
-  }, [location, customLocation]);
-
-  useEffect(() => {
-    (async () => {
-      let temp = JSON.parse(await AsyncStorage.getItem("lastpets"));
-      setResults(temp);
-
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== "granted") {
-        alert("Permission to access location was denied. Try again.");
-        const { newstatus } = await Permissions.askAsync(Permissions.LOCATION);
-        if (!newstatus === "granted") {
-          throw new Error("Location permissions not granted.");
-        }
-      }
-
-      let location2 = await Location.getCurrentPositionAsync({});
-      console.log(
-        "location: " +
-          location2.coords.latitude +
-          "," +
-          location2.coords.longitude
-      );
-      setLocation(location2);
-
-      let temp2 = JSON.parse(await AsyncStorage.getItem("lastsearch"));
-      if ((await temp2) != null) {
-        console.log();
-        setCustomLocation(temp2.customLocation);
-        setInputVal(temp2.customLocation);
-        setAge(temp2.age);
-        setDistance(temp2.distance);
-        setType(temp2.type);
-        setBreed(temp2.breed);
-        console.log(
-          "Initial GET: Age: " +
-            age +
-            ", Type: " +
-            type +
-            ", Breeds: " +
-            breed +
-            ", Location: " +
-            customLocation
-        );
-      }
-
-      //getBreedOptions();
-      searchApi();
-    })();
-  }, []);
-
-  const loadMoreResults = async () => {
-    if (!loadingMore) {
-      setLoadingMore(true);
-      console.log("rendering page " + nextPage + "...");
-      retrieveNewPage();
-      setNextPage(nextPage + 1);
-      setLoadingMore(false);
-    }
-  };
-
-  const retrieveNewPage = async () => {
-    const newpagesearch = searchReq.concat(`&page=${nextPage}`);
-
-    petfinder
-      .get(newpagesearch, {
-        headers: {
-          Authorization: `Bearer ${(
-            await AsyncStorage.getItem("token")
-          ).toString()}`,
-        },
-      })
-      .then((response) => {
-        let temp3 = results;
-        for (let item of response.data.animals) {
-          if (!temp3.includes(item)) {
-            temp3.push(item);
-          }
-        }
-        setResults(temp3);
-      })
-      .catch(function (error) {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-          //console.log(error.response.status);
-          //console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log("Error", error.message);
-        }
-        //console.log(error.config);
-      });
-  };
-
-  const getBreedOptions = async () => {
-    var breedSearch = `types/${type}/breeds`;
-
-    petfinder
-      .get(breedSearch, {
-        headers: {
-          Authorization: `Bearer ${(
-            await AsyncStorage.getItem("token")
-          ).toString()}`,
-        },
-      })
-      .then((response) => {
-        const my_breeds = response.data.breeds.map((breed1) => {
-          return {
-            label: breed1.name,
-            value: breed1.name,
-          };
-        });
-        //console.log("breeds: " + JSON.stringify(my_breeds));
-        setBreedOptions(my_breeds);
-      })
-      .catch(function (error) {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-          //console.log(error.response.status);
-          //console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log("Error", error.message);
-        }
-        //console.log(error.config);
-      });
-  };
 
   const searchApi = async () => {
     setNextPage(2);
@@ -294,8 +150,156 @@ const ListScreen = ({ navigation }) => {
           setType("Dog");
           setBreed([]);
         }
-      }, 3000);
+      }, 1500);
     }
+  };
+
+  useEffect(() => {
+    update_token();
+    if ((!results || results.length <= 0) && location != null) {
+      console.log("Condition Met");
+      searchApi();
+    }
+  }, [location, customLocation]);
+
+  useEffect(() => {
+    (async () => {
+      let temp = JSON.parse(await AsyncStorage.getItem("lastpets"));
+      setResults(temp);
+
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== "granted") {
+        alert("Permission to access location was denied. Try again.");
+        const { newstatus } = await Permissions.askAsync(Permissions.LOCATION);
+        if (!newstatus === "granted") {
+          throw new Error("Location permissions not granted.");
+        }
+      }
+
+      let location2 = await Location.getCurrentPositionAsync({});
+      console.log(
+        "location: " +
+          location2.coords.latitude +
+          "," +
+          location2.coords.longitude
+      );
+      setLocation(location2);
+
+      let temp2 = JSON.parse(await AsyncStorage.getItem("lastsearch"));
+      if ((await temp2) != null) {
+        console.log();
+        setCustomLocation(temp2.customLocation);
+        setInputVal(temp2.customLocation);
+        setAge(temp2.age);
+        setDistance(temp2.distance);
+        setType(temp2.type);
+        setBreed(temp2.breed);
+        console.log(
+          "Initial GET: Age: " +
+            age +
+            ", Type: " +
+            type +
+            ", Breeds: " +
+            breed +
+            ", Location: " +
+            customLocation
+        );
+      }
+
+      //getBreedOptions();
+      //searchApi();
+    })();
+  }, []);
+
+  const loadMoreResults = async () => {
+    if (!loadingMore) {
+      setLoadingMore(true);
+      console.log("rendering page " + nextPage + "...");
+      retrieveNewPage();
+      setNextPage(nextPage + 1);
+      setLoadingMore(false);
+    }
+  };
+
+  const retrieveNewPage = async () => {
+    const newpagesearch = searchReq.concat(`&page=${nextPage}`);
+
+    petfinder
+      .get(newpagesearch, {
+        headers: {
+          Authorization: `Bearer ${(
+            await AsyncStorage.getItem("token")
+          ).toString()}`,
+        },
+      })
+      .then((response) => {
+        let temp3 = results;
+        for (let item of response.data.animals) {
+          if (!temp3.includes(item)) {
+            temp3.push(item);
+          }
+        }
+        setResults(temp3);
+      })
+      .catch(function (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          //console.log(error.response.status);
+          //console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+        }
+        //console.log(error.config);
+      });
+  };
+
+  const getBreedOptions = async () => {
+    var breedSearch = `types/${type}/breeds`;
+
+    petfinder
+      .get(breedSearch, {
+        headers: {
+          Authorization: `Bearer ${(
+            await AsyncStorage.getItem("token")
+          ).toString()}`,
+        },
+      })
+      .then((response) => {
+        const my_breeds = response.data.breeds.map((breed1) => {
+          return {
+            label: breed1.name,
+            value: breed1.name,
+          };
+        });
+        //console.log("breeds: " + JSON.stringify(my_breeds));
+        setBreedOptions(my_breeds);
+      })
+      .catch(function (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          //console.log(error.response.status);
+          //console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+        }
+        //console.log(error.config);
+      });
   };
 
   return (

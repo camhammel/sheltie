@@ -43,10 +43,10 @@ const WelcomeScreen = ({ navigation }) => {
           <Text style={styles.linkStyle}>I already have an account</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={(async () => {
+          onPress={async () => {
             await AsyncStorage.setItem("guest", "true");
             navigation.navigate("List");
-          })()}
+          }}
         >
           <Text style={styles.linkStyle}>Continue as Guest</Text>
         </TouchableOpacity>

@@ -20,7 +20,7 @@ const authReducer = (state, action) => {
 };
 
 const clearAsyncStorage = async () => {
-  AsyncStorage.clear();
+  await AsyncStorage.clear();
 };
 
 const clearErrorMessage = (dispatch) => () => {
@@ -127,11 +127,10 @@ const signin = (dispatch) => async ({ email, password }) => {
 };
 
 const signout = (dispatch) => async () => {
-  await clearAsyncStorage().then(() => {
-    console.log("AsyncStorage cleared.");
-    dispatch({ type: "signout" });
-    RootNavigation.reset("Welcome");
-  });
+  await clearAsyncStorage();
+  console.log("AsyncStorage cleared.");
+  dispatch({ type: "signout" });
+  RootNavigation.reset("Welcome");
 };
 
 const getfavs = (dispatch) => async (email) => {

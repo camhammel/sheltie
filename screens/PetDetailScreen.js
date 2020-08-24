@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Share,
   Platform,
+  Alert,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { Asset } from "expo-asset";
@@ -26,6 +27,7 @@ import FAIcon from "react-native-vector-icons/FontAwesome";
 import Attribute from "../components/Attribute";
 import { Context } from "../context/AuthContext";
 import ShelterInfo from "../components/ShelterInfo";
+import { navigationRef } from "../navigationRef";
 
 const defaultURI = Asset.fromModule(require("../assets/logo.png")).uri;
 const screenWidth = Math.round(Dimensions.get("window").width);
@@ -209,8 +211,24 @@ const PetDetailScreen = ({ route, navigation }) => {
                       }
                       setFavourited(!favourited);
                     } else {
-                      alert(
-                        "Please sign in via the Account screen to use favourites"
+                      Alert.alert(
+                        "Sorry!",
+                        "Please sign in via the Account screen to use the favourites feature.",
+                        [
+                          {
+                            text: "Cancel",
+                            onPress: () => {
+                              console.log("Cancelled.");
+                            },
+                            style: "cancel",
+                          },
+                          {
+                            text: "Sign in",
+                            onPress: () => {
+                              navigationRef.current.navigate("Signin");
+                            },
+                          },
+                        ]
                       );
                     }
                   }}

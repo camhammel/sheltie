@@ -1,11 +1,5 @@
-import React, { useState, useRef } from "react";
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Text,
-  ActivityIndicator,
-} from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, FlatList, ActivityIndicator } from "react-native";
 import { ListItem } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { Asset } from "expo-asset";

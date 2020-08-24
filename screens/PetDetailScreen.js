@@ -42,11 +42,16 @@ const PetDetailScreen = ({ route, navigation }) => {
   const [email, setEmail] = useState("");
   const { item } = route.params;
   const [favourited, setFavourited] = useState(false);
+  const [guest, setGuest] = useState("false");
 
   useEffect(() => {
     (async () => {
       detailApi(item.id);
-      setEmail(await AsyncStorage.getItem("email"));
+      if ((await AsyncStorage.getItem("guest")) == "true") {
+        setGuest("true");
+      } else {
+        setEmail(await AsyncStorage.getItem("email"));
+      }
     })();
   }, []);
 
@@ -195,13 +200,19 @@ const PetDetailScreen = ({ route, navigation }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    console.log("Heart Pressed");
-                    {
-                      favourited
-                        ? removefav({ email, petid: results.id })
-                        : addfav({ email, petid: results.id });
+                    if (guest !== "true") {
+                      console.log("Heart Pressed");
+                      {
+                        favourited
+                          ? removefav({ email, petid: results.id })
+                          : addfav({ email, petid: results.id });
+                      }
+                      setFavourited(!favourited);
+                    } else {
+                      alert(
+                        "Please sign in via the Account screen to use favourites"
+                      );
                     }
-                    setFavourited(!favourited);
                   }}
                 >
                   <Icon

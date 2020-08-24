@@ -1,8 +1,7 @@
-import React, { useEffect, useContext } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import React from "react";
+import { View, StyleSheet, TouchableOpacity, AsyncStorage } from "react-native";
 import { Button, Image, Text } from "react-native-elements";
 import Logo from "../assets/icon.png";
-import { Context as AuthContext } from "../context/AuthContext";
 import { COLORS } from "../assets/colors";
 
 const WelcomeScreen = ({ navigation }) => {
@@ -38,6 +37,14 @@ const WelcomeScreen = ({ navigation }) => {
           }}
         >
           <Text style={styles.linkStyle}>I already have an account</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={(async () => {
+            await AsyncStorage.setItem("guest", "true");
+            navigation.navigate("List");
+          })()}
+        >
+          <Text style={styles.linkStyle}>Continue as Guest</Text>
         </TouchableOpacity>
         <Text style={{ textAlign: "center", marginTop: 60 }}>
           Powered by the Petfinder API

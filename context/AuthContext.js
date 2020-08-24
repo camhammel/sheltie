@@ -80,6 +80,7 @@ const tryLocalSignin = (dispatch) => async () => {
 
   if (token) {
     dispatch({ type: "signin", payload: token });
+    AsyncStorage.setItem("guest", false);
     RootNavigation.reset("List");
   } else {
     RootNavigation.reset("Signup");
@@ -92,7 +93,7 @@ const signup = (dispatch) => async ({ email, password }) => {
     const response = await sheltieApi.post("/signup", { email, password });
     await AsyncStorage.setItem("authtoken", response.data.token);
     await AsyncStorage.setItem("email", email);
-
+    AsyncStorage.setItem("guest", "false");
     dispatch({
       type: "signin",
       payload: response.data.token,
@@ -113,7 +114,7 @@ const signin = (dispatch) => async ({ email, password }) => {
     const response = await sheltieApi.post("/signin", { email, password });
     await AsyncStorage.setItem("authtoken", response.data.token);
     await AsyncStorage.setItem("email", email);
-
+    AsyncStorage.setItem("guest", "false");
     dispatch({ type: "signin", payload: response.data.token });
     RootNavigation.reset("List");
   } catch (err) {

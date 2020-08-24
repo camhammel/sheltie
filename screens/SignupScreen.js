@@ -1,16 +1,24 @@
 import React, { useContext } from "react";
-import { View, StyleSheet, Image, useWindowDimensions } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  useWindowDimensions,
+  TouchableOpacity,
+  AsyncStorage,
+} from "react-native";
 import { Text } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Context as AuthContext } from "../context/AuthContext";
 import NavLink from "../components/NavLink";
-import AuthForm from "../components/AuthForm";
+import { useNavigation } from "@react-navigation/native";
 import SignUpComponent from "../components/SignUpComponent";
 import { COLORS } from "../assets/colors";
 import Spacer from "../components/Spacer";
 import Logo from "../assets/logo.png";
 
-const SignupScreen = ({ navigation }) => {
+const SignupScreen = () => {
+  const navigation = useNavigation();
   const { state, signup, clearErrorMessage } = useContext(AuthContext);
 
   return (
@@ -48,6 +56,19 @@ const SignupScreen = ({ navigation }) => {
           text="Already have an account? Sign in here."
           routeName="Signin"
           clearErrorMessage={clearErrorMessage}
+          custStyle={{ marginBottom: 0, marginTop: 20 }}
+        />
+        <NavLink
+          text="Continue as Guest."
+          routeName="List"
+          clearErrorMessage={() => {
+            console.log("got here");
+            (async () => {
+              await AsyncStorage.setItem("guest", "true");
+            })();
+            //navigation.navigate("List");
+          }}
+          custStyle={{ marginBottom: 40, marginTop: 0 }}
         />
       </KeyboardAwareScrollView>
     </View>
@@ -57,6 +78,13 @@ const SignupScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   scrollStyle: {
     marginTop: 50,
+  },
+  linkStyle: {
+    marginTop: 20,
+    textAlign: "center",
+    color: "blue",
+    fontSize: 15,
+    marginBottom: 40,
   },
 });
 

@@ -40,7 +40,7 @@ const AccountScreen = ({ navigation }) => {
         style={styles.viewStyle}
         contentContainerStyle={{
           alignItems: "center",
-          justifyContent: "flex-start",
+          //justifyContent: "flex-start",
         }}
       >
         <Modal
@@ -271,7 +271,7 @@ const AccountScreen = ({ navigation }) => {
             resizeMode="contain"
           />
         </Spacer>
-        <View style={{}}>
+        <View style={{ flex: 6, justifyContent: "flex-start" }}>
           <Text
             style={{
               fontSize: 24,

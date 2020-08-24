@@ -3,10 +3,8 @@ import {
   View,
   AsyncStorage,
   StyleSheet,
-  ActivityIndicator,
   ScrollView,
   useWindowDimensions,
-  TextInput,
 } from "react-native";
 import { Text, Button, Input } from "react-native-elements";
 import ListComponent from "../components/ListComponent";

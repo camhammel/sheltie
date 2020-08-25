@@ -32,6 +32,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "scheme": "sheltie",
     "description": "Search for pets available for adoption from local shelters. This app uses the Petfinder API and does not claim ownership to the data provided by Petfinder. "
   }
 }

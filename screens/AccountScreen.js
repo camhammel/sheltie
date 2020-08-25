@@ -4,7 +4,6 @@ import {
   StyleSheet,
   AsyncStorage,
   Image,
-  Linking,
   ScrollView,
   useWindowDimensions,
 } from "react-native";
@@ -16,12 +15,14 @@ import { COLORS } from "../assets/colors";
 import Icon from "react-native-vector-icons/Entypo";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Modal from "react-native-modal";
+import * as Linking from "expo-linking";
 
 const AccountScreen = ({ navigation }) => {
   const { signout, getfavs } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
   const [guest, setGuest] = useState("true");
+  const [url, setUrl] = useState("");
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -31,6 +32,7 @@ const AccountScreen = ({ navigation }) => {
     (async () => {
       setGuest(await AsyncStorage.getItem("guest"));
       setEmail(await AsyncStorage.getItem("email"));
+      setUrl(Linking.makeUrl("pet", { id: 48781173 }));
     })();
   }, []);
 
@@ -284,6 +286,24 @@ const AccountScreen = ({ navigation }) => {
           >
             You aren't signed in
           </Text>
+          <TouchableOpacity
+            onPress={() => {
+              Linking.openURL(url);
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 24,
+                marginTop: 20,
+                marginBottom: 5,
+                color: COLORS.darkgrey,
+                textAlign: "center",
+                fontWeight: "normal",
+              }}
+            >
+              {url}
+            </Text>
+          </TouchableOpacity>
           <Button
             containerStyle={{ marginBottom: 15 }}
             type="solid"

@@ -28,6 +28,7 @@ import Attribute from "../components/Attribute";
 import { Context } from "../context/AuthContext";
 import ShelterInfo from "../components/ShelterInfo";
 import { navigationRef } from "../navigationRef";
+import * as Linking from "expo-linking";
 
 const defaultURI = Asset.fromModule(require("../assets/logo.png")).uri;
 const screenWidth = Math.round(Dimensions.get("window").width);
@@ -41,25 +42,29 @@ const PetDetailScreen = ({ route, navigation }) => {
   const [results, setResults] = useState(null);
   const [page, setPage] = useState(0);
   const [email, setEmail] = useState("");
-  const { item } = route.params;
+  const { id } = route.params;
   const [favourited, setFavourited] = useState(false);
   const [guest, setGuest] = useState("true");
+  let isSubscribed = true;
 
   useEffect(() => {
     (async () => {
-      detailApi(item.id);
-      if ((await AsyncStorage.getItem("guest")) == "true") {
+      await detailApi(id);
+      if ((await AsyncStorage.getItem("guest")) == "true" && isSubscribed) {
         setGuest("true");
       } else {
-        setGuest("false");
-        setEmail(await AsyncStorage.getItem("email"));
+        if (isSubscribed) {
+          setGuest("false");
+          setEmail(await AsyncStorage.getItem("email"));
+        }
       }
     })();
+    return () => (isSubscribed = false);
   }, []);
 
   useEffect(() => {
     (async () => {
-      setFavourited(await checkfav({ email, petid: item.id }));
+      setFavourited(await checkfav({ email, petid: id }));
     })();
   }, [email]);
 
@@ -78,8 +83,10 @@ const PetDetailScreen = ({ route, navigation }) => {
         },
       })
       .then((response) => {
-        setResults(response.data.animal);
-        console.log(response.data.animal);
+        if (isSubscribed) {
+          setResults(response.data.animal);
+          console.log(response.data.animal);
+        }
       })
       .catch(function (error) {
         if (error.response) {
@@ -123,7 +130,7 @@ const PetDetailScreen = ({ route, navigation }) => {
         const result = await Share.share({
           message: `I was browsing Sheltie and found ${results.name}!`,
           title: `Meet ${results.name}`,
-          url: `${results.url}`,
+          url: `${Linking.makeUrl("pet", { id: results.id })}`,
         });
 
         if (result.action === Share.sharedAction) {

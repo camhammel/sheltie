@@ -14,11 +14,13 @@ import petfinder from "../api/petfinder";
 const ShelterInfo = ({ results }) => {
   const [shelter, setShelter] = useState(null);
   let doneLoading = false;
+  let isSubscribed = true;
 
   useEffect(() => {
     (async () => {
-      getShelterDetails();
+      await getShelterDetails();
     })();
+    return () => (isSubscribed = false);
   }, []);
 
   const shelterAddress = () => {
@@ -43,9 +45,13 @@ const ShelterInfo = ({ results }) => {
         },
       })
       .then((response) => {
-        setShelter(response.data.organization);
-        console.log("Found org: " + JSON.stringify(response.data.organization));
-        doneLoading = true;
+        if (isSubscribed) {
+          setShelter(response.data.organization);
+          console.log(
+            "Found org: " + JSON.stringify(response.data.organization)
+          );
+          doneLoading = true;
+        }
       })
       .catch(function (error) {
         if (error.response) {

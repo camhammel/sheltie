@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import { NavigationContainer } from "@react-navigation/native";
@@ -17,6 +17,8 @@ import { Provider as TokenProvider } from "./context/TokenContext";
 import { navigationRef } from "./navigationRef";
 import { decode, encode } from "base-64";
 import { COLORS } from "./assets/colors";
+import * as Linking from "expo-linking";
+let goturl = false;
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -33,6 +35,26 @@ function capitalizeFirstLetter(string) {
 }
 
 function App() {
+  useEffect(() => {
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        goturl = true;
+        setTimeout(() => {
+          _handleOpenURL(url);
+        }, 500);
+      }
+    });
+
+    Linking.addEventListener("url", ({ url }) => {
+      _handleOpenURL(url);
+    });
+
+    return function cleanup() {
+      Linking.removeEventListener("url");
+    };
+  }),
+    [];
+
   const [isReady, setIsReady] = useState(false);
 
   const _cacheResourcesAsync = async () => {
@@ -47,7 +69,22 @@ function App() {
     return Promise.all(cacheImages);
   };
 
-  if (!isReady) {
+  const _handleOpenURL = (url) => {
+    let { path, queryParams } = Linking.parse(url);
+    console.log("Path: " + path + ", query: " + queryParams.id);
+    if (path == "pet") {
+      if (queryParams.id) {
+        console.log("**********Trying to navigate!");
+        navigationRef.current.navigate("PetDetail", { id: queryParams.id });
+      } else {
+        alert("Invalid Pet ID: " + queryParams.id);
+      }
+    } else {
+      //alert("Invalid path: " + path);
+    }
+  };
+
+  if (!isReady && !goturl) {
     return (
       <AppLoading
         startAsync={_cacheResourcesAsync}
@@ -55,90 +92,90 @@ function App() {
         onError={console.warn}
       />
     );
+  } else {
+    return (
+      <TokenProvider>
+        <AuthProvider>
+          <NavigationContainer ref={navigationRef}>
+            <Stack.Navigator initialRouteName="Loading">
+              <Stack.Screen
+                name="Loading"
+                component={LoadingScreen}
+                options={{ title: "Loading", headerShown: false }}
+              />
+              <Stack.Screen
+                name="Welcome"
+                component={WelcomeScreen}
+                options={{ title: "Welcome", headerShown: false }}
+              />
+              <Stack.Screen
+                name="Signup"
+                component={SignupScreen}
+                options={{
+                  title: "Sign Up",
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="Signin"
+                component={SigninScreen}
+                options={{ title: "Sign In", headerShown: false }}
+              />
+              <Stack.Screen
+                name="ForgotPassword"
+                component={ForgotPasswordScreen}
+                options={{
+                  title: "Forgot Password",
+                  headerShown: true,
+                  headerTintColor: "black",
+                  headerStyle: { backgroundColor: COLORS.primarylight },
+                }}
+              />
+              <Stack.Screen
+                name="List"
+                component={ListScreen}
+                options={{
+                  title: "Nearby Pets for Adoption",
+                  headerLeft: null,
+                  headerTintColor: "black",
+                  headerStyle: { backgroundColor: COLORS.primarylight },
+                }}
+              />
+              <Stack.Screen
+                name="PetDetail"
+                component={PetDetailScreen}
+                options={({ route }) => ({
+                  headerTintColor: "black",
+                  headerStyle: { backgroundColor: COLORS.primarylight },
+                  title: route?.params?.id,
+                })}
+              />
+              <Stack.Screen
+                name="Account"
+                component={AccountScreen}
+                options={{
+                  title: "Account",
+                  headerShown: true,
+                  headerTintColor: "black",
+                  headerStyle: { backgroundColor: COLORS.primarylight },
+                }}
+              />
+              <Stack.Screen
+                name="Favourites"
+                component={FavouritesScreen}
+                options={{
+                  title: "Favourites",
+                  headerShown: true,
+                  headerTintColor: "black",
+                  headerStyle: { backgroundColor: COLORS.primarylight },
+                }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </AuthProvider>
+      </TokenProvider>
+    );
   }
-
-  return (
-    <TokenProvider>
-      <AuthProvider>
-        <NavigationContainer ref={navigationRef}>
-          <Stack.Navigator initialRouteName="Loading">
-            <Stack.Screen
-              name="Loading"
-              component={LoadingScreen}
-              options={{ title: "Loading", headerShown: false }}
-            />
-            <Stack.Screen
-              name="Welcome"
-              component={WelcomeScreen}
-              options={{ title: "Welcome", headerShown: false }}
-            />
-            <Stack.Screen
-              name="Signup"
-              component={SignupScreen}
-              options={{
-                title: "Sign Up",
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="Signin"
-              component={SigninScreen}
-              options={{ title: "Sign In", headerShown: false }}
-            />
-            <Stack.Screen
-              name="ForgotPassword"
-              component={ForgotPasswordScreen}
-              options={{
-                title: "Forgot Password",
-                headerShown: true,
-                headerTintColor: "black",
-                headerStyle: { backgroundColor: COLORS.primarylight },
-              }}
-            />
-            <Stack.Screen
-              name="List"
-              component={ListScreen}
-              options={{
-                title: "Nearby Pets for Adoption",
-                headerLeft: null,
-                headerTintColor: "black",
-                headerStyle: { backgroundColor: COLORS.primarylight },
-              }}
-            />
-            <Stack.Screen
-              name="PetDetail"
-              component={PetDetailScreen}
-              options={({ route }) => ({
-                headerTintColor: "black",
-                headerStyle: { backgroundColor: COLORS.primarylight },
-                title: capitalizeFirstLetter(route.params.name.toLowerCase()),
-              })}
-            />
-            <Stack.Screen
-              name="Account"
-              component={AccountScreen}
-              options={{
-                title: "Account",
-                headerShown: true,
-                headerTintColor: "black",
-                headerStyle: { backgroundColor: COLORS.primarylight },
-              }}
-            />
-            <Stack.Screen
-              name="Favourites"
-              component={FavouritesScreen}
-              options={{
-                title: "Favourites",
-                headerShown: true,
-                headerTintColor: "black",
-                headerStyle: { backgroundColor: COLORS.primarylight },
-              }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </AuthProvider>
-    </TokenProvider>
-  );
 }
 
 export default App;

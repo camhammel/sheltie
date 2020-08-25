@@ -39,7 +39,7 @@ const ListComponent = React.forwardRef(
         chevron
         onPress={() => {
           navigation.navigate("PetDetail", {
-            item,
+            id: item.id,
             name: item.name,
             breed: item.breeds.primary,
           });

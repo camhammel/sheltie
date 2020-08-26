@@ -56,11 +56,21 @@ const PetDetailScreen = ({ route, navigation }) => {
         if (isSubscribed) {
           setGuest("false");
           setEmail(await AsyncStorage.getItem("email"));
+          navigation.setOptions({
+            headerTitleStyle: { color: "transparent" },
+          });
         }
       }
     })();
     return () => (isSubscribed = false);
   }, []);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: results?.name,
+      headerTitleStyle: { color: "black" },
+    });
+  }, [results]);
 
   useEffect(() => {
     (async () => {

@@ -144,11 +144,12 @@ function App() {
               <Stack.Screen
                 name="PetDetail"
                 component={PetDetailScreen}
-                options={({ route }) => ({
+                options={{
                   headerTintColor: "black",
                   headerStyle: { backgroundColor: COLORS.primarylight },
-                  title: route?.params?.id,
-                })}
+                  headerTitle: "",
+                  //headerTitleStyle: { color: "transparent" },
+                }}
               />
               <Stack.Screen
                 name="Account"

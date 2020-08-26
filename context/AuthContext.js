@@ -83,7 +83,7 @@ const tryLocalSignin = (dispatch) => async () => {
     AsyncStorage.setItem("guest", "false");
     RootNavigation.reset("List");
   } else {
-    RootNavigation.reset("Signup");
+    RootNavigation.reset("Welcome");
   }
 };
 

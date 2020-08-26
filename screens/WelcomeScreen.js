@@ -1,20 +1,24 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity, AsyncStorage } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  AsyncStorage,
+  ScrollView,
+} from "react-native";
 import { Button, Image, Text } from "react-native-elements";
 import Logo from "../assets/icon.png";
 import { COLORS } from "../assets/colors";
 
 const WelcomeScreen = ({ navigation }) => {
-  (async () => {
-    await AsyncStorage.setItem("guest", "true");
-  })();
+  AsyncStorage.setItem("guest", "true");
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
+    <ScrollView style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <View style={styles.viewStyle}>
         <Image
           source={Logo}
-          style={{ width: 256, height: 256, marginTop: 40 }}
+          style={{ width: 256, height: 256, marginTop: 10 }}
         />
         <Text h1 style={styles.headerStyle}>
           Sheltie
@@ -54,7 +58,7 @@ const WelcomeScreen = ({ navigation }) => {
           Powered by the Petfinder API
         </Text>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -65,7 +69,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#ffffff",
-    marginVertical: 80,
+    marginBottom: 60,
+    marginTop: 20,
   },
   view2Style: {
     flex: 1,

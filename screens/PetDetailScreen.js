@@ -50,15 +50,17 @@ const PetDetailScreen = ({ route, navigation }) => {
   useEffect(() => {
     (async () => {
       await detailApi(id);
+      if (isSubscribed) {
+        navigation.setOptions({
+          headerTitleStyle: { color: "transparent" },
+        });
+      }
       if ((await AsyncStorage.getItem("guest")) == "true" && isSubscribed) {
         setGuest("true");
       } else {
         if (isSubscribed) {
           setGuest("false");
           setEmail(await AsyncStorage.getItem("email"));
-          navigation.setOptions({
-            headerTitleStyle: { color: "transparent" },
-          });
         }
       }
     })();

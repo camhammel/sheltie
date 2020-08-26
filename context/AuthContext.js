@@ -52,7 +52,6 @@ const sendCodeToEmail = (dispatch) => async (email) => {
       email: email.toString().toLowerCase(),
       code: prng,
     });
-    console.log(prng);
     return true;
   } catch (err) {
     console.log(err);
@@ -139,7 +138,6 @@ const getfavs = (dispatch) => async (email) => {
     const response = await sheltieApi.post("/getfavourites", {
       email: email,
     });
-    console.log("response: " + JSON.stringify(response.data));
     await AsyncStorage.setItem("favourites", JSON.stringify(response.data));
 
     //dispatch({ type: "getfavs", payload: response.data });
@@ -155,29 +153,23 @@ const checkfav = (dispatch) => async ({ email, petid }) => {
     const response = await sheltieApi.post("/getfavourites", {
       email: email,
     });
-    console.log("response: " + JSON.stringify(response.data));
     await AsyncStorage.setItem("favourites", JSON.stringify(response.data));
 
     if (response.data.includes(petid + "")) {
-      console.log("This animal was favourited.");
       return true;
     } else {
-      console.log("This animal was not favourited.");
       return false;
     }
-  } catch (err) {
-    console.log("Had to exit: " + err.message);
-  }
+  } catch (err) {}
 };
 
 const addfav = (dispatch) => async ({ email, petid }) => {
   try {
     console.log("email: " + email + ", id: " + petid);
-    const response = await sheltieApi.post("/addfav", {
+    await sheltieApi.post("/addfav", {
       email: email,
       petid: petid,
     });
-    console.log("response: " + JSON.stringify(response.data));
   } catch (err) {
     console.log(err.message);
   }
@@ -190,7 +182,6 @@ const removefav = (dispatch) => async ({ email, petid }) => {
       email: email,
       petid: petid,
     });
-    console.log("response: " + JSON.stringify(response.data.favourites));
     await AsyncStorage.setItem(
       "favourites",
       JSON.stringify(response.data.favourites)

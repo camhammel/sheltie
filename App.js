@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import { NavigationContainer } from "@react-navigation/native";
@@ -13,7 +13,10 @@ import AccountScreen from "./screens/AccountScreen";
 import ForgotPasswordScreen from "./screens/ForgotPasswordScreen";
 import FavouritesScreen from "./screens/FavouritesScreen";
 import { Provider as AuthProvider } from "./context/AuthContext";
-import { Provider as TokenProvider } from "./context/TokenContext";
+import {
+  Provider as TokenProvider,
+  Context as TokenContext,
+} from "./context/TokenContext";
 import { navigationRef } from "./navigationRef";
 import { decode, encode } from "base-64";
 import { COLORS } from "./assets/colors";
@@ -35,7 +38,10 @@ function capitalizeFirstLetter(string) {
 }
 
 function App() {
+  const { update_token } = useContext(TokenContext);
+
   useEffect(() => {
+    update_token();
     Linking.getInitialURL().then((url) => {
       if (url) {
         goturl = true;
@@ -52,8 +58,7 @@ function App() {
     return function cleanup() {
       Linking.removeEventListener("url");
     };
-  }),
-    [];
+  }, []);
 
   const [isReady, setIsReady] = useState(false);
 
@@ -94,89 +99,93 @@ function App() {
     );
   } else {
     return (
-      <TokenProvider>
-        <AuthProvider>
-          <NavigationContainer ref={navigationRef}>
-            <Stack.Navigator initialRouteName="Loading">
-              <Stack.Screen
-                name="Loading"
-                component={LoadingScreen}
-                options={{ title: "Loading", headerShown: false }}
-              />
-              <Stack.Screen
-                name="Welcome"
-                component={WelcomeScreen}
-                options={{ title: "Welcome", headerShown: false }}
-              />
-              <Stack.Screen
-                name="Signup"
-                component={SignupScreen}
-                options={{
-                  title: "Sign Up",
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="Signin"
-                component={SigninScreen}
-                options={{ title: "Sign In", headerShown: false }}
-              />
-              <Stack.Screen
-                name="ForgotPassword"
-                component={ForgotPasswordScreen}
-                options={{
-                  title: "Forgot Password",
-                  headerShown: true,
-                  headerTintColor: "black",
-                  headerStyle: { backgroundColor: COLORS.primarylight },
-                }}
-              />
-              <Stack.Screen
-                name="List"
-                component={ListScreen}
-                options={{
-                  title: "Nearby Pets for Adoption",
-                  headerLeft: null,
-                  headerTintColor: "black",
-                  headerStyle: { backgroundColor: COLORS.primarylight },
-                }}
-              />
-              <Stack.Screen
-                name="PetDetail"
-                component={PetDetailScreen}
-                options={{
-                  headerTintColor: "black",
-                  headerStyle: { backgroundColor: COLORS.primarylight },
-                  headerTitle: "",
-                  //headerTitleStyle: { color: "transparent" },
-                }}
-              />
-              <Stack.Screen
-                name="Account"
-                component={AccountScreen}
-                options={{
-                  title: "Account",
-                  headerShown: true,
-                  headerTintColor: "black",
-                  headerStyle: { backgroundColor: COLORS.primarylight },
-                }}
-              />
-              <Stack.Screen
-                name="Favourites"
-                component={FavouritesScreen}
-                options={{
-                  title: "Favourites",
-                  headerShown: true,
-                  headerTintColor: "black",
-                  headerStyle: { backgroundColor: COLORS.primarylight },
-                }}
-              />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </AuthProvider>
-      </TokenProvider>
+      <NavigationContainer ref={navigationRef}>
+        <Stack.Navigator initialRouteName="Loading">
+          <Stack.Screen
+            name="Loading"
+            component={LoadingScreen}
+            options={{ title: "Loading", headerShown: false }}
+          />
+          <Stack.Screen
+            name="Welcome"
+            component={WelcomeScreen}
+            options={{ title: "Welcome", headerShown: false }}
+          />
+          <Stack.Screen
+            name="Signup"
+            component={SignupScreen}
+            options={{
+              title: "Sign Up",
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Signin"
+            component={SigninScreen}
+            options={{ title: "Sign In", headerShown: false }}
+          />
+          <Stack.Screen
+            name="ForgotPassword"
+            component={ForgotPasswordScreen}
+            options={{
+              title: "Forgot Password",
+              headerShown: true,
+              headerTintColor: "black",
+              headerStyle: { backgroundColor: COLORS.primarylight },
+            }}
+          />
+          <Stack.Screen
+            name="List"
+            component={ListScreen}
+            options={{
+              title: "Nearby Pets for Adoption",
+              headerLeft: null,
+              headerTintColor: "black",
+              headerStyle: { backgroundColor: COLORS.primarylight },
+            }}
+          />
+          <Stack.Screen
+            name="PetDetail"
+            component={PetDetailScreen}
+            options={{
+              headerTintColor: "black",
+              headerStyle: { backgroundColor: COLORS.primarylight },
+              headerTitle: "",
+              //headerTitleStyle: { color: "transparent" },
+            }}
+          />
+          <Stack.Screen
+            name="Account"
+            component={AccountScreen}
+            options={{
+              title: "Account",
+              headerShown: true,
+              headerTintColor: "black",
+              headerStyle: { backgroundColor: COLORS.primarylight },
+            }}
+          />
+          <Stack.Screen
+            name="Favourites"
+            component={FavouritesScreen}
+            options={{
+              title: "Favourites",
+              headerShown: true,
+              headerTintColor: "black",
+              headerStyle: { backgroundColor: COLORS.primarylight },
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     );
   }
 }
 
-export default App;
+export default function AppWrapper() {
+  return (
+    <TokenProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </TokenProvider>
+  );
+}

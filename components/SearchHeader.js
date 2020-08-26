@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 30,
     marginHorizontal: 2,
+    marginLeft: 10,
   },
 });
 

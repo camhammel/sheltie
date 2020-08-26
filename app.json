@@ -22,7 +22,13 @@
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This app uses Location to determine animal shelters closest to you for results.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "This app uses Location to determine animal shelters closest to you for results."
-      }
+      },
+      "associatedDomains": [
+        "applinks:*.sheltie.app",
+        "applinks:sheltie.app",
+        "applinks:https://sheltie.app",
+        "applinks:www.sheltie.app"
+      ]
     },
     "android": {
       "package": "app.sheltie",

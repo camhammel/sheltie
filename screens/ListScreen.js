@@ -166,9 +166,9 @@ const ListScreen = ({ navigation }) => {
       (location != null || customLocation != "")
     ) {
       console.log("Condition Met");
-      setTimeout(() => {
+      setTimeout(async () => {
+        //searchApi();
         setInit(!init);
-        searchApi();
       }, 800);
     }
   }, [location, customLocation]);

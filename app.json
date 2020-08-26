@@ -17,7 +17,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "app.sheltie",
-      "buildNumber": "1.0.2",
+      "buildNumber": "1.0.4",
       "supportsTablet": false,
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This app uses Location to determine animal shelters closest to you for results.",
@@ -32,8 +32,22 @@
     },
     "android": {
       "package": "app.sheltie",
-      "versionCode": 3,
-      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"]
+      "versionCode": 4,
+      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "*.sheltie.app",
+              "pathPrefix": "/pet"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"

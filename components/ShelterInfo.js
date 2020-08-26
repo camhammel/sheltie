@@ -47,9 +47,6 @@ const ShelterInfo = ({ results }) => {
       .then((response) => {
         if (isSubscribed) {
           setShelter(response.data.organization);
-          console.log(
-            "Found org: " + JSON.stringify(response.data.organization)
-          );
           doneLoading = true;
         }
       })

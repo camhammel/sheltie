@@ -107,15 +107,12 @@ const ListScreen = ({ navigation }) => {
             JSON.stringify(response.data.animals)
           );
           AsyncStorage.setItem("lastsearch", JSON.stringify(this_search));
-          //console.log(response.data.animals);
         })
         .catch(function (error) {
           if (error.response) {
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
             console.log(error.response.data);
-            //console.log(error.response.status);
-            //console.log(error.response.headers);
           } else if (error.request) {
             // The request was made but no response was received
             // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
@@ -154,6 +151,17 @@ const ListScreen = ({ navigation }) => {
 
   useEffect(() => {
     update_token();
+    if (customLocation != "") {
+      navigation.setOptions({
+        headerTitle: "Pets near " + customLocation,
+        headerTitleStyle: { color: "black" },
+      });
+    } else {
+      navigation.setOptions({
+        headerTitle: "Nearby Pets for Adoption",
+        headerTitleStyle: { color: "black" },
+      });
+    }
     if (
       (!results || results.length <= 0) &&
       (location != null || customLocation != "")
@@ -293,7 +301,6 @@ const ListScreen = ({ navigation }) => {
               value: breed1.name,
             };
           });
-          //console.log("breeds: " + JSON.stringify(my_breeds));
           setBreedOptions(my_breeds);
         })
         .catch(function (error) {

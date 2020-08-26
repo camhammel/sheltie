@@ -15,7 +15,6 @@ const FavouritesScreen = () => {
     (async () => {
       favIds = await AsyncStorage.getItem("favourites");
       parsedIds = JSON.parse(favIds);
-      console.log("FavIds: " + parsedIds);
       await searchFavs();
     })();
 
@@ -24,11 +23,6 @@ const FavouritesScreen = () => {
   }, [isFocused]);
 
   const searchFavs = async () => {
-    console.log(
-      "Token value in storage is: " +
-        (await AsyncStorage.getItem("token")).toString()
-    );
-
     let animals = [];
     let promises = [];
     for (let i = 0; i < parsedIds.length; i++) {
@@ -66,7 +60,6 @@ const FavouritesScreen = () => {
     }
 
     Promise.all(promises).then(() => {
-      console.log(animals);
       setResults(animals);
     });
   };

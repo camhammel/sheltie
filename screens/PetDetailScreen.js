@@ -79,11 +79,6 @@ const PetDetailScreen = ({ route, navigation }) => {
   }, [email]);
 
   const detailApi = async (id) => {
-    console.log(
-      "Token value in storage is: " +
-        (await AsyncStorage.getItem("token")).toString()
-    );
-
     petfinder
       .get(`animals/${id}`, {
         headers: {
@@ -220,7 +215,6 @@ const PetDetailScreen = ({ route, navigation }) => {
                 <TouchableOpacity
                   onPress={() => {
                     if (guest !== "true") {
-                      console.log("Heart Pressed");
                       {
                         favourited
                           ? removefav({ email, petid: results.id })

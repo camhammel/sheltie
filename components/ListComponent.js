@@ -52,7 +52,6 @@ const ListComponent = React.forwardRef(
         setOnEndReachedCalledDuringMomentum(true);
 
         setTimeout(() => {
-          console.log("Got here...");
           loadMoreResults();
         }, 500);
       }

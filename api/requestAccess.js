@@ -28,7 +28,6 @@ async function retrieveToken() {
       }
     })
     .then(async (response) => {
-      //console.log("WOO: " + response.data.access_token.toString());
       await AsyncStorage.setItem(
         "token",
         response.data.access_token.toString()

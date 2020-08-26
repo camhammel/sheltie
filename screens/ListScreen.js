@@ -44,7 +44,7 @@ const ListScreen = ({ navigation }) => {
   const [nextPage, setNextPage] = useState(2);
   const flatListRef = useRef();
   const customLocationRef = useRef();
-  const [init, setInit] = useState(0);
+  const [init, setInit] = useState(false);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -167,7 +167,7 @@ const ListScreen = ({ navigation }) => {
     ) {
       console.log("Condition Met");
       setTimeout(() => {
-        setInit(init + 1);
+        setInit(!init);
         searchApi();
       }, 800);
     }

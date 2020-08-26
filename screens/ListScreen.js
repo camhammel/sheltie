@@ -148,15 +148,20 @@ const ListScreen = ({ navigation }) => {
           setType("Dog");
           setBreed([]);
         }
-      }, 1500);
+      }, 600);
     }
   };
 
   useEffect(() => {
     update_token();
-    if ((!results || results.length <= 0) && location != null) {
+    if (
+      (!results || results.length <= 0) &&
+      (location != null || customLocation != "")
+    ) {
       console.log("Condition Met");
-      searchApi();
+      setTimeout(() => {
+        searchApi();
+      }, 800);
     }
   }, [location, customLocation]);
 
@@ -202,6 +207,16 @@ const ListScreen = ({ navigation }) => {
             ", Location: " +
             customLocation
         );
+      } else {
+        setType("Dog");
+        setDistance(150);
+        setAge([]);
+        setBreed([]);
+        setCustomLocation("");
+        setInputVal("");
+        setTimeout(async () => {
+          await searchApi();
+        }, 3000);
       }
 
       //getBreedOptions();
@@ -260,44 +275,46 @@ const ListScreen = ({ navigation }) => {
   };
 
   const getBreedOptions = async () => {
-    var breedSearch = `types/${type}/breeds`;
+    if (type != "") {
+      var breedSearch = `types/${type}/breeds`;
 
-    petfinder
-      .get(breedSearch, {
-        headers: {
-          Authorization: `Bearer ${(
-            await AsyncStorage.getItem("token")
-          ).toString()}`,
-        },
-      })
-      .then((response) => {
-        const my_breeds = response.data.breeds.map((breed1) => {
-          return {
-            label: breed1.name,
-            value: breed1.name,
-          };
+      petfinder
+        .get(breedSearch, {
+          headers: {
+            Authorization: `Bearer ${(
+              await AsyncStorage.getItem("token")
+            ).toString()}`,
+          },
+        })
+        .then((response) => {
+          const my_breeds = response.data.breeds.map((breed1) => {
+            return {
+              label: breed1.name,
+              value: breed1.name,
+            };
+          });
+          //console.log("breeds: " + JSON.stringify(my_breeds));
+          setBreedOptions(my_breeds);
+        })
+        .catch(function (error) {
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            //console.log(error.response.status);
+            //console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+          }
+          //console.log(error.config);
         });
-        //console.log("breeds: " + JSON.stringify(my_breeds));
-        setBreedOptions(my_breeds);
-      })
-      .catch(function (error) {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-          //console.log(error.response.status);
-          //console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log("Error", error.message);
-        }
-        //console.log(error.config);
-      });
+    }
   };
 
   return (

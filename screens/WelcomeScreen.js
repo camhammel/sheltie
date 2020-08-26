@@ -18,16 +18,16 @@ const WelcomeScreen = ({ navigation }) => {
       <View style={styles.viewStyle}>
         <Image
           source={Logo}
-          style={{ width: 256, height: 256, marginTop: 10 }}
+          style={{ width: 256, height: 256, marginTop: 40 }}
         />
         <Text h1 style={styles.headerStyle}>
           Sheltie
         </Text>
         <Text style={styles.bodyStyle}>Shelter Pet Adoption Classifieds</Text>
       </View>
-      <View style={styles.view2Style}>
+      <View>
         <Button
-          style={styles.buttonStyle}
+          containerStyle={{ marginHorizontal: 40 }}
           type="solid"
           title="Sign Up"
           linearGradientProps={{
@@ -52,7 +52,7 @@ const WelcomeScreen = ({ navigation }) => {
             navigation.navigate("List");
           }}
         >
-          <Text style={styles.linkStyle}>Continue as Guest</Text>
+          <Text style={styles.linkStyle}>Continue as guest</Text>
         </TouchableOpacity>
         <Text style={{ textAlign: "center", marginTop: 60 }}>
           Powered by the Petfinder API
@@ -70,22 +70,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#ffffff",
     marginBottom: 60,
-    marginTop: 20,
-  },
-  view2Style: {
-    flex: 1,
-    flexDirection: "column",
   },
   headerStyle: {
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 10,
+    marginTop: 10,
   },
   bodyStyle: {
     textAlign: "center",
     fontSize: 20,
-  },
-  buttonStyle: {
-    marginHorizontal: 40,
   },
   linkStyle: {
     marginTop: 20,

@@ -16,7 +16,6 @@ import { COLORS } from "../assets/colors";
 import Modal from "react-native-modal";
 import MySlider from "../components/MySlider";
 import DropDownPicker from "react-native-dropdown-picker";
-import Icon from "react-native-vector-icons/FontAwesome";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -321,6 +320,48 @@ const ListScreen = ({ navigation }) => {
           }
           //console.log(error.config);
         });
+    } else {
+      setTimeout(async () => {
+        if (type == "") {
+          var breedSearch = `types/dog/breeds`;
+
+          petfinder
+            .get(breedSearch, {
+              headers: {
+                Authorization: `Bearer ${(
+                  await AsyncStorage.getItem("token")
+                ).toString()}`,
+              },
+            })
+            .then((response) => {
+              const my_breeds = response.data.breeds.map((breed1) => {
+                return {
+                  label: breed1.name,
+                  value: breed1.name,
+                };
+              });
+              setBreedOptions(my_breeds);
+            })
+            .catch(function (error) {
+              if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.log(error.response.data);
+                //console.log(error.response.status);
+                //console.log(error.response.headers);
+              } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                console.log(error.request);
+              } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log("Error", error.message);
+              }
+              //console.log(error.config);
+            });
+        }
+      }, 500);
     }
   };
 

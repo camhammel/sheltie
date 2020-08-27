@@ -201,7 +201,13 @@ const PetDetailScreen = ({ route, navigation }) => {
               style={{ justifyContent: "space-between", flexDirection: "row" }}
             >
               <NameGender name={results.name} gender={results.gender} />
-              <View style={{ flexDirection: "row", alignSelf: "flex-end" }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignSelf: "flex-end",
+                  marginBottom: 5,
+                }}
+              >
                 <TouchableOpacity
                   onPress={() => {
                     onShare();

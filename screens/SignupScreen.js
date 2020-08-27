@@ -6,6 +6,7 @@ import {
   useWindowDimensions,
   TouchableOpacity,
   AsyncStorage,
+  ImageBackground,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -16,38 +17,33 @@ import SignUpComponent from "../components/SignUpComponent";
 import { COLORS } from "../assets/colors";
 import Spacer from "../components/Spacer";
 import Logo from "../assets/logo.png";
+const BgImage = require("../assets/authbg.png");
 
 const SignupScreen = () => {
   const navigation = useNavigation();
   const { state, signup, clearErrorMessage } = useContext(AuthContext);
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.primary }}>
-      <KeyboardAwareScrollView behaviour="padding" style={styles.scrollStyle}>
-        {/* <AuthForm
-          headerText="Sign Up for Sheltie"
-          buttonLabel="Sign Up"
-          errorMessage={state.errorMessage}
-          onSubmit={signup}
-        /> */}
+    <ImageBackground
+      source={BgImage}
+      style={{
+        flex: 1,
+        resizeMode: "contain",
+        justifyContent: "center",
+      }}
+    >
+      <KeyboardAwareScrollView
+        behaviour="padding"
+        scrollContainerStyle={styles.scrollContainerStyle}
+      >
         <Spacer>
-          <Text
-            h2
-            style={{
-              color: COLORS.white,
-              alignSelf: "center",
-              marginBottom: 10,
-              marginTop: 15,
-            }}
-          >
-            Sign Up
-          </Text>
           <Image
             source={Logo}
             style={{
               width: useWindowDimensions().width / 3,
               height: useWindowDimensions().height / 4,
               alignSelf: "center",
+              marginTop: 60,
             }}
           />
         </Spacer>
@@ -56,7 +52,7 @@ const SignupScreen = () => {
           text="Already have an account? Sign in here."
           routeName="Signin"
           clearErrorMessage={clearErrorMessage}
-          custStyle={{ marginBottom: 0, marginTop: 20 }}
+          custStyle={{ marginBottom: 0, marginTop: 20, color: "white" }}
         />
         <NavLink
           text="Continue as Guest."
@@ -68,23 +64,17 @@ const SignupScreen = () => {
             })();
             //navigation.navigate("List");
           }}
-          custStyle={{ marginBottom: 40, marginTop: 0 }}
+          custStyle={{ marginBottom: 40, marginTop: 10, color: "white" }}
         />
       </KeyboardAwareScrollView>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollStyle: {
-    marginTop: 50,
-  },
-  linkStyle: {
-    marginTop: 20,
-    textAlign: "center",
-    color: "blue",
-    fontSize: 15,
-    marginBottom: 40,
+  scrollContainerStyle: {
+    flex: 1,
+    justifyContent: "flex-end",
   },
 });
 

@@ -10,16 +10,13 @@ function capitalizeFirstLetter(string) {
 }
 
 const NameGender = ({ name, gender }) => {
-  // if (name.length > 8) {
-  //   name = name.substring(0, 8) + "...";
-  // }
-
   return (
     <View
       style={{
         flexDirection: "row",
         marginTop: 10,
         justifyContent: "flex-start",
+        width: Dimensions.get("screen").width - 240,
       }}
     >
       <Text
@@ -28,7 +25,6 @@ const NameGender = ({ name, gender }) => {
           marginLeft: 15,
           marginVertical: 10,
           fontWeight: "bold",
-          width: Dimensions.get("screen").width - 240,
         }}
         //adjustsFontSizeToFit={true}
         numberOfLines={1}
@@ -51,7 +47,7 @@ const styles = StyleSheet.create({
     width: 30,
     resizeMode: "contain",
     alignSelf: "center",
-    marginLeft: 0,
+    marginLeft: 10,
   },
 });
 

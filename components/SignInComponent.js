@@ -2,9 +2,11 @@ import React, { useContext } from "react";
 import { StyleSheet, View, useWindowDimensions } from "react-native";
 import { Input, Button, Text } from "react-native-elements";
 import { Context as AuthContext } from "../context/AuthContext";
+import Icon from "react-native-vector-icons/Entypo";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { COLORS } from "../assets/colors";
+import { styles } from "../utils/styles";
 
 const SigninSchema = yup.object({
   email: yup.string().required().email(),
@@ -32,11 +34,13 @@ export default function SignInComponent({ state, clearErrorMessage }) {
         {(props) => (
           <View>
             <Input
-              label="Email"
-              placeholder="myemail@email.com"
+              //label="Email"
+              placeholder="Email address"
               onChangeText={props.handleChange("email")}
               value={props.values.email}
               keyboardType="email-address"
+              autoCorrect={false}
+              autoCapitalize="none"
               inputStyle={styles.inputStyle}
               inputContainerStyle={styles.containerStyle}
               labelStyle={styles.labelStyle}
@@ -51,13 +55,24 @@ export default function SignInComponent({ state, clearErrorMessage }) {
               onTextInput={() => {
                 clearErrorMessage();
               }}
+              leftIcon={
+                <Icon
+                  name="email"
+                  size={20}
+                  color={COLORS.white}
+                  //borderWidth={1}
+                  //borderColor={COLORS.white}
+                />
+              }
             />
             <Input
-              label="Password"
-              placeholder="*******"
+              //label="Password"
+              placeholder="Password"
               onChangeText={props.handleChange("password")}
               value={props.values.password}
               textContentType="newPassword"
+              autoCorrect={false}
+              autoCapitalize="none"
               secureTextEntry
               inputStyle={styles.inputStyle}
               inputContainerStyle={styles.containerStyle}
@@ -67,20 +82,29 @@ export default function SignInComponent({ state, clearErrorMessage }) {
                 marginLeft: 15,
                 marginBottom: 10,
               }}
+              leftIcon={
+                <Icon
+                  name="lock"
+                  size={20}
+                  color={COLORS.white}
+                  //borderWidth={1}
+                  //borderColor={COLORS.white}
+                />
+              }
             />
             <Button
-              title="submit"
+              title="Sign in"
               onPress={props.handleSubmit}
               buttonStyle={{
                 backgroundColor: "transparent",
-                width: useWindowDimensions().width / 4,
+                width: useWindowDimensions().width / 2,
                 alignSelf: "center",
                 borderRadius: 25,
                 borderColor: COLORS.white,
                 borderWidth: 1,
               }}
               containerStyle={{
-                width: useWindowDimensions().width / 4,
+                width: useWindowDimensions().width / 2,
                 alignSelf: "center",
               }}
               titleStyle={{
@@ -94,24 +118,3 @@ export default function SignInComponent({ state, clearErrorMessage }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  inputStyle: {
-    backgroundColor: "white",
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    color: COLORS.darkgrey,
-  },
-  containerStyle: {
-    borderRadius: 8,
-    marginHorizontal: 5,
-    padding: 5,
-    borderBottomWidth: 0,
-  },
-  labelStyle: {
-    color: COLORS.white,
-    marginLeft: 10,
-    marginBottom: 5,
-    marginTop: 5,
-  },
-});

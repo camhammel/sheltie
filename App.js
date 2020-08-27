@@ -67,6 +67,7 @@ function App() {
       require("./assets/logo.png"),
       require("./assets/icon.png"),
       require("./assets/default.png"),
+      require("./assets/authbg.png"),
     ];
     const cacheImages = images.map((image) => {
       return Asset.fromModule(image).downloadAsync();

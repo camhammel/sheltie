@@ -16,7 +16,7 @@ const NameGender = ({ name, gender }) => {
         flexDirection: "row",
         marginTop: 10,
         justifyContent: "flex-start",
-        width: Dimensions.get("screen").width - 240,
+        width: Dimensions.get("screen").width - 180,
       }}
     >
       <Text

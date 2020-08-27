@@ -119,7 +119,7 @@ const PetDetailScreen = ({ route, navigation }) => {
     if (Platform.OS === "android") {
       try {
         const result = await Share.share({
-          message: `I was browsing Sheltie and found ${results.name}! ${results.url}`,
+          message: `I was browsing Sheltie and found ${results.name}! https://sheltie.app/pet?id=${results.id}`,
           title: `Meet ${results.name}`,
         });
 
@@ -137,7 +137,7 @@ const PetDetailScreen = ({ route, navigation }) => {
         const result = await Share.share({
           message: `I was browsing Sheltie and found ${results.name}!`,
           title: `Meet ${results.name}`,
-          url: `${Linking.makeUrl("pet", { id: results.id })}`,
+          url: `https://sheltie.app/pet?id=${results.id}`,
         });
 
         if (result.action === Share.sharedAction) {

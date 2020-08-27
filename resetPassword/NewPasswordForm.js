@@ -5,6 +5,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { COLORS } from "../assets/colors";
 import { Context as AuthContext } from "../context/AuthContext";
+import { useNavigation } from "@react-navigation/native";
 
 const newPassSchema = yup.object({
   password: yup.string().required().min(6),
@@ -12,6 +13,7 @@ const newPassSchema = yup.object({
 
 const NewPasswordForm = ({ email, switchStage }) => {
   const { updatePassword } = useContext(AuthContext);
+  const navigation = useNavigation();
   const [errorMessage, setErrorMessage] = useState("");
 
   return (
@@ -26,11 +28,13 @@ const NewPasswordForm = ({ email, switchStage }) => {
 
           if (status == true) {
             console.log("Successfully updated password.");
-            switchStage();
+            navigation.navigate("Signin");
+            Alert.alert("Success", "Password successfully reset.");
+            //switchStage();
           } else if (status == false) {
             console.log("Password couldn't be updated.");
             switchStage();
-            alert("Password couldn't be updated.");
+            Alert.alert("Error", "Password couldn't be updated.");
           } else {
             alert("Unknown response...");
           }
@@ -56,6 +60,9 @@ const NewPasswordForm = ({ email, switchStage }) => {
           <Input
             label="New Password"
             placeholder="*************"
+            secureTextEntry
+            autoCapitalize="none"
+            autoCorrect={false}
             onChangeText={props.handleChange("password")}
             onTextInput={() => {
               setErrorMessage("");

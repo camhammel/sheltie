@@ -1,5 +1,11 @@
 import React, { useContext } from "react";
-import { View, StyleSheet, Image, useWindowDimensions } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  useWindowDimensions,
+  ImageBackground,
+} from "react-native";
 import { Text } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Context } from "../context/AuthContext";
@@ -8,55 +14,57 @@ import SignInComponent from "../components/SignInComponent";
 import { COLORS } from "../assets/colors";
 import Spacer from "../components/Spacer";
 import Logo from "../assets/logo.png";
+const BgImage = require("../assets/authbg.png");
 
 const SigninScreen = ({ navigation }) => {
   const { state, clearErrorMessage } = useContext(Context);
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.primary }}>
-      <KeyboardAwareScrollView behaviour="padding" style={styles.scrollStyle}>
+    <ImageBackground
+      source={BgImage}
+      style={{
+        flex: 1,
+        resizeMode: "contain",
+        justifyContent: "center",
+      }}
+    >
+      <KeyboardAwareScrollView
+        behaviour="padding"
+        scrollContainerStyle={styles.scrollContainerStyle}
+      >
         <Spacer>
-          <Text
-            h2
-            style={{
-              color: COLORS.white,
-              alignSelf: "center",
-              marginBottom: 10,
-              marginTop: 15,
-            }}
-          >
-            Sign In
-          </Text>
           <Image
             source={Logo}
             style={{
               width: useWindowDimensions().width / 3,
               height: useWindowDimensions().height / 4,
               alignSelf: "center",
+              marginTop: 60,
             }}
           />
         </Spacer>
         <SignInComponent state={state} clearErrorMessage={clearErrorMessage} />
         <NavLink
-          text="Forgot Password"
+          text="Forgot Password?"
           routeName="ForgotPassword"
           clearErrorMessage={clearErrorMessage}
-          custStyle={{ marginBottom: 0, marginTop: 60 }}
+          custStyle={{ marginBottom: 10, marginTop: 60, color: "white" }}
         />
         <NavLink
           text="Don't have an account? Sign up here."
           routeName="Signup"
           clearErrorMessage={clearErrorMessage}
-          custStyle={{ marginBottom: 60 }}
+          custStyle={{ marginBottom: 20, color: "white" }}
         />
       </KeyboardAwareScrollView>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollStyle: {
-    marginTop: 50,
+  scrollContainerStyle: {
+    flex: 1,
+    justifyContent: "flex-end",
   },
 });
 

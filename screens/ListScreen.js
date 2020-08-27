@@ -17,6 +17,8 @@ import Modal from "react-native-modal";
 import MySlider from "../components/MySlider";
 import DropDownPicker from "react-native-dropdown-picker";
 
+//TODO: fix initial loading bug
+
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }

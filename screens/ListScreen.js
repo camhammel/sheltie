@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   useWindowDimensions,
+  Alert,
 } from "react-native";
 import { Text, Button, Input } from "react-native-elements";
 import ListComponent from "../components/ListComponent";
@@ -139,13 +140,6 @@ const ListScreen = ({ navigation }) => {
           //console.log(error.config);
         });
       flatListRef.current?.scrollToOffset({ x: 0, y: 0, animated: true });
-    } else {
-      setTimeout(() => {
-        if (type == "") {
-          setType("Dog");
-          setBreed([]);
-        }
-      }, 1500);
     }
   };
 
@@ -206,7 +200,7 @@ const ListScreen = ({ navigation }) => {
         setType(temp2.type);
         setBreed(temp2.breed);
         console.log(
-          "Initial GET: Age: " +
+          "Retrieved from storage: Age: " +
             age +
             ", Type: " +
             type +
@@ -216,18 +210,16 @@ const ListScreen = ({ navigation }) => {
             customLocation
         );
       } else {
-        console.log("Got here");
-        //setType("Dog");
-        //setDistance(150);
-        //setAge([]);
-        //setBreed([]);
-        //setCustomLocation("");
-        //setInputVal("");
-        searchApi();
+        //
+        setType("Dog");
+        setModalVisible(true);
+        setTimeout(() => {
+          Alert.alert(
+            "Search Filters",
+            "Use these filters to help narrow down your search. When you're ready, click 'Save'. "
+          );
+        }, 750);
       }
-
-      //getBreedOptions();
-      //searchApi();
     })();
   }, []);
 

@@ -46,7 +46,6 @@ const ListScreen = ({ navigation }) => {
   const [nextPage, setNextPage] = useState(2);
   const flatListRef = useRef();
   const customLocationRef = useRef();
-  const [init, setInit] = useState(false);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -170,7 +169,6 @@ const ListScreen = ({ navigation }) => {
       console.log("Condition Met");
       setTimeout(async () => {
         //searchApi();
-        setInit(!init);
       }, 800);
     }
   }, [location, customLocation]);
@@ -218,15 +216,14 @@ const ListScreen = ({ navigation }) => {
             customLocation
         );
       } else {
-        setType("Dog");
-        setDistance(150);
-        setAge([]);
-        setBreed([]);
-        setCustomLocation("");
-        setInputVal("");
-        setTimeout(async () => {
-          await searchApi();
-        }, 3000);
+        console.log("Got here");
+        //setType("Dog");
+        //setDistance(150);
+        //setAge([]);
+        //setBreed([]);
+        //setCustomLocation("");
+        //setInputVal("");
+        searchApi();
       }
 
       //getBreedOptions();
@@ -634,7 +631,6 @@ const ListScreen = ({ navigation }) => {
           loadMoreResults={loadMoreResults}
           refresh={searchApi}
           ref={flatListRef}
-          extra={init}
         />
       </View>
     </View>

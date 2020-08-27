@@ -9,7 +9,7 @@ const defaultURI = Asset.fromModule(require("../assets/default.png")).uri;
 let isRefreshing = false;
 
 const ListComponent = React.forwardRef(
-  ({ results, loadMoreResults, refresh, extra }, ref) => {
+  ({ results, loadMoreResults, refresh }, ref) => {
     const [
       onEndReachedCalledDuringMomentum,
       setOnEndReachedCalledDuringMomentum,
@@ -99,7 +99,6 @@ const ListComponent = React.forwardRef(
             }}
             refreshing={isRefreshing}
             ref={ref}
-            extraData={extra}
           />
         </View>
       );

@@ -63,37 +63,77 @@ const ListScreen = ({ navigation }) => {
     setNextPage(2);
     let search = "";
 
-    if (type != "") {
-      if (customLocation != "") {
-        setSearchReq(
-          `animals?type=${type}&limit=50&location=${customLocation}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`
-        );
-        search = `animals?type=${type}&limit=50&location=${customLocation}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`;
-      } else {
-        setSearchReq(
-          `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`
-        );
-        search = `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`;
-      }
-      const this_search = {
-        customLocation,
-        type,
-        age,
-        distance,
-        breed,
-      };
+    if (customLocation != "") {
+      Location.geocodeAsync(customLocation).then((cust) => {
+        if (cust[0]?.latitude == null) {
+          setCustomLocationErrorMessage(
+            "Sorry, we couldn't find any results from this location. To use your current location, keep this blank."
+          );
+          setTimeout(() => {
+            setModalVisible(true);
+            customLocationRef?.current?.focus();
+          }, 500);
+        } else {
+          setSearchReq(
+            `animals?type=${type}&limit=50&location=${cust[0].latitude},${cust[0].longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`
+          );
+          search = `animals?type=${type}&limit=50&location=${cust[0].latitude},${cust[0].longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`;
 
-      console.log(
-        "GET: Age: " +
-          age +
-          ", Type: " +
-          type +
-          ", Breeds: " +
-          breed +
-          ", Location: " +
-          customLocation
+          (async () => {
+            console.log("search: " + search);
+            petfinder
+              .get(search, {
+                headers: {
+                  Authorization: `Bearer ${(
+                    await AsyncStorage.getItem("token")
+                  ).toString()}`,
+                },
+              })
+              .then((response) => {
+                setResults(response.data.animals);
+                AsyncStorage.setItem(
+                  "lastpets",
+                  JSON.stringify(response.data.animals)
+                );
+                AsyncStorage.setItem("lastsearch", JSON.stringify(this_search));
+              })
+              .catch(function (error) {
+                if (error.response) {
+                  // The request was made and the server responded with a status code
+                  // that falls out of the range of 2xx
+                  console.log(error.response.data);
+                } else if (error.request) {
+                  // The request was made but no response was received
+                  // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                  // http.ClientRequest in node.js
+                  console.log(error.request);
+                } else {
+                  // Something happened in setting up the request that triggered an Error
+                  console.log("Error", error.message);
+                }
+                //setSearchError(error.status);
+                if (error.response.data.status == 401) {
+                  update_token();
+                } else if (error.response.data.status == 400) {
+                  setCustomLocationErrorMessage(
+                    "Invalid location. Be sure to use the [city, state] format, such as Orlando, FL"
+                  );
+                  setTimeout(() => {
+                    setModalVisible(true);
+                    customLocationRef?.current?.focus();
+                  }, 500);
+                }
+
+                //console.log(error.config);
+              });
+          })();
+        }
+      });
+    } else {
+      setSearchReq(
+        `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`
       );
-
+      search = `animals?type=${type}&limit=50&location=${location.coords.latitude},${location.coords.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`;
       petfinder
         .get(search, {
           headers: {
@@ -129,7 +169,7 @@ const ListScreen = ({ navigation }) => {
             update_token();
           } else if (error.response.data.status == 400) {
             setCustomLocationErrorMessage(
-              "Invalid location. Be sure to use the [city, state] format, such as Orlando, FL"
+              "Sorry, we couldn't find any results from this location. To use your current location, keep this blank."
             );
             setTimeout(() => {
               setModalVisible(true);
@@ -139,8 +179,15 @@ const ListScreen = ({ navigation }) => {
 
           //console.log(error.config);
         });
-      flatListRef.current?.scrollToOffset({ x: 0, y: 0, animated: true });
     }
+    const this_search = {
+      customLocation,
+      type,
+      age,
+      distance,
+      breed,
+    };
+    flatListRef.current?.scrollToOffset({ x: 0, y: 0, animated: true });
   };
 
   useEffect(() => {

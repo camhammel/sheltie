@@ -68,10 +68,12 @@ const PetDetailScreen = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
-    navigation.setOptions({
-      headerTitle: results?.name,
-      headerTitleStyle: { color: "black" },
-    });
+    if (results?.name != null) {
+      navigation.setOptions({
+        headerTitle: capitalizeFirstLetter(results?.name?.toLowerCase()),
+        headerTitleStyle: { color: "black" },
+      });
+    }
   }, [results]);
 
   useEffect(() => {

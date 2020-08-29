@@ -24,7 +24,7 @@ const MySlider = ({ distance, setDistance }) => {
         }}
         minimumValue={0}
         step={25}
-        minimumTrackTintColor={COLORS.primary}
+        minimumTrackTintColor={COLORS.primarylight}
         maximumValue={300}
         onSlidingComplete={(value) => {
           setDistance(value);

@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
   },
   containerStyle: {
     borderRadius: 8,
-    marginHorizontal: 15,
+    marginHorizontal: 35,
     paddingTop: 5,
     paddingHorizontal: 5,
     borderBottomWidth: 1,
@@ -25,11 +25,12 @@ export const styles = StyleSheet.create({
     opacity: 0.65,
     alignSelf: "center",
   },
-  labelStyle: {
-    color: COLORS.white,
-    marginLeft: 10,
-    marginBottom: 5,
-    marginTop: 5,
-    opacity: 0.8,
-  },
+  // labelStyle: {
+  //   color: COLORS.white,
+  //   marginLeft: 10,
+  //   marginBottom: 5,
+  //   marginTop: 5,
+  //   opacity: 0.8,
+  //   marginHorizontal: 25,
+  // },
 });

@@ -36,6 +36,7 @@ export default function SignInComponent({ state, clearErrorMessage }) {
             <Input
               //label="Email"
               placeholder="Email address"
+              placeholderTextColor={COLORS.white}
               onChangeText={props.handleChange("email")}
               value={props.values.email}
               keyboardType="email-address"
@@ -68,6 +69,7 @@ export default function SignInComponent({ state, clearErrorMessage }) {
             <Input
               //label="Password"
               placeholder="Password"
+              placeholderTextColor={COLORS.white}
               onChangeText={props.handleChange("password")}
               value={props.values.password}
               textContentType="newPassword"

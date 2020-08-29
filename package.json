@@ -17,6 +17,7 @@
     "base-64": "^0.1.0",
     "curl": "^0.1.4",
     "expo": "~38.0.8",
+    "expo-font": "~8.2.1",
     "expo-location": "~8.2.1",
     "expo-permissions": "~9.0.1",
     "expo-secure-store": "~9.0.1",

@@ -11,7 +11,7 @@ const SearchHeader = ({ onPress }) => {
     <View
       style={{
         flexDirection: "row",
-        backgroundColor: "white",
+        backgroundColor: COLORS.white,
         alignItems: "center",
         borderWidth: 1,
         borderColor: "lightgrey",
@@ -20,13 +20,13 @@ const SearchHeader = ({ onPress }) => {
       <View
         style={{
           flex: 9,
-          backgroundColor: "white",
+          backgroundColor: COLORS.white,
         }}
       >
         <Button
           type="outline"
           title={"Search Filters"}
-          titleStyle={{ color: "grey", paddingLeft: 10 }}
+          titleStyle={{ color: COLORS.white, paddingLeft: 10 }}
           buttonStyle={styles.signoutButtonStyle}
           onPress={() => {
             onPress();
@@ -35,7 +35,7 @@ const SearchHeader = ({ onPress }) => {
             <FAIcon
               name="filter"
               size={20}
-              color={COLORS.primary}
+              color={COLORS.white}
               style={{ alignSelf: "center" }}
             />
           }
@@ -46,12 +46,7 @@ const SearchHeader = ({ onPress }) => {
           flexDirection: "row",
           flex: 2,
           justifyContent: "space-evenly",
-          backgroundColor: "white",
-          borderWidth: 0,
-          borderTopColor: "lightgrey",
-          borderBottomColor: "lightgrey",
-          borderStartColor: "white",
-          borderEndColor: "white",
+          backgroundColor: COLORS.white,
           alignSelf: "center",
           paddingVertical: 9,
         }}
@@ -75,7 +70,7 @@ const SearchHeader = ({ onPress }) => {
         ></Button> */}
         <Button
           buttonStyle={{
-            backgroundColor: "#ffffff",
+            backgroundColor: COLORS.white,
             borderColor: "transparent",
             borderWidth: 1,
             marginRight: 10,
@@ -116,6 +111,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginHorizontal: 2,
     marginLeft: 10,
+    backgroundColor: COLORS.primary,
   },
 });
 

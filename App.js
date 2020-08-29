@@ -20,7 +20,6 @@ import { navigationRef } from "./navigationRef";
 import { decode, encode } from "base-64";
 import { COLORS } from "./assets/colors";
 import * as Linking from "expo-linking";
-import * as Font from "expo-font";
 import { loadAsync } from "expo-font";
 
 let goturl = false;
@@ -71,8 +70,6 @@ function App() {
     });
 
     const images = [
-      require("./assets/logo.png"),
-      require("./assets/icon.png"),
       require("./assets/default.png"),
       require("./assets/authBg-25.png"),
       require("./assets/transparent_icon2.png"),

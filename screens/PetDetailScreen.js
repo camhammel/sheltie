@@ -11,7 +11,6 @@ import {
   Alert,
 } from "react-native";
 import { Text } from "react-native-elements";
-import { Asset } from "expo-asset";
 import petfinder from "../api/petfinder";
 import Spacer from "../components/Spacer";
 import TagComponent from "../components/TagComponent";
@@ -28,9 +27,8 @@ import Attribute from "../components/Attribute";
 import { Context } from "../context/AuthContext";
 import ShelterInfo from "../components/ShelterInfo";
 import { navigationRef } from "../navigationRef";
-import * as Linking from "expo-linking";
 
-const defaultURI = Asset.fromModule(require("../assets/logo.png")).uri;
+//const defaultURI = Asset.fromModule(require("../assets/logo.png")).uri;
 const screenWidth = Math.round(Dimensions.get("window").width);
 
 function capitalizeFirstLetter(string) {

@@ -6,16 +6,20 @@ import {
   Image,
   ScrollView,
   useWindowDimensions,
+  Dimensions,
 } from "react-native";
 import { Button, Text } from "react-native-elements";
 import Spacer from "../components/Spacer";
 import { Context as AuthContext } from "../context/AuthContext";
-import Logo from "../assets/icon.png";
+import Logo from "../assets/transparent_icon2.png";
 import { COLORS } from "../assets/colors";
 import Icon from "react-native-vector-icons/Entypo";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Modal from "react-native-modal";
 import * as Linking from "expo-linking";
+const B = (props) => (
+  <Text style={{ fontWeight: "bold" }}>{props.children}</Text>
+);
 
 const AccountScreen = ({ navigation }) => {
   const { signout, getfavs } = useContext(AuthContext);
@@ -274,10 +278,10 @@ const AccountScreen = ({ navigation }) => {
         <View style={{ flex: 6, justifyContent: "flex-start" }}>
           <Text
             style={{
-              fontSize: 24,
+              fontSize: 28,
               marginTop: 20,
-              marginBottom: 5,
-              color: COLORS.darkgrey,
+              marginBottom: 15,
+              color: COLORS.white,
               textAlign: "center",
               fontWeight: "normal",
             }}
@@ -285,7 +289,7 @@ const AccountScreen = ({ navigation }) => {
             You aren't signed in
           </Text>
           <Button
-            containerStyle={{ marginBottom: 15 }}
+            containerStyle={{ marginBottom: 25 }}
             type="solid"
             title={"Sign In"}
             titleStyle={{ paddingLeft: 10 }}
@@ -318,14 +322,21 @@ const AccountScreen = ({ navigation }) => {
             <Text
               style={{
                 textAlign: "center",
-                color: "blue",
+                color: COLORS.white,
                 marginBottom: 5,
               }}
             >
-              Contact: help@sheltie.app
+              Contact:{" "}
+              <Text style={{ fontWeight: "bold" }}> help@sheltie.app </Text>
             </Text>
           </TouchableOpacity>
-          <Text style={{ textAlign: "center", marginBottom: 5 }}>
+          <Text
+            style={{
+              textAlign: "center",
+              marginBottom: 5,
+              color: "#888",
+            }}
+          >
             Powered by the Petfinder API
           </Text>
           <TouchableOpacity
@@ -334,7 +345,12 @@ const AccountScreen = ({ navigation }) => {
             }}
           >
             <Text
-              style={{ textAlign: "center", color: "blue", marginBottom: 15 }}
+              style={{
+                textAlign: "center",
+                color: COLORS.white,
+                marginBottom: 15,
+                fontWeight: "bold",
+              }}
             >
               Privacy Policy
             </Text>
@@ -344,13 +360,7 @@ const AccountScreen = ({ navigation }) => {
     );
   } else {
     return (
-      <ScrollView
-        style={styles.viewStyle}
-        contentContainerStyle={{
-          alignItems: "center",
-          justifyContent: "flex-start",
-        }}
-      >
+      <ScrollView style={styles.viewStyle}>
         <Modal
           isVisible={isModalVisible}
           hasBackdrop={true}
@@ -568,21 +578,22 @@ const AccountScreen = ({ navigation }) => {
             </ScrollView>
           </View>
         </Modal>
-        <Spacer>
+        <View>
           <Image
             source={Logo}
             style={{
               width: useWindowDimensions().width - 40,
-              height: useWindowDimensions().height / 3,
-              marginBottom: 20,
+              height: useWindowDimensions().height / 3.5,
+              marginBottom: 40,
+              marginTop: 20,
+              alignSelf: "center",
             }}
             resizeMode="contain"
           />
-        </Spacer>
-
-        <View>
+        </View>
+        <View style={{ flex: 1 }}>
           <Button
-            containerStyle={{ marginBottom: 15 }}
+            containerStyle={{ marginBottom: 15, marginHorizontal: 90 }}
             type="solid"
             title={"My Favourites"}
             titleStyle={{ paddingLeft: 10 }}
@@ -603,13 +614,13 @@ const AccountScreen = ({ navigation }) => {
           ></Button>
         </View>
 
-        <View style={{ flex: 6, justifyContent: "flex-end" }}>
+        <View style={{ flex: 1, justifyContent: "flex-end" }}>
           <Text
             style={{
               fontSize: 24,
               marginTop: 20,
               marginBottom: 5,
-              color: COLORS.darkgrey,
+              color: COLORS.white,
               textAlign: "center",
               fontWeight: "normal",
             }}
@@ -620,7 +631,7 @@ const AccountScreen = ({ navigation }) => {
             style={{
               fontSize: 26,
               marginBottom: 20,
-              color: COLORS.darkgrey,
+              color: COLORS.white,
               textAlign: "center",
               fontWeight: "bold",
             }}
@@ -632,7 +643,7 @@ const AccountScreen = ({ navigation }) => {
             <Button
               type="outline"
               title={"Sign Out"}
-              titleStyle={{ color: COLORS.darkgrey, paddingLeft: 10 }}
+              titleStyle={{ color: COLORS.white, paddingLeft: 10 }}
               buttonStyle={styles.signoutButtonStyle}
               containerStyle={styles.signoutContainerStyle}
               onPress={() => signout()}
@@ -640,7 +651,7 @@ const AccountScreen = ({ navigation }) => {
                 <Icon
                   name="back"
                   size={18}
-                  color={COLORS.darkgrey}
+                  color={COLORS.white}
                   style={{ alignSelf: "center" }}
                 />
               }
@@ -653,14 +664,21 @@ const AccountScreen = ({ navigation }) => {
               <Text
                 style={{
                   textAlign: "center",
-                  color: "blue",
+                  color: COLORS.white,
                   marginBottom: 5,
                 }}
               >
-                Contact: help@sheltie.app
+                Contact:{" "}
+                <Text style={{ fontWeight: "bold" }}> help@sheltie.app </Text>
               </Text>
             </TouchableOpacity>
-            <Text style={{ textAlign: "center", marginBottom: 5 }}>
+            <Text
+              style={{
+                textAlign: "center",
+                marginBottom: 5,
+                color: "#888",
+              }}
+            >
               Powered by the Petfinder API
             </Text>
             <TouchableOpacity
@@ -669,7 +687,12 @@ const AccountScreen = ({ navigation }) => {
               }}
             >
               <Text
-                style={{ textAlign: "center", color: "blue", marginBottom: 15 }}
+                style={{
+                  textAlign: "center",
+                  color: COLORS.white,
+                  marginBottom: 15,
+                  fontWeight: "bold",
+                }}
               >
                 Privacy Policy
               </Text>
@@ -684,34 +707,31 @@ const styles = StyleSheet.create({
   headerStyle: {
     textAlign: "center",
     marginBottom: 40,
+    color: COLORS.white,
   },
   signoutStyle: {
-    borderColor: COLORS.darkgrey,
-    borderStartColor: COLORS.darkgrey,
-    borderTopColor: COLORS.darkgrey,
-    borderBottomColor: COLORS.darkgrey,
-    color: COLORS.darkgrey,
+    borderColor: COLORS.grey,
+    borderStartColor: COLORS.grey,
+    borderTopColor: COLORS.grey,
+    borderBottomColor: COLORS.grey,
+    color: "transparent",
   },
   signoutContainerStyle: {
-    borderColor: COLORS.darkgrey,
-    borderStartColor: COLORS.darkgrey,
-    borderTopColor: COLORS.darkgrey,
-    color: COLORS.darkgrey,
     marginBottom: 40,
+    marginHorizontal: 40,
   },
   signoutButtonStyle: {
-    borderColor: COLORS.darkgrey,
-    borderStartColor: COLORS.darkgrey,
-    borderTopColor: COLORS.darkgrey,
-    borderBottomColor: COLORS.darkgrey,
-    color: COLORS.darkgrey,
+    borderColor: COLORS.grey,
+    borderStartColor: COLORS.grey,
+    borderTopColor: COLORS.grey,
+    borderBottomColor: COLORS.grey,
+    color: "transparent",
   },
-  favouritesStyle: {},
   viewStyle: {
     flex: 1,
+    minHeight: Dimensions.get("window").height,
     paddingBottom: 20,
-    flexDirection: "column",
-    backgroundColor: "#ffffff",
+    backgroundColor: COLORS.primarydark,
   },
 });
 

@@ -120,7 +120,7 @@ const ListComponent = React.forwardRef(
 const styles = StyleSheet.create({
   titleStyle: {
     fontWeight: "bold",
-    color: COLORS.primary,
+    color: COLORS.primarylight,
     fontSize: 18,
   },
   container: {

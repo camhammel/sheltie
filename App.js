@@ -3,7 +3,6 @@ import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import WelcomeScreen from "./screens/WelcomeScreen";
 import SignupScreen from "./screens/SignupScreen";
 import SigninScreen from "./screens/SigninScreen";
 import ListScreen from "./screens/ListScreen";
@@ -21,6 +20,9 @@ import { navigationRef } from "./navigationRef";
 import { decode, encode } from "base-64";
 import { COLORS } from "./assets/colors";
 import * as Linking from "expo-linking";
+import * as Font from "expo-font";
+import { loadAsync } from "expo-font";
+
 let goturl = false;
 
 if (!global.btoa) {
@@ -63,11 +65,17 @@ function App() {
   const [isReady, setIsReady] = useState(false);
 
   const _cacheResourcesAsync = async () => {
+    await loadAsync({
+      //TeamSpirit: require("./assets/fonts/TeamSpirit-NF.ttf"),
+      Yellowtail: require("./assets/fonts/Yellowtail-Regular.ttf"),
+    });
+
     const images = [
       require("./assets/logo.png"),
       require("./assets/icon.png"),
       require("./assets/default.png"),
       require("./assets/authBg-25.png"),
+      require("./assets/transparent_icon2.png"),
     ];
     const cacheImages = images.map((image) => {
       return Asset.fromModule(image).downloadAsync();
@@ -108,11 +116,6 @@ function App() {
             options={{ title: "Loading", headerShown: false }}
           />
           <Stack.Screen
-            name="Welcome"
-            component={WelcomeScreen}
-            options={{ title: "Welcome", headerShown: false }}
-          />
-          <Stack.Screen
             name="Signup"
             component={SignupScreen}
             options={{
@@ -131,7 +134,7 @@ function App() {
             options={{
               title: "Forgot Password",
               headerShown: true,
-              headerTintColor: "black",
+              headerTintColor: "white",
               headerStyle: { backgroundColor: COLORS.primarylight },
             }}
           />
@@ -141,7 +144,7 @@ function App() {
             options={{
               title: "Nearby Pets for Adoption",
               headerLeft: null,
-              headerTintColor: "black",
+              headerTintColor: "white",
               headerStyle: { backgroundColor: COLORS.primarylight },
             }}
           />
@@ -149,10 +152,10 @@ function App() {
             name="PetDetail"
             component={PetDetailScreen}
             options={{
-              headerTintColor: "black",
+              headerTintColor: "white",
               headerStyle: { backgroundColor: COLORS.primarylight },
               headerTitle: "",
-              //headerTitleStyle: { color: "transparent" },
+              headerTitleStyle: { fontFamily: "TeamSpirit" },
             }}
           />
           <Stack.Screen
@@ -161,7 +164,7 @@ function App() {
             options={{
               title: "Account",
               headerShown: true,
-              headerTintColor: "black",
+              headerTintColor: "white",
               headerStyle: { backgroundColor: COLORS.primarylight },
             }}
           />
@@ -171,7 +174,7 @@ function App() {
             options={{
               title: "Favourites",
               headerShown: true,
-              headerTintColor: "black",
+              headerTintColor: "white",
               headerStyle: { backgroundColor: COLORS.primarylight },
             }}
           />

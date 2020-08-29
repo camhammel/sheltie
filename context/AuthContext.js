@@ -82,7 +82,7 @@ const tryLocalSignin = (dispatch) => async () => {
     AsyncStorage.setItem("guest", "false");
     RootNavigation.reset("List");
   } else {
-    RootNavigation.reset("Welcome");
+    RootNavigation.reset("Signin");
   }
 };
 
@@ -129,7 +129,7 @@ const signout = (dispatch) => async () => {
   await clearAsyncStorage();
   console.log("AsyncStorage cleared.");
   dispatch({ type: "signout" });
-  RootNavigation.reset("Welcome");
+  RootNavigation.reset("Signin");
 };
 
 const getfavs = (dispatch) => async (email) => {

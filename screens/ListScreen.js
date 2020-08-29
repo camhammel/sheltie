@@ -195,12 +195,12 @@ const ListScreen = ({ navigation }) => {
     if (customLocation != "") {
       navigation.setOptions({
         headerTitle: "Pets near " + customLocation,
-        headerTitleStyle: { color: "black" },
+        headerTitleStyle: { color: "white" },
       });
     } else {
       navigation.setOptions({
         headerTitle: "Nearby Pets for Adoption",
-        headerTitleStyle: { color: "black" },
+        headerTitleStyle: { color: "white" },
       });
     }
     if (

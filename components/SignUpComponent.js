@@ -42,8 +42,8 @@ export default function SignUpComponent({ state, clearErrorMessage }) {
         {(props) => (
           <View>
             <Input
-              label="Email"
-              placeholder="myemail@email.com"
+              placeholder="Email address"
+              placeholderTextColor={COLORS.white}
               onChangeText={props.handleChange("email")}
               value={props.values.email}
               keyboardType="email-address"
@@ -72,8 +72,8 @@ export default function SignUpComponent({ state, clearErrorMessage }) {
               }
             />
             <Input
-              label="Password"
-              placeholder="*******"
+              placeholder="Password"
+              placeholderTextColor={COLORS.white}
               onChangeText={props.handleChange("password")}
               value={props.values.password}
               textContentType="newPassword"
@@ -97,8 +97,8 @@ export default function SignUpComponent({ state, clearErrorMessage }) {
               }
             />
             <Input
-              label="Confirm Password"
-              placeholder="*******"
+              placeholder="Confirm Password"
+              placeholderTextColor={COLORS.white}
               onChangeText={props.handleChange("confirmPassword")}
               value={props.values.confirmPassword}
               secureTextEntry

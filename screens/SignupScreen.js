@@ -4,20 +4,17 @@ import {
   StyleSheet,
   Image,
   useWindowDimensions,
-  TouchableOpacity,
   AsyncStorage,
   ImageBackground,
+  Dimensions,
 } from "react-native";
-import { Text } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Context as AuthContext } from "../context/AuthContext";
 import NavLink from "../components/NavLink";
 import { useNavigation } from "@react-navigation/native";
 import SignUpComponent from "../components/SignUpComponent";
-import { COLORS } from "../assets/colors";
-import Spacer from "../components/Spacer";
-import Logo from "../assets/logo.png";
-const BgImage = require("../assets/authbg.png");
+import Logo from "../assets/transparent_icon2.png";
+const BgImage = require("../assets/authBg-25.png");
 
 const SignupScreen = () => {
   const navigation = useNavigation();
@@ -27,45 +24,57 @@ const SignupScreen = () => {
     <ImageBackground
       source={BgImage}
       style={{
+        display: "flex",
         flex: 1,
         resizeMode: "contain",
-        justifyContent: "center",
+        display: "flex",
       }}
     >
-      <KeyboardAwareScrollView
-        behaviour="padding"
-        scrollContainerStyle={styles.scrollContainerStyle}
-      >
-        <Spacer>
-          <Image
-            source={Logo}
+      <KeyboardAwareScrollView>
+        <View style={styles.scrollContainerStyle}>
+          <View style={{ flex: 1, justifyContent: "flex-start" }}>
+            <Image
+              source={Logo}
+              style={{
+                width: useWindowDimensions().width,
+                height: useWindowDimensions().height / 4,
+                alignSelf: "center",
+                marginTop: 60,
+                marginBottom: 40,
+              }}
+              resizeMode="contain"
+            />
+            <SignUpComponent
+              state={state}
+              clearErrorMessage={clearErrorMessage}
+            />
+          </View>
+          <View
             style={{
-              width: useWindowDimensions().width / 3,
-              height: useWindowDimensions().height / 4,
-              alignSelf: "center",
-              marginTop: 60,
+              flex: 1,
+              justifyContent: "flex-end",
             }}
-          />
-        </Spacer>
-        <SignUpComponent state={state} clearErrorMessage={clearErrorMessage} />
-        <NavLink
-          text="Already have an account? Sign in here."
-          routeName="Signin"
-          clearErrorMessage={clearErrorMessage}
-          custStyle={{ marginBottom: 0, marginTop: 20, color: "white" }}
-        />
-        <NavLink
-          text="Continue as Guest."
-          routeName="List"
-          clearErrorMessage={() => {
-            console.log("got here");
-            (async () => {
-              await AsyncStorage.setItem("guest", "true");
-            })();
-            //navigation.navigate("List");
-          }}
-          custStyle={{ marginBottom: 40, marginTop: 10, color: "white" }}
-        />
+          >
+            <NavLink
+              text="Already have an account? Sign in here."
+              routeName="Signin"
+              clearErrorMessage={clearErrorMessage}
+              custStyle={{ marginBottom: 20, marginTop: 0, color: "white" }}
+            />
+            <NavLink
+              text="Or, continue as Guest."
+              routeName="List"
+              clearErrorMessage={() => {
+                console.log("got here");
+                (async () => {
+                  await AsyncStorage.setItem("guest", "true");
+                })();
+                //navigation.navigate("List");
+              }}
+              custStyle={{ marginBottom: 40, marginTop: 0, color: "white" }}
+            />
+          </View>
+        </View>
       </KeyboardAwareScrollView>
     </ImageBackground>
   );
@@ -74,7 +83,7 @@ const SignupScreen = () => {
 const styles = StyleSheet.create({
   scrollContainerStyle: {
     flex: 1,
-    justifyContent: "flex-end",
+    minHeight: Dimensions.get("window").height,
   },
 });
 

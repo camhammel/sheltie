@@ -26,7 +26,6 @@ const NameGender = ({ name, gender }) => {
           marginVertical: 10,
           fontWeight: "bold",
         }}
-        //adjustsFontSizeToFit={true}
         numberOfLines={1}
         ellipsizeMode="tail"
       >

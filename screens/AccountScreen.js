@@ -17,9 +17,6 @@ import Icon from "react-native-vector-icons/Entypo";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Modal from "react-native-modal";
 import * as Linking from "expo-linking";
-const B = (props) => (
-  <Text style={{ fontWeight: "bold" }}>{props.children}</Text>
-);
 
 const AccountScreen = ({ navigation }) => {
   const { signout, getfavs } = useContext(AuthContext);

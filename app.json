@@ -40,7 +40,7 @@
           "data": [
             {
               "scheme": "https",
-              "host": "*.sheltie.app",
+              "host": "sheltie.app",
               "pathPrefix": "/pet"
             }
           ],

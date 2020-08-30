@@ -73,6 +73,7 @@ function App() {
       require("./assets/default.png"),
       require("./assets/authBg-25.png"),
       require("./assets/transparent_icon2.png"),
+      require("./assets/accountPattern.png"),
     ];
     const cacheImages = images.map((image) => {
       return Asset.fromModule(image).downloadAsync();
@@ -152,7 +153,6 @@ function App() {
               headerTintColor: "white",
               headerStyle: { backgroundColor: COLORS.primarylight },
               headerTitle: "",
-              headerTitleStyle: { fontFamily: "TeamSpirit" },
             }}
           />
           <Stack.Screen

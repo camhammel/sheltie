@@ -424,20 +424,8 @@ const ListScreen = ({ navigation }) => {
           }}
         >
           <ScrollView>
-            <Text
-              h3
-              style={{
-                textAlign: "center",
-                marginTop: 15,
-                marginBottom: 25,
-                color: "grey",
-                fontWeight: "bold",
-              }}
-            >
-              Search Filters
-            </Text>
             <View style={{ flex: 1 }}>
-              <Text style={styles.labelStyle}>CUSTOM LOCATION</Text>
+              <Text style={styles.labelStyle}>LOCATION</Text>
               <Input
                 inputStyle={{
                   marginLeft: 10,
@@ -544,7 +532,6 @@ const ListScreen = ({ navigation }) => {
                 dropDownStyle={{ backgroundColor: "#fafafa" }}
                 onChangeItem={(item) => {
                   setType(item.value);
-                  //setBreed([]);
                 }}
                 isVisible={isTypeVisible}
                 onOpen={() => {
@@ -588,7 +575,7 @@ const ListScreen = ({ navigation }) => {
                 }}
               >
                 <Button
-                  title="Clear Search"
+                  title="Clear Filters"
                   onPress={() => {
                     setCustomLocation("");
                     setInputVal("");
@@ -608,7 +595,7 @@ const ListScreen = ({ navigation }) => {
                   }}
                 />
                 <Button
-                  title="Save"
+                  title="Search"
                   onPress={() => {
                     if (customLocation == "") {
                       console.log(
@@ -694,15 +681,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   inputStyle: {
-    //backgroundColor: "white",
     borderRadius: 8,
     paddingHorizontal: 10,
     color: COLORS.darkgrey,
   },
   inputContainerStyle: {
     borderRadius: 8,
-    //marginHorizontal: 5,
-    //padding: 5,
     borderBottomWidth: 0,
   },
   inputLabelStyle: {

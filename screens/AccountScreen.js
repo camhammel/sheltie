@@ -278,97 +278,105 @@ const AccountScreen = ({ navigation }) => {
               </ScrollView>
             </View>
           </Modal>
-          <Spacer>
-            <Image
-              source={Logo}
-              style={{
-                width: useWindowDimensions().width - 40,
-                height: useWindowDimensions().height / 3,
-                marginBottom: 20,
-              }}
-              resizeMode="contain"
-            />
-          </Spacer>
-          <View style={{ flex: 6, justifyContent: "flex-start" }}>
-            <Text
-              style={{
-                fontSize: 28,
-                marginTop: 20,
-                marginBottom: 15,
-                color: COLORS.white,
-                textAlign: "center",
-                fontWeight: "normal",
-              }}
-            >
-              You aren't signed in
-            </Text>
-            <Button
-              containerStyle={{ marginBottom: 25 }}
-              type="solid"
-              title={"Sign In"}
-              titleStyle={{ paddingLeft: 10 }}
-              onPress={() => {
-                navigation.navigate("Signin");
-              }}
-              linearGradientProps={{
-                colors: [COLORS.primarylight, COLORS.primary],
-                start: { x: 0.25, y: 0.1 },
-                end: { x: 0.25, y: 1 },
-              }}
-              icon={
-                <Icon
-                  name="login"
-                  size={18}
-                  color="white"
-                  style={{ alignSelf: "center" }}
-                />
-              }
-              buttonStyle={{ marginHorizontal: 20, marginTop: 10 }}
-            ></Button>
-          </View>
-
-          <View style={{ flex: 1, justifyContent: "flex-end" }}>
-            <TouchableOpacity
-              onPress={() => {
-                Linking.openURL("mailto: help@sheltie.app");
-              }}
-            >
-              <Text
+          <View
+            style={{
+              flex: 1,
+              minHeight: Dimensions.get("window").height * 0.85,
+              justifyContent: "center",
+            }}
+          >
+            <Spacer>
+              <Image
+                source={Logo}
                 style={{
-                  textAlign: "center",
-                  color: COLORS.white,
-                  marginBottom: 5,
+                  width: useWindowDimensions().width - 40,
+                  height: useWindowDimensions().height / 3,
+                  marginBottom: 20,
                 }}
-              >
-                Contact:{" "}
-                <Text style={{ fontWeight: "bold" }}> help@sheltie.app </Text>
-              </Text>
-            </TouchableOpacity>
-            <Text
-              style={{
-                textAlign: "center",
-                marginBottom: 5,
-                color: "#888",
-              }}
-            >
-              Powered by the Petfinder API
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                toggleModal();
-              }}
-            >
+                resizeMode="contain"
+              />
+            </Spacer>
+            <View style={{ flex: 6, justifyContent: "flex-start" }}>
               <Text
                 style={{
-                  textAlign: "center",
-                  color: COLORS.white,
+                  fontSize: 28,
+                  marginTop: 20,
                   marginBottom: 15,
-                  fontWeight: "bold",
+                  color: COLORS.white,
+                  textAlign: "center",
+                  fontWeight: "normal",
                 }}
               >
-                Privacy Policy
+                You aren't signed in
               </Text>
-            </TouchableOpacity>
+              <Button
+                containerStyle={{ marginBottom: 25, marginHorizontal: 35 }}
+                type="solid"
+                title={"Sign In"}
+                titleStyle={{ paddingLeft: 10 }}
+                onPress={() => {
+                  navigation.navigate("Signin");
+                }}
+                linearGradientProps={{
+                  colors: [COLORS.primarylight, COLORS.primary],
+                  start: { x: 0.25, y: 0.1 },
+                  end: { x: 0.25, y: 1 },
+                }}
+                icon={
+                  <Icon
+                    name="login"
+                    size={18}
+                    color="white"
+                    style={{ alignSelf: "center" }}
+                  />
+                }
+                buttonStyle={{ marginHorizontal: 20, marginTop: 10 }}
+              ></Button>
+            </View>
+
+            <View style={{ flex: 1, justifyContent: "flex-end" }}>
+              <TouchableOpacity
+                onPress={() => {
+                  Linking.openURL("mailto: help@sheltie.app");
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: "center",
+                    color: COLORS.white,
+                    marginBottom: 5,
+                  }}
+                >
+                  Contact:{" "}
+                  <Text style={{ fontWeight: "bold" }}> help@sheltie.app </Text>
+                </Text>
+              </TouchableOpacity>
+              <Text
+                style={{
+                  textAlign: "center",
+                  marginBottom: 5,
+                  color: "#888",
+                }}
+              >
+                Powered by the Petfinder API
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  toggleModal();
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: "center",
+                    color: COLORS.white,
+                    marginBottom: 15,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Privacy Policy
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
       </ImageBackground>
@@ -608,7 +616,13 @@ const AccountScreen = ({ navigation }) => {
               </ScrollView>
             </View>
           </Modal>
-          <View>
+          <View
+            style={{
+              flex: 1,
+              minHeight: Dimensions.get("window").height * 0.85,
+              justifyContent: "center",
+            }}
+          >
             <Image
               source={Logo}
               style={{
@@ -620,56 +634,55 @@ const AccountScreen = ({ navigation }) => {
               }}
               resizeMode="contain"
             />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Button
-              containerStyle={{ marginBottom: 15, marginHorizontal: 90 }}
-              type="solid"
-              title={"My Favourites"}
-              titleStyle={{ paddingLeft: 10 }}
-              onPress={() => getfavs(email)}
-              linearGradientProps={{
-                colors: [COLORS.primarylight, COLORS.primary],
-                start: { x: 0.25, y: 0.1 },
-                end: { x: 0.25, y: 1 },
-              }}
-              icon={
-                <Icon
-                  name="heart"
-                  size={18}
-                  color="white"
-                  style={{ alignSelf: "center" }}
-                />
-              }
-            ></Button>
-          </View>
 
-          <View style={{ flex: 1, justifyContent: "flex-end" }}>
-            <Text
-              style={{
-                fontSize: 24,
-                marginTop: 20,
-                marginBottom: 5,
-                color: COLORS.white,
-                textAlign: "center",
-                fontWeight: "normal",
-              }}
-            >
-              Currently signed in as
-            </Text>
-            <Text
-              style={{
-                fontSize: 26,
-                marginBottom: 20,
-                color: COLORS.white,
-                textAlign: "center",
-                fontWeight: "bold",
-              }}
-            >
-              {email}
-            </Text>
+            <View style={{}}>
+              <Button
+                containerStyle={{ marginBottom: 15, marginHorizontal: 90 }}
+                type="solid"
+                title={"My Favourites"}
+                titleStyle={{ paddingLeft: 10 }}
+                onPress={() => getfavs(email)}
+                linearGradientProps={{
+                  colors: [COLORS.primarylight, COLORS.primary],
+                  start: { x: 0.25, y: 0.1 },
+                  end: { x: 0.25, y: 1 },
+                }}
+                icon={
+                  <Icon
+                    name="heart"
+                    size={18}
+                    color="white"
+                    style={{ alignSelf: "center" }}
+                  />
+                }
+              ></Button>
+            </View>
 
             <View style={{ flex: 1, justifyContent: "flex-end" }}>
+              <Text
+                style={{
+                  fontSize: 24,
+                  marginTop: 20,
+                  marginBottom: 5,
+                  color: COLORS.white,
+                  textAlign: "center",
+                  fontWeight: "normal",
+                }}
+              >
+                Currently signed in as
+              </Text>
+              <Text
+                style={{
+                  fontSize: 26,
+                  marginBottom: 20,
+                  color: COLORS.white,
+                  textAlign: "center",
+                  fontWeight: "bold",
+                }}
+              >
+                {email}
+              </Text>
+
               <Button
                 type="outline"
                 title={"Sign Out"}
@@ -686,47 +699,57 @@ const AccountScreen = ({ navigation }) => {
                   />
                 }
               ></Button>
-              <TouchableOpacity
-                onPress={() => {
-                  Linking.openURL("mailto: help@sheltie.app");
-                }}
-              >
-                <Text
-                  style={{
-                    textAlign: "center",
-                    color: COLORS.white,
-                    marginBottom: 5,
-                  }}
-                >
-                  Contact:{" "}
-                  <Text style={{ fontWeight: "bold" }}> help@sheltie.app </Text>
-                </Text>
-              </TouchableOpacity>
-              <Text
+              <View
                 style={{
-                  textAlign: "center",
-                  marginBottom: 5,
-                  color: "#888",
+                  flex: 1,
+                  justifyContent: "flex-end",
                 }}
               >
-                Powered by the Petfinder API
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  toggleModal();
-                }}
-              >
+                <TouchableOpacity
+                  onPress={() => {
+                    Linking.openURL("mailto: help@sheltie.app");
+                  }}
+                >
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      color: COLORS.white,
+                      marginBottom: 5,
+                    }}
+                  >
+                    Contact:{" "}
+                    <Text style={{ fontWeight: "bold" }}>
+                      {" "}
+                      help@sheltie.app{" "}
+                    </Text>
+                  </Text>
+                </TouchableOpacity>
                 <Text
                   style={{
                     textAlign: "center",
-                    color: COLORS.white,
-                    marginBottom: 15,
-                    fontWeight: "bold",
+                    marginBottom: 5,
+                    color: "#888",
                   }}
                 >
-                  Privacy Policy
+                  Powered by the Petfinder API
                 </Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    toggleModal();
+                  }}
+                >
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      color: COLORS.white,
+                      marginBottom: 15,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Privacy Policy
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </ScrollView>

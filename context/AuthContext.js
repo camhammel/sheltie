@@ -29,14 +29,12 @@ const clearErrorMessage = (dispatch) => () => {
 
 const updatePassword = (dispatch) => async ({ email, password }) => {
   try {
-    let result = await sheltieApi.post("/resetpassword", {
+    await sheltieApi.post("/resetpassword", {
       email: email.toString().toLowerCase(),
       password: password,
     });
-    console.log("Attempted password update: " + result);
     return true;
   } catch (err) {
-    console.log(err);
     return false;
   }
 };
@@ -45,7 +43,6 @@ const sendCodeToEmail = (dispatch) => async (email) => {
   let prng = Math.random();
   prng = prng.toString().substring(3, 9);
   await SecureStore.setItemAsync("fpcode", prng);
-  //AsyncStorage.setItem("fpcode", prng);
 
   try {
     await sheltieApi.post("/sendEmailCode", {
@@ -54,7 +51,6 @@ const sendCodeToEmail = (dispatch) => async (email) => {
     });
     return true;
   } catch (err) {
-    console.log(err);
     return false;
   }
 };
@@ -64,12 +60,11 @@ const emailExists = (dispatch) => async (email) => {
     await sheltieApi.post("/getfavourites", {
       email: email.toString().toLowerCase(),
     });
-    console.log("email verified: " + email);
 
     return true;
   } catch (err) {
     AsyncStorage.setItem("fpcode", null);
-    console.log(err);
+
     return false;
   }
 };
@@ -117,7 +112,6 @@ const signin = (dispatch) => async ({ email, password }) => {
     dispatch({ type: "signin", payload: response.data.token });
     RootNavigation.reset("List");
   } catch (err) {
-    console.log(err);
     dispatch({
       type: "add_error",
       payload: "Something went wrong during signin.",
@@ -127,14 +121,12 @@ const signin = (dispatch) => async ({ email, password }) => {
 
 const signout = (dispatch) => async () => {
   await clearAsyncStorage();
-  console.log("AsyncStorage cleared.");
   dispatch({ type: "signout" });
   RootNavigation.reset("Signin");
 };
 
 const getfavs = (dispatch) => async (email) => {
   try {
-    console.log(email);
     const response = await sheltieApi.post("/getfavourites", {
       email: email,
     });
@@ -142,14 +134,11 @@ const getfavs = (dispatch) => async (email) => {
 
     //dispatch({ type: "getfavs", payload: response.data });
     RootNavigation.navigate("Favourites");
-  } catch (err) {
-    console.log(err.message);
-  }
+  } catch (err) {}
 };
 
 const checkfav = (dispatch) => async ({ email, petid }) => {
   try {
-    console.log(email + ", " + petid);
     const response = await sheltieApi.post("/getfavourites", {
       email: email,
     });
@@ -165,19 +154,15 @@ const checkfav = (dispatch) => async ({ email, petid }) => {
 
 const addfav = (dispatch) => async ({ email, petid }) => {
   try {
-    console.log("email: " + email + ", id: " + petid);
     await sheltieApi.post("/addfav", {
       email: email,
       petid: petid,
     });
-  } catch (err) {
-    console.log(err.message);
-  }
+  } catch (err) {}
 };
 
 const removefav = (dispatch) => async ({ email, petid }) => {
   try {
-    console.log("email: " + email + ", id: " + petid);
     const response = await sheltieApi.post("/removefav", {
       email: email,
       petid: petid,
@@ -186,9 +171,7 @@ const removefav = (dispatch) => async ({ email, petid }) => {
       "favourites",
       JSON.stringify(response.data.favourites)
     );
-  } catch (err) {
-    console.log(err.message);
-  }
+  } catch (err) {}
 };
 
 export const { Provider, Context } = createDataContext(

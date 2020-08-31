@@ -27,7 +27,6 @@ const ResetForm = ({ switchStage, setEmail }) => {
             if (sendCodeToEmail(values.email.toString().toLowerCase()))
               switchStage();
             else {
-              console.log("Couldn't send the email with code as payload.");
             }
           } else {
             setErrorMessage("Sorry, that email doesn't exist.");

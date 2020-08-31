@@ -103,7 +103,6 @@ const ListComponent = React.forwardRef(
         </View>
       );
     } else {
-      console.log("couldnt find loadMoreResults");
       return (
         <View style={styles.container}>
           <FlatList

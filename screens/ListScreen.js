@@ -80,7 +80,6 @@ const ListScreen = ({ navigation }) => {
           search = `animals?type=${type}&limit=50&location=${cust[0].latitude},${cust[0].longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}`;
 
           (async () => {
-            console.log("search: " + search);
             petfinder
               .get(search, {
                 headers: {
@@ -99,19 +98,7 @@ const ListScreen = ({ navigation }) => {
               })
               .catch(function (error) {
                 if (error.response) {
-                  // The request was made and the server responded with a status code
-                  // that falls out of the range of 2xx
-                  console.log(error.response.data);
-                } else if (error.request) {
-                  // The request was made but no response was received
-                  // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                  // http.ClientRequest in node.js
-                  console.log(error.request);
-                } else {
-                  // Something happened in setting up the request that triggered an Error
-                  console.log("Error", error.message);
                 }
-                //setSearchError(error.status);
                 if (error.response.data.status == 401) {
                   update_token();
                 } else if (error.response.data.status == 400) {
@@ -123,8 +110,6 @@ const ListScreen = ({ navigation }) => {
                     customLocationRef?.current?.focus();
                   }, 500);
                 }
-
-                //console.log(error.config);
               });
           })();
         }
@@ -152,19 +137,7 @@ const ListScreen = ({ navigation }) => {
         })
         .catch(function (error) {
           if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.log(error.response.data);
-          } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-            // http.ClientRequest in node.js
-            console.log(error.request);
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log("Error", error.message);
           }
-          //setSearchError(error.status);
           if (error.response.data.status == 401) {
             update_token();
           } else if (error.response.data.status == 400) {
@@ -176,8 +149,6 @@ const ListScreen = ({ navigation }) => {
               customLocationRef?.current?.focus();
             }, 500);
           }
-
-          //console.log(error.config);
         });
     }
     const this_search = {
@@ -207,7 +178,6 @@ const ListScreen = ({ navigation }) => {
       (!results || results.length <= 0) &&
       (location != null || customLocation != "")
     ) {
-      console.log("Condition Met");
       setTimeout(async () => {
         //searchApi();
       }, 800);
@@ -229,33 +199,17 @@ const ListScreen = ({ navigation }) => {
       }
 
       let location2 = await Location.getCurrentPositionAsync({});
-      console.log(
-        "location: " +
-          location2.coords.latitude +
-          "," +
-          location2.coords.longitude
-      );
+
       setLocation(location2);
 
       let temp2 = JSON.parse(await AsyncStorage.getItem("lastsearch"));
       if ((await temp2) != null) {
-        console.log();
         setCustomLocation(temp2.customLocation);
         setInputVal(temp2.customLocation);
         setAge(temp2.age);
         setDistance(temp2.distance);
         setType(temp2.type);
         setBreed(temp2.breed);
-        console.log(
-          "Retrieved from storage: Age: " +
-            age +
-            ", Type: " +
-            type +
-            ", Breeds: " +
-            breed +
-            ", Location: " +
-            customLocation
-        );
       } else {
         //
         setType("Dog");
@@ -273,7 +227,6 @@ const ListScreen = ({ navigation }) => {
   const loadMoreResults = async () => {
     if (!loadingMore) {
       setLoadingMore(true);
-      console.log("rendering page " + nextPage + "...");
       retrieveNewPage();
       setNextPage(nextPage + 1);
       setLoadingMore(false);
@@ -302,21 +255,7 @@ const ListScreen = ({ navigation }) => {
       })
       .catch(function (error) {
         if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-          //console.log(error.response.status);
-          //console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log("Error", error.message);
         }
-        //console.log(error.config);
       });
   };
 
@@ -343,21 +282,7 @@ const ListScreen = ({ navigation }) => {
         })
         .catch(function (error) {
           if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.log(error.response.data);
-            //console.log(error.response.status);
-            //console.log(error.response.headers);
-          } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-            // http.ClientRequest in node.js
-            console.log(error.request);
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log("Error", error.message);
           }
-          //console.log(error.config);
         });
     } else {
       setTimeout(async () => {
@@ -383,21 +308,7 @@ const ListScreen = ({ navigation }) => {
             })
             .catch(function (error) {
               if (error.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                console.log(error.response.data);
-                //console.log(error.response.status);
-                //console.log(error.response.headers);
-              } else if (error.request) {
-                // The request was made but no response was received
-                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                // http.ClientRequest in node.js
-                console.log(error.request);
-              } else {
-                // Something happened in setting up the request that triggered an Error
-                console.log("Error", error.message);
               }
-              //console.log(error.config);
             });
         }
       }, 500);
@@ -617,29 +528,6 @@ const ListScreen = ({ navigation }) => {
                 <Button
                   title="Search"
                   onPress={() => {
-                    if (customLocation == "") {
-                      console.log(
-                        "Age: " +
-                          age +
-                          ", Type: " +
-                          type +
-                          ", Breeds: " +
-                          breed +
-                          ", Location: " +
-                          location
-                      );
-                    } else {
-                      console.log(
-                        "Age: " +
-                          age +
-                          ", Type: " +
-                          type +
-                          ", Breeds: " +
-                          breed +
-                          ", Location: " +
-                          customLocation
-                      );
-                    }
                     searchApi();
                     toggleModal();
                   }}

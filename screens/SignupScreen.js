@@ -65,7 +65,6 @@ const SignupScreen = () => {
               text="Or, continue as Guest."
               routeName="List"
               clearErrorMessage={() => {
-                console.log("got here");
                 (async () => {
                   await AsyncStorage.setItem("guest", "true");
                 })();

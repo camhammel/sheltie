@@ -27,12 +27,10 @@ const NewPasswordForm = ({ email, switchStage }) => {
           });
 
           if (status == true) {
-            console.log("Successfully updated password.");
             navigation.navigate("Signin");
             Alert.alert("Success", "Password successfully reset.");
             //switchStage();
           } else if (status == false) {
-            console.log("Password couldn't be updated.");
             switchStage();
             Alert.alert("Error", "Password couldn't be updated.");
           } else {

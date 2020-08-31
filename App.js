@@ -83,10 +83,9 @@ function App() {
 
   const _handleOpenURL = (url) => {
     let { path, queryParams } = Linking.parse(url);
-    console.log("Path: " + path + ", query: " + queryParams.id);
+
     if (path == "pet") {
       if (queryParams.id) {
-        console.log("**********Trying to navigate!");
         navigationRef.current.navigate("PetDetail", { id: queryParams.id });
       } else {
         alert("Invalid Pet ID: " + queryParams.id);
@@ -101,7 +100,6 @@ function App() {
       <AppLoading
         startAsync={_cacheResourcesAsync}
         onFinish={() => setIsReady(true)}
-        onError={console.warn}
       />
     );
   } else {

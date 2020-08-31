@@ -445,10 +445,6 @@ const ListScreen = ({ navigation }) => {
                       label: "Bird",
                       value: "Bird",
                     },
-                    {
-                      label: "Rabbit",
-                      value: "Rabbit",
-                    },
                   ]}
                   defaultValue={type}
                   containerStyle={{ height: 40, marginHorizontal: 10 }}

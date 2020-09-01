@@ -43,7 +43,7 @@ const PetDetailScreen = ({ route, navigation }) => {
   const { id } = route.params;
   const [favourited, setFavourited] = useState(false);
   const [guest, setGuest] = useState("true");
-  const [isEmpty, setIsEmpty] = useState("false");
+  //const [isEmpty, setIsEmpty] = useState("false");
   let isSubscribed = true;
 
   useEffect(() => {
@@ -69,7 +69,7 @@ const PetDetailScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     if (results?.name) {
-      setIsEmpty("false");
+      //setIsEmpty("false");
       navigation.setOptions({
         headerTitle: capitalizeFirstLetter(results?.name?.toLowerCase()),
         headerTitleStyle: {
@@ -84,7 +84,7 @@ const PetDetailScreen = ({ route, navigation }) => {
       setTimeout(() => {
         () => {
           if (!results?.name) {
-            setIsEmpty("true");
+            //setIsEmpty("true");
           }
         };
       }, 3000);
@@ -112,7 +112,7 @@ const PetDetailScreen = ({ route, navigation }) => {
         }
       })
       .catch(function (error) {
-        setIsEmpty("true");
+        //setIsEmpty("true");
         if (error.response) {
         }
       });
@@ -171,194 +171,182 @@ const PetDetailScreen = ({ route, navigation }) => {
     );
   };
 
-  if (isEmpty == "false") {
-    return (
-      <View>
-        {results ? (
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            backgroundColor="white"
-          >
-            <View style={{ backgroundColor: COLORS.white }}>
-              <Carousel
-                sliderWidth={screenWidth}
-                sliderHeight={screenWidth}
-                itemWidth={screenWidth - 60}
-                data={results.photos}
-                renderItem={renderItem}
-                hasParallaxImages={true}
-                pagingEnabled={true}
-                onSnapToItem={(index) => setPage(index)}
-              />
-              <Pagination
-                dotsLength={results.photos.length}
-                activeDotIndex={page}
-                inactiveDotColor={COLORS.primarylight}
-                dotColor={COLORS.primary}
-                inactiveDotOpacity={0.4}
-                inactiveDotScale={0.6}
-                containerStyle={{ paddingVertical: 0, paddingTop: 20 }}
-              />
-            </View>
-            <View>
+  //if (isEmpty == "false") {
+  return (
+    <View>
+      {results ? (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          backgroundColor="white"
+        >
+          <View style={{ backgroundColor: COLORS.white }}>
+            <Carousel
+              sliderWidth={screenWidth}
+              sliderHeight={screenWidth}
+              itemWidth={screenWidth - 60}
+              data={results.photos}
+              renderItem={renderItem}
+              hasParallaxImages={true}
+              pagingEnabled={true}
+              onSnapToItem={(index) => setPage(index)}
+            />
+            <Pagination
+              dotsLength={results.photos.length}
+              activeDotIndex={page}
+              inactiveDotColor={COLORS.primarylight}
+              dotColor={COLORS.primary}
+              inactiveDotOpacity={0.4}
+              inactiveDotScale={0.6}
+              containerStyle={{ paddingVertical: 0, paddingTop: 20 }}
+            />
+          </View>
+          <View>
+            <View
+              style={{
+                justifyContent: "space-between",
+                flexDirection: "row",
+              }}
+            >
+              <NameGender name={results.name} gender={results.gender} />
               <View
                 style={{
-                  justifyContent: "space-between",
                   flexDirection: "row",
+                  alignSelf: "flex-end",
+                  marginBottom: 5,
                 }}
               >
-                <NameGender name={results.name} gender={results.gender} />
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignSelf: "flex-end",
-                    marginBottom: 5,
+                <TouchableOpacity
+                  onPress={() => {
+                    onShare();
                   }}
                 >
-                  <TouchableOpacity
-                    onPress={() => {
-                      onShare();
-                    }}
-                  >
-                    <Icon
-                      name="share"
-                      size={40}
-                      color={COLORS.primarylight}
-                      style={{ marginLeft: 15 }}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      if (guest !== "true") {
-                        {
-                          favourited
-                            ? removefav({ email, petid: results.id })
-                            : addfav({ email, petid: results.id });
-                        }
-                        setFavourited(!favourited);
-                      } else {
-                        Alert.alert(
-                          "Sorry!",
-                          "Please sign in via the Account screen to use the favourites feature.",
-                          [
-                            {
-                              text: "Cancel",
-                              onPress: () => {},
-                              style: "cancel",
-                            },
-                            {
-                              text: "Sign in",
-                              onPress: () => {
-                                navigationRef.current.navigate("Signin");
-                              },
-                            },
-                          ]
-                        );
+                  <Icon
+                    name="share"
+                    size={40}
+                    color={COLORS.primarylight}
+                    style={{ marginLeft: 15 }}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (guest !== "true") {
+                      {
+                        favourited
+                          ? removefav({ email, petid: results.id })
+                          : addfav({ email, petid: results.id });
                       }
-                    }}
-                  >
-                    <Icon
-                      name={favourited ? "heart" : "heart-outlined"}
-                      size={40}
-                      color={COLORS.primarylight}
-                      style={{ marginHorizontal: 20 }}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <FAIcon
-                  name="paw"
-                  size={30}
-                  color={COLORS.primarylight}
-                  style={{ marginLeft: 15, alignSelf: "center" }}
-                />
-                <Text style={{ fontSize: 20, marginLeft: 8 }}>
-                  {results.breeds.primary} {results.breeds.mixed ? "Mix" : null}
-                </Text>
-              </View>
-              <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Icon
-                  name="location-pin"
-                  size={30}
-                  color={COLORS.primarylight}
-                  style={{ marginLeft: 15, alignSelf: "center" }}
-                />
-                <Text style={{ fontSize: 20, marginLeft: 5 }}>
-                  {results.contact.address.city},{" "}
-                  {results.contact.address.state}
-                </Text>
-              </View>
-              <TagComponent tags={results.tags} />
-              <Spacer>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    marginLeft: 10,
-                    color: COLORS.darkgrey,
+                      setFavourited(!favourited);
+                    } else {
+                      Alert.alert(
+                        "Sorry!",
+                        "Please sign in via the Account screen to use the favourites feature.",
+                        [
+                          {
+                            text: "Cancel",
+                            onPress: () => {},
+                            style: "cancel",
+                          },
+                          {
+                            text: "Sign in",
+                            onPress: () => {
+                              navigationRef.current.navigate("Signin");
+                            },
+                          },
+                        ]
+                      );
+                    }
                   }}
                 >
-                  {results.description
-                    ? results.description
-                        .replace(/&#039;/g, "'")
-                        .replace(/&amp;#39;/g, "'")
-                        .replace(/&amp;#34;/g, '"')
-                        .replace(/&quot;/g, '"')
-                    : null}
-                </Text>
-
-                <NavLink
-                  text={`Read more about ${capitalizeFirstLetter(
-                    results.name.toLowerCase()
-                  )} here via Petfinder.com`}
-                  routeName={results.url}
-                  custStyle={{ marginBottom: 60 }}
-                />
-              </Spacer>
+                  <Icon
+                    name={favourited ? "heart" : "heart-outlined"}
+                    size={40}
+                    color={COLORS.primarylight}
+                    style={{ marginHorizontal: 20 }}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <FAIcon
+                name="paw"
+                size={30}
+                color={COLORS.primarylight}
+                style={{ marginLeft: 15, alignSelf: "center" }}
+              />
+              <Text style={{ fontSize: 20, marginLeft: 8 }}>
+                {results.breeds.primary} {results.breeds.mixed ? "Mix" : null}
+              </Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Icon
+                name="location-pin"
+                size={30}
+                color={COLORS.primarylight}
+                style={{ marginLeft: 15, alignSelf: "center" }}
+              />
+              <Text style={{ fontSize: 20, marginLeft: 5 }}>
+                {results.contact.address.city}, {results.contact.address.state}
+              </Text>
+            </View>
+            <TagComponent tags={results.tags} />
+            <Spacer>
               <Text
                 style={{
-                  margin: 5,
-                  marginLeft: 15,
-                  marginTop: -50,
-                  fontWeight: "bold",
-                  fontSize: 18,
-                  color: COLORS.primary,
+                  fontSize: 16,
+                  marginLeft: 10,
+                  color: COLORS.darkgrey,
                 }}
               >
-                ATTRIBUTES
+                {results.description
+                  ? results.description
+                      .replace(/&#039;/g, "'")
+                      .replace(/&amp;#39;/g, "'")
+                      .replace(/&amp;#34;/g, '"')
+                      .replace(/&quot;/g, '"')
+                  : null}
               </Text>
-              <Attribute type="size" value={results.size} />
-              <Attribute type="age" value={results.age} />
-              <Attribute type="declawed" value={results.attributes.declawed} />
-              <Attribute
-                type="spayed"
-                value={results.attributes.spayed_neutered}
-                gender={results.gender}
+
+              <NavLink
+                text={`Read more about ${capitalizeFirstLetter(
+                  results.name.toLowerCase()
+                )} here via Petfinder.com`}
+                routeName={results.url}
+                custStyle={{ marginBottom: 60 }}
               />
-              <Attribute
-                type="house_trained"
-                value={results.attributes.house_trained}
-              />
-              <Attribute
-                type="shots"
-                value={results.attributes.shots_current}
-              />
-              <ShelterInfo results={results} />
-              <View style={{ marginBottom: 40 }} />
-            </View>
-          </ScrollView>
-        ) : null}
-      </View>
-    );
-  } else {
-    return (
-      <View style={{ marginTop: 25, marginHorizontal: 25 }}>
-        <Text h2 style={{ alignSelf: "center" }}>
-          Sorry, looks like this pet is no longer available.
-        </Text>
-      </View>
-    );
-  }
+            </Spacer>
+            <Text
+              style={{
+                margin: 5,
+                marginLeft: 15,
+                marginTop: -50,
+                fontWeight: "bold",
+                fontSize: 18,
+                color: COLORS.primary,
+              }}
+            >
+              ATTRIBUTES
+            </Text>
+            <Attribute type="size" value={results.size} />
+            <Attribute type="age" value={results.age} />
+            <Attribute type="declawed" value={results.attributes.declawed} />
+            <Attribute
+              type="spayed"
+              value={results.attributes.spayed_neutered}
+              gender={results.gender}
+            />
+            <Attribute
+              type="house_trained"
+              value={results.attributes.house_trained}
+            />
+            <Attribute type="shots" value={results.attributes.shots_current} />
+            <ShelterInfo results={results} />
+            <View style={{ marginBottom: 40 }} />
+          </View>
+        </ScrollView>
+      ) : null}
+    </View>
+  );
+  //}
 };
 
 const styles = StyleSheet.create({

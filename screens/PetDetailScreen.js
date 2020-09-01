@@ -77,7 +77,7 @@ const PetDetailScreen = ({ route, navigation }) => {
           fontFamily: "Yellowtail",
           fontSize: 28,
           paddingVertical: 5,
-          paddingHorizontal: 10,
+          paddingHorizontal: 15,
         },
       });
     } else {

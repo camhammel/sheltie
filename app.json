@@ -37,13 +37,11 @@
         {
           "action": "VIEW",
           "autoVerify": true,
-          "data": [
-            {
-              "scheme": "https",
-              "host": "sheltie.app",
-              "pathPrefix": "/pet"
-            }
-          ],
+          "data": {
+            "scheme": "https",
+            "host": "*.sheltie.app",
+            "pathPrefix": "/pet"
+          },
           "category": ["BROWSABLE", "DEFAULT"]
         }
       ]

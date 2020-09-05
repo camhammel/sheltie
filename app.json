@@ -2,7 +2,7 @@
   "expo": {
     "name": "Sheltie",
     "slug": "sheltie-app",
-    "version": "1.1.0",
+    "version": "1.1.2",
     "orientation": "portrait",
     "icon": "./assets/appIcon.png",
     "primaryColor": "#3F77B9",
@@ -16,7 +16,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "app.sheltie",
-      "buildNumber": "1.1.0",
+      "buildNumber": "1.1.2",
       "supportsTablet": false,
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This app uses Location to determine animal shelters closest to you for results.",
@@ -31,16 +31,26 @@
     },
     "android": {
       "package": "app.sheltie",
-      "versionCode": 11,
+      "versionCode": 12,
       "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"],
       "intentFilters": [
         {
           "action": "VIEW",
           "autoVerify": true,
-          "data": {
-            "scheme": "https",
-            "host": "*.sheltie.app"
-          },
+          "data": [
+            {
+              "scheme": "http",
+              "host": "sheltie.app"
+            },
+            {
+              "scheme": "https",
+              "host": "sheltie.app"
+            },
+            {
+              "scheme": "https",
+              "host": "*.sheltie.app"
+            }
+          ],
           "category": ["BROWSABLE", "DEFAULT"]
         }
       ]

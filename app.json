@@ -31,7 +31,7 @@
     },
     "android": {
       "package": "app.sheltie",
-      "versionCode": 10,
+      "versionCode": 11,
       "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"],
       "intentFilters": [
         {
@@ -39,8 +39,7 @@
           "autoVerify": true,
           "data": {
             "scheme": "https",
-            "host": "*.sheltie.app",
-            "pathPrefix": "/pet"
+            "host": "*.sheltie.app"
           },
           "category": ["BROWSABLE", "DEFAULT"]
         }

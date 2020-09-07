@@ -6,7 +6,7 @@ import Icon from "react-native-vector-icons/Entypo";
 import FAIcon from "react-native-vector-icons/FontAwesome";
 import { COLORS } from "../assets/colors";
 
-const SearchHeader = ({ onPress }) => {
+const SearchHeader = ({ onPress, location }) => {
   return (
     <View
       style={{
@@ -53,7 +53,8 @@ const SearchHeader = ({ onPress }) => {
       >
         <Button
           onPress={() => {
-            RootNavigation.navigate("Maps");
+            //TODO: attach params from location.lat and location.long
+            RootNavigation.navigate("Maps", { location });
           }}
           buttonStyle={{
             backgroundColor: "#ffffff",

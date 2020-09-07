@@ -19,7 +19,7 @@ const SearchHeader = ({ onPress }) => {
     >
       <View
         style={{
-          flex: 9,
+          flex: 5,
           backgroundColor: COLORS.white,
         }}
       >
@@ -57,17 +57,17 @@ const SearchHeader = ({ onPress }) => {
           }}
           buttonStyle={{
             backgroundColor: "#ffffff",
-            borderColor: COLORS.primary,
+            borderColor: "transparent",
             borderWidth: 1,
-            marginRight: 5,
+            marginHorizontal: 5,
           }}
           icon={
             <Icon
               name="map"
-              size={20}
+              size={30}
               color={COLORS.primary}
               borderWidth={1}
-              borderColor={COLORS.primary}
+              borderColor={COLORS.white}
             />
           }
         ></Button>
@@ -76,7 +76,7 @@ const SearchHeader = ({ onPress }) => {
             backgroundColor: COLORS.white,
             borderColor: "transparent",
             borderWidth: 1,
-            marginRight: 10,
+            marginRight: 5,
           }}
           icon={
             <Icon

@@ -51,7 +51,10 @@ const SearchHeader = ({ onPress }) => {
           paddingVertical: 9,
         }}
       >
-        {/* <Button
+        <Button
+          onPress={() => {
+            RootNavigation.navigate("Maps");
+          }}
           buttonStyle={{
             backgroundColor: "#ffffff",
             borderColor: COLORS.primary,
@@ -67,7 +70,7 @@ const SearchHeader = ({ onPress }) => {
               borderColor={COLORS.primary}
             />
           }
-        ></Button> */}
+        ></Button>
         <Button
           buttonStyle={{
             backgroundColor: COLORS.white,

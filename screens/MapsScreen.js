@@ -30,9 +30,13 @@ const MapsScreen = ({ route, navigation }) => {
     }
   }, [results]);
 
-  const addMarker = (newMarker) => setMarkers([...markers, newMarker]);
+  const addMarker = async (newMarker) =>
+    await setMarkers([...markers, newMarker]);
+
   const mapMarkers = () => {
-    return markers.map(() => {});
+    return markers.map((m) => {
+      <Marker coordinate={m?.coordinate} title={m?.title} key={m?.key} />;
+    });
   };
 
   const searchShelters = async () => {
@@ -89,7 +93,7 @@ const MapsScreen = ({ route, navigation }) => {
           longitudeDelta: 0.1,
         }}
       >
-        {mapMarkers()}
+        {markers}
       </MapView>
       <View
         style={{

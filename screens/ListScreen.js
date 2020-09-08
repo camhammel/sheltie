@@ -818,7 +818,13 @@ const ListScreen = ({ navigation }) => {
             borderWidth: 0,
           }}
         >
-          <SearchHeader onPress={toggleModal} />
+          <SearchHeader
+            onPress={toggleModal}
+            location={{
+              lat: location?.coords?.latitude,
+              long: location?.coords?.longitude,
+            }}
+          />
         </View>
         <View style={{ flex: 1 }}>
           {results ? (

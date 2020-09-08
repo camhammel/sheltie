@@ -2,24 +2,49 @@ import React, { useEffect, useState, useCallback } from "react";
 import MapView, { Marker } from "react-native-maps";
 import { View, Text, Dimensions, AsyncStorage, StyleSheet } from "react-native";
 import petfinder from "../api/petfinder";
+import * as Location from "expo-location";
 
 //TODO: pass in current location from ListScreen to set initialRegion
 //TODO: use 'Zoom to Specified Markers' to focus the map after markers are loaded
 
 const MapsScreen = ({ route, navigation }) => {
   const [shelters, setShelters] = useState([{}]);
+  const [markers, setMarkers] = useState([{}]);
 
   let { location } = route.params;
-  let lat = location.lat;
-  let long = location.long;
+  let lat = location?.lat;
+  let long = location?.long;
   let results = [];
-  var triggerUpdate = false;
 
   useEffect(() => {
-    searchShelters();
+    if (location == undefined) {
+      alert("Couldn't find your location");
+    } else {
+      searchShelters();
+    }
   }, [location]);
 
-  //TODO: Retrieve lat and long from shelter address using the Expo Geocoding library
+  useEffect(() => {
+    //TODO: REPEAT FOR EACH SHELTER IN LIST
+    Location.geocodeAsync(shelters[0]?.address?.postcode).then((coords) => {
+      console.log(coords[0]?.latitude);
+      () => {
+        setMarkers([
+          ...markers,
+          <Marker
+            coordinate={{
+              latitude: coords[0]?.latitude,
+              longitude: coords[0]?.longitude,
+            }}
+            title={shelters[0]?.name}
+            identifier={shelters[0]?.id}
+          />,
+        ]);
+      };
+    });
+  }, [shelters]);
+
+  //TODO: Retrieve lats and longs from shelter addresses using the Expo Geocoding library
   //TODO: Create 'markers' in state as an array of Marker objects from latitude and longitude provided by shelter call
 
   const searchShelters = async () => {
@@ -32,7 +57,7 @@ const MapsScreen = ({ route, navigation }) => {
         },
       })
       .then((response) => {
-        //console.log(response.data.organizations[0].name);
+        console.log(response.data.organizations[0]);
         results.push(response.data.organizations);
         setShelters(response.data.organizations);
         //triggerUpdate = !triggerUpdate;
@@ -58,7 +83,9 @@ const MapsScreen = ({ route, navigation }) => {
           longitudeDelta: 0.0922,
         }}
       >
-        {/* add this as child of MapView: {markers.map(marker => (<Marker coordinate={marker.latlng} title={marker.title} description={marker.description} />))} */}
+        {markers.map((marker) => (
+          <Marker coordinate={marker.coordinate} title={marker.title} />
+        ))}
       </MapView>
       <View
         style={{
@@ -73,8 +100,8 @@ const MapsScreen = ({ route, navigation }) => {
       >
         <Text style={styles.titleStyle}>{shelters[0]?.name}</Text>
         <Text style={styles.subtitleStyle}>
-          {shelters[0]?.address.address1}, {shelters[0].address.city},{" "}
-          {shelters[0].address.state}
+          {shelters[0]?.address?.address1}, {shelters[0]?.address?.city},{" "}
+          {shelters[0]?.address?.state}
         </Text>
       </View>
     </View>

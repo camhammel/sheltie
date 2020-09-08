@@ -4,17 +4,16 @@ import { View, Text, Dimensions, AsyncStorage, StyleSheet } from "react-native";
 import petfinder from "../api/petfinder";
 import * as Location from "expo-location";
 
-//TODO: pass in current location from ListScreen to set initialRegion
+//TODO: Fix marker list to allow multiple markers on the mapview at once
 //TODO: use 'Zoom to Specified Markers' to focus the map after markers are loaded
 
 const MapsScreen = ({ route, navigation }) => {
-  const [shelters, setShelters] = useState([{}]);
-  const [markers, setMarkers] = useState([{}]);
+  const [results, setResults] = useState([]);
+  const [markers, setMarkers] = useState([]);
 
   let { location } = route.params;
   let lat = location?.lat;
   let long = location?.long;
-  let results = [];
 
   useEffect(() => {
     if (location == undefined) {
@@ -25,31 +24,20 @@ const MapsScreen = ({ route, navigation }) => {
   }, [location]);
 
   useEffect(() => {
-    //TODO: REPEAT FOR EACH SHELTER IN LIST
-    Location.geocodeAsync(shelters[0]?.address?.postcode).then((coords) => {
-      console.log(coords[0]?.latitude);
-      () => {
-        setMarkers([
-          ...markers,
-          <Marker
-            coordinate={{
-              latitude: coords[0]?.latitude,
-              longitude: coords[0]?.longitude,
-            }}
-            title={shelters[0]?.name}
-            identifier={shelters[0]?.id}
-          />,
-        ]);
-      };
-    });
-  }, [shelters]);
+    if (markers.length <= 1) {
+      console.log("Mapping new markers...");
+      addMarkers();
+    }
+  }, [results]);
 
-  //TODO: Retrieve lats and longs from shelter addresses using the Expo Geocoding library
-  //TODO: Create 'markers' in state as an array of Marker objects from latitude and longitude provided by shelter call
+  const addMarker = (newMarker) => setMarkers([...markers, newMarker]);
+  const mapMarkers = () => {
+    return markers.map(() => {});
+  };
 
   const searchShelters = async () => {
     petfinder
-      .get(`organizations?location=${lat},${long}`, {
+      .get(`organizations?location=${lat},${long}&limit=5`, {
         headers: {
           Authorization: `Bearer ${(
             await AsyncStorage.getItem("token")
@@ -58,15 +46,33 @@ const MapsScreen = ({ route, navigation }) => {
       })
       .then((response) => {
         console.log(response.data.organizations[0]);
-        results.push(response.data.organizations);
-        setShelters(response.data.organizations);
-        //triggerUpdate = !triggerUpdate;
+        setResults(response.data.organizations);
       })
       .catch((error) => {
         if (error.response) {
           console.log(error.response);
         }
       });
+  };
+
+  const addMarkers = () => {
+    results.map((org) => {
+      Location.geocodeAsync(org.address.postcode).then((coords) => {
+        console.log(
+          org.name + ": " + coords[0].latitude + ", " + coords[0].longitude
+        );
+        addMarker(
+          <Marker
+            key={org.id}
+            coordinate={{
+              latitude: coords[0].latitude,
+              longitude: coords[0].longitude,
+            }}
+            title={org.name}
+          ></Marker>
+        );
+      });
+    });
   };
 
   return (
@@ -79,13 +85,11 @@ const MapsScreen = ({ route, navigation }) => {
         initialRegion={{
           latitude: lat,
           longitude: long,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0922,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.1,
         }}
       >
-        {markers.map((marker) => (
-          <Marker coordinate={marker.coordinate} title={marker.title} />
-        ))}
+        {mapMarkers()}
       </MapView>
       <View
         style={{
@@ -98,10 +102,10 @@ const MapsScreen = ({ route, navigation }) => {
           borderRadius: 15,
         }}
       >
-        <Text style={styles.titleStyle}>{shelters[0]?.name}</Text>
+        <Text style={styles.titleStyle}>{results[0]?.name}</Text>
         <Text style={styles.subtitleStyle}>
-          {shelters[0]?.address?.address1}, {shelters[0]?.address?.city},{" "}
-          {shelters[0]?.address?.state}
+          {results[0]?.address?.address1}, {results[0]?.address?.city},{" "}
+          {results[0]?.address?.state}
         </Text>
       </View>
     </View>

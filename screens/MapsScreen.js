@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import MapView, { Marker } from "react-native-maps";
 import { View, Dimensions, AsyncStorage, StyleSheet } from "react-native";
-import { Card, Text } from "react-native-elements";
+import { Card, Text, Button } from "react-native-elements";
 import petfinder from "../api/petfinder";
 import * as Location from "expo-location";
 import ShelterInfo from "../components/ShelterInfo";
@@ -37,7 +37,7 @@ const MapsScreen = ({ route, navigation }) => {
 
   const searchShelters = async () => {
     petfinder
-      .get(`organizations?location=${lat},${long}&limit=5`, {
+      .get(`organizations?location=${lat},${long}&limit=10`, {
         headers: {
           Authorization: `Bearer ${(
             await AsyncStorage.getItem("token")
@@ -68,14 +68,14 @@ const MapsScreen = ({ route, navigation }) => {
   };
 
   const addMarkers = () => {
-    results.map((org) => {
-      Location.geocodeAsync(org.address.postcode).then((coords) => {
+    results.map((org, index) => {
+      Location.geocodeAsync(org?.address?.postcode).then((coords) => {
         console.log(
           org.name + ": " + coords[0].latitude + ", " + coords[0].longitude
         );
         addMarker(
           <Marker
-            key={org.id}
+            key={index + ""}
             coordinate={{
               latitude: coords[0].latitude,
               longitude: coords[0].longitude,
@@ -97,6 +97,7 @@ const MapsScreen = ({ route, navigation }) => {
       >
         <Text h4>{item.name}</Text>
         <Text h6>{item.email}</Text>
+        <Button type="solid" title="View Pets" style={{ marginTop: 10 }} />
         {/* <ShelterInfo organization_id={item?.id} pet_name={item?.name} /> */}
       </Card>
     );

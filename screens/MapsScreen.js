@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import MapView, { Marker } from "react-native-maps";
 import { View, Dimensions, AsyncStorage, StyleSheet } from "react-native";
 import { Card, Text, Button } from "react-native-elements";
@@ -14,18 +14,21 @@ import { COLORS } from "../assets/colors";
 
 const MapsScreen = ({ route, navigation }) => {
   const [results, setResults] = useState([]);
-  const [markers, setMarkers] = useState([]);
+  let mapRef = useRef();
+  let carRef = useRef();
+  const [markers, setMarkers] = useState([
+    // {
+    //   key: "001",
+    //   coordinate: { latitude: 43.5, longitude: -79.7 },
+    //   title: "test marker",
+    // },
+  ]);
+  var tempMarkers = [];
   const [page, setPage] = useState(0);
 
   let { location } = route.params;
   let lat = location?.lat;
   let long = location?.long;
-
-  // const mapMarkers = () => {
-  //   return markers.map((m) => {
-  //     <Marker coordinate={m?.coordinate} title={m?.title} key={m?.key} />;
-  //   });
-  // };
 
   useEffect(() => {
     if (location == undefined) {
@@ -37,7 +40,7 @@ const MapsScreen = ({ route, navigation }) => {
 
   const searchShelters = async () => {
     petfinder
-      .get(`organizations?location=${lat},${long}&limit=10`, {
+      .get(`organizations?location=${lat},${long}&limit=5&sort=distance`, {
         headers: {
           Authorization: `Bearer ${(
             await AsyncStorage.getItem("token")
@@ -57,34 +60,42 @@ const MapsScreen = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    if (markers.length <= 1) {
-      console.log("Mapping new markers...");
-      addMarkers();
-    }
+    addMarkers();
   }, [results]);
 
   const addMarker = (newMarker) => {
+    //setMarkers([...markers, newMarker]);
+    //tempMarkers.push(newMarker);
     setMarkers([...markers, newMarker]);
   };
 
   const addMarkers = () => {
+    let temp = [];
     results.map((org, index) => {
       Location.geocodeAsync(org?.address?.postcode).then((coords) => {
         console.log(
           org.name + ": " + coords[0].latitude + ", " + coords[0].longitude
         );
-        addMarker(
-          <Marker
-            key={index + ""}
-            coordinate={{
-              latitude: coords[0].latitude,
-              longitude: coords[0].longitude,
-            }}
-            title={org.name}
-          ></Marker>
-        );
+        temp.push({
+          key: index + "",
+          coordinate: {
+            latitude: coords[0].latitude,
+            longitude: coords[0].longitude,
+          },
+          title: org.name,
+        });
+        addMarker({
+          key: index + "",
+          coordinate: {
+            latitude: coords[0].latitude,
+            longitude: coords[0].longitude,
+          },
+          title: org.name,
+        });
+        console.log("length: " + tempMarkers.length);
       });
     });
+    setMarkers(temp);
   };
 
   const renderItem = ({ item }) => {
@@ -92,13 +103,25 @@ const MapsScreen = ({ route, navigation }) => {
       <Card
         style={{
           width: Dimensions.get("screen").width,
-          height: Dimensions.get("screen").width,
+          backgroundColor: "white",
+          flex: 1,
+        }}
+        containerStyle={{
+          backgroundColor: "white",
+          flex: 1,
         }}
       >
-        <Text h4>{item.name}</Text>
-        <Text h6>{item.email}</Text>
-        <Button type="solid" title="View Pets" style={{ marginTop: 10 }} />
-        {/* <ShelterInfo organization_id={item?.id} pet_name={item?.name} /> */}
+        <View
+          style={{
+            justifyContent: "space-evenly",
+            height: Dimensions.get("screen").width * 0.4,
+          }}
+        >
+          <Text h4>{item.name}</Text>
+          <Text h6>{item.email}</Text>
+          <Button type="solid" title="View Pets" style={{ marginTop: 10 }} />
+          {/* <ShelterInfo organization_id={item?.id} pet_name={item?.name} /> */}
+        </View>
       </Card>
     );
   };
@@ -106,6 +129,9 @@ const MapsScreen = ({ route, navigation }) => {
   return (
     <View>
       <MapView
+        ref={(mapView) => {
+          mapRef = mapView;
+        }}
         style={{
           width: Dimensions.get("window").width,
           height: Dimensions.get("window").height,
@@ -116,15 +142,23 @@ const MapsScreen = ({ route, navigation }) => {
           latitudeDelta: 0.05,
           longitudeDelta: 0.1,
         }}
+        showsUserLocation
       >
-        {markers}
+        {markers.map((mark) => (
+          <Marker
+            key={mark.key}
+            coordinate={
+              mark.coordinate ? mark.coordinate : { latitude: 0, longitude: 0 }
+            }
+            title={mark.title}
+            onPress={() => {
+              mapRef?.animateToRegion(mark.coordinate, 500);
+              carRef?.snapToItem(mark.key);
+            }}
+          />
+        ))}
       </MapView>
       <View style={styles.mapOverlayStyle}>
-        {/* <Text style={styles.titleStyle}>{results[0]?.name}</Text>
-        <Text style={styles.subtitleStyle}>
-          {results[0]?.address?.address1}, {results[0]?.address?.city},{" "}
-          {results[0]?.address?.state}
-        </Text> */}
         <Carousel
           sliderWidth={Dimensions.get("window").width}
           sliderHeight={Dimensions.get("window").width}
@@ -134,6 +168,10 @@ const MapsScreen = ({ route, navigation }) => {
           //hasParallaxImages={true}
           pagingEnabled={true}
           onSnapToItem={(index) => setPage(index)}
+          itemHeight={Dimensions.get("window").width * 0.7}
+          ref={(carousel) => {
+            carRef = carousel;
+          }}
         />
         <Pagination
           dotsLength={results.length}
@@ -142,7 +180,11 @@ const MapsScreen = ({ route, navigation }) => {
           dotColor={COLORS.primary}
           inactiveDotOpacity={0.4}
           inactiveDotScale={0.6}
-          containerStyle={{ paddingVertical: 0, paddingTop: 20 }}
+          containerStyle={{
+            paddingVertical: 0,
+            paddingTop: 20,
+            marginBottom: 20,
+          }}
         />
       </View>
     </View>

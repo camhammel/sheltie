@@ -94,6 +94,7 @@ const ListComponent = React.forwardRef(
               if (!isRefreshing) {
                 isRefreshing = true;
                 await refresh();
+
                 isRefreshing = false;
               }
             }}
@@ -109,6 +110,22 @@ const ListComponent = React.forwardRef(
             data={results}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
+            keyboardShouldPersistTaps="always"
+            showsVerticalScrollIndicator={false}
+            onMomentumScrollBegin={() => {
+              _onMomentumScrollBegin();
+            }}
+            ListFooterComponent={_renderSearchResultsFooter()}
+            onRefresh={async () => {
+              if (!isRefreshing) {
+                isRefreshing = true;
+                await refresh();
+
+                isRefreshing = false;
+              }
+            }}
+            refreshing={isRefreshing}
+            ref={ref}
           />
         </View>
       );

@@ -6,6 +6,7 @@ import petfinder from "../api/petfinder";
 import * as Location from "expo-location";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import { COLORS } from "../assets/colors";
+import * as RootNavigation from "../navigationRef";
 
 //TODO: use 'Zoom to Specified Markers' to focus the map after markers are loaded
 
@@ -23,7 +24,7 @@ const MapsScreen = ({ route }) => {
   let long = location?.long;
 
   useEffect(() => {
-    if (location == undefined) {
+    if (location == null || location == undefined) {
       alert("Couldn't find your location");
     } else {
       searchShelters();
@@ -40,7 +41,7 @@ const MapsScreen = ({ route }) => {
         },
       })
       .then((response) => {
-        //console.log(response.data.organizations[0]);
+        console.log(response.data.organizations[0]);
         if (response?.data?.organizations)
           setResults(response.data.organizations);
       })
@@ -67,7 +68,6 @@ const MapsScreen = ({ route }) => {
   }, [markers]);
 
   const addMarkers = async () => {
-    //try using temp variables and setMarker to fix android bug
     if (loading == "false") {
       setLoading("true");
       results.map(async (org, index) => {
@@ -118,9 +118,23 @@ const MapsScreen = ({ route }) => {
             height: Dimensions.get("screen").width * 0.4,
           }}
         >
-          <Text h4>{item.name}</Text>
-          <Text h6>{item.email}</Text>
-          <Button type="solid" title="View Pets" style={{ marginTop: 10 }} />
+          <Text h5 style={{ fontWeight: "bold" }}>
+            {item.name}
+          </Text>
+          <Text>
+            {item.address?.address1 ? item.address?.address1 + ", " : null}
+            {item.address?.address2 ? item.address?.address2 + ", " : null}
+            {item.address?.city ? item.address?.city + ", " : null}
+            {item.address?.state ? item.address?.state : null}
+          </Text>
+          <Button
+            type="solid"
+            title="View Pets"
+            style={{ marginTop: 10 }}
+            onPress={() => {
+              RootNavigation.navigate("ShelterList", { item });
+            }}
+          />
         </View>
       </Card>
     );
@@ -139,25 +153,23 @@ const MapsScreen = ({ route }) => {
         initialRegion={{
           latitude: lat,
           longitude: long,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.1,
+          latitudeDelta: 0.2,
+          longitudeDelta: 0.4,
         }}
         showsUserLocation
       >
-        {markers[0]?.key
-          ? markers.map((mark) => (
-              //do something with onChangeRegion to fix onPress glitchiness
-              <Marker
-                key={mark.key}
-                coordinate={mark.coordinate}
-                title={mark.title}
-                onPress={() => {
-                  mapRef?.animateToRegion(mark.coordinate, 500);
-                  carRef?.snapToItem(mark.key);
-                }}
-              />
-            ))
-          : null}
+        {markers.map((mark) => (
+          //do something with onChangeRegion to fix onPress glitchiness
+          <Marker
+            key={mark.key}
+            coordinate={mark.coordinate}
+            title={mark.title}
+            onPress={() => {
+              mapRef?.animateToRegion(mark.coordinate, 500);
+              carRef?.snapToItem(mark.key);
+            }}
+          />
+        ))}
       </MapView>
       <View style={styles.mapOverlayStyle}>
         <Carousel

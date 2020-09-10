@@ -4,26 +4,18 @@ import { View, Dimensions, AsyncStorage, StyleSheet } from "react-native";
 import { Card, Text, Button } from "react-native-elements";
 import petfinder from "../api/petfinder";
 import * as Location from "expo-location";
-import ShelterInfo from "../components/ShelterInfo";
-import { FlatList } from "react-native-gesture-handler";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import { COLORS } from "../assets/colors";
 
-//TODO: Fix marker list to allow multiple markers on the mapview at once
 //TODO: use 'Zoom to Specified Markers' to focus the map after markers are loaded
 
-const MapsScreen = ({ route, navigation }) => {
+const MapsScreen = ({ route }) => {
   const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState("false");
   let mapRef = useRef();
   let carRef = useRef();
-  const [markers, setMarkers] = useState([
-    // {
-    //   key: "001",
-    //   coordinate: { latitude: 43.5, longitude: -79.7 },
-    //   title: "test marker",
-    // },
-  ]);
-  var tempMarkers = [];
+  const [markers, setMarkers] = useState([]);
+
   const [page, setPage] = useState(0);
 
   let { location } = route.params;
@@ -40,7 +32,7 @@ const MapsScreen = ({ route, navigation }) => {
 
   const searchShelters = async () => {
     petfinder
-      .get(`organizations?location=${lat},${long}&limit=5&sort=distance`, {
+      .get(`organizations?location=${lat},${long}&limit=10&sort=distance`, {
         headers: {
           Authorization: `Bearer ${(
             await AsyncStorage.getItem("token")
@@ -48,8 +40,8 @@ const MapsScreen = ({ route, navigation }) => {
         },
       })
       .then((response) => {
-        console.log(response.data.organizations[0]);
-        if (response.data.organizations)
+        //console.log(response.data.organizations[0]);
+        if (response?.data?.organizations)
           setResults(response.data.organizations);
       })
       .catch((error) => {
@@ -63,39 +55,45 @@ const MapsScreen = ({ route, navigation }) => {
     addMarkers();
   }, [results]);
 
-  const addMarker = (newMarker) => {
-    //setMarkers([...markers, newMarker]);
-    //tempMarkers.push(newMarker);
-    setMarkers([...markers, newMarker]);
-  };
+  useEffect(() => {
+    console.log("Total markers:" + markers.length);
+    console.log("First marker key: " + markers[0]?.key);
+    console.log(
+      "First marker coords: " +
+        markers[0]?.coordinate?.latitude +
+        ", " +
+        markers[0]?.coordinate?.longitude
+    );
+  }, [markers]);
 
-  const addMarkers = () => {
-    let temp = [];
-    results.map((org, index) => {
-      Location.geocodeAsync(org?.address?.postcode).then((coords) => {
+  const addMarkers = async () => {
+    if (loading == "false") {
+      setLoading("true");
+      results.map(async (org, index) => {
+        let coords = await Location.geocodeAsync(org.address.postcode);
         console.log(
-          org.name + ": " + coords[0].latitude + ", " + coords[0].longitude
+          index +
+            ": " +
+            org.name +
+            ": " +
+            coords[0].latitude +
+            "," +
+            coords[0].longitude
         );
-        temp.push({
-          key: index + "",
-          coordinate: {
-            latitude: coords[0].latitude,
-            longitude: coords[0].longitude,
+        setMarkers((markers) => [
+          ...markers,
+          {
+            key: index + "",
+            coordinate: {
+              latitude: coords[0].latitude,
+              longitude: coords[0].longitude,
+            },
+            title: org.name,
           },
-          title: org.name,
-        });
-        addMarker({
-          key: index + "",
-          coordinate: {
-            latitude: coords[0].latitude,
-            longitude: coords[0].longitude,
-          },
-          title: org.name,
-        });
-        console.log("length: " + tempMarkers.length);
+        ]);
       });
-    });
-    setMarkers(temp);
+    }
+    setLoading("false");
   };
 
   const renderItem = ({ item }) => {
@@ -120,7 +118,6 @@ const MapsScreen = ({ route, navigation }) => {
           <Text h4>{item.name}</Text>
           <Text h6>{item.email}</Text>
           <Button type="solid" title="View Pets" style={{ marginTop: 10 }} />
-          {/* <ShelterInfo organization_id={item?.id} pet_name={item?.name} /> */}
         </View>
       </Card>
     );
@@ -144,19 +141,19 @@ const MapsScreen = ({ route, navigation }) => {
         }}
         showsUserLocation
       >
-        {markers.map((mark) => (
-          <Marker
-            key={mark.key}
-            coordinate={
-              mark.coordinate ? mark.coordinate : { latitude: 0, longitude: 0 }
-            }
-            title={mark.title}
-            onPress={() => {
-              mapRef?.animateToRegion(mark.coordinate, 500);
-              carRef?.snapToItem(mark.key);
-            }}
-          />
-        ))}
+        {markers[0]?.key
+          ? markers.map((mark) => (
+              <Marker
+                key={mark.key}
+                coordinate={mark.coordinate}
+                title={mark.title}
+                onPress={() => {
+                  mapRef?.animateToRegion(mark.coordinate, 500);
+                  carRef?.snapToItem(mark.key);
+                }}
+              />
+            ))
+          : null}
       </MapView>
       <View style={styles.mapOverlayStyle}>
         <Carousel
@@ -165,9 +162,11 @@ const MapsScreen = ({ route, navigation }) => {
           itemWidth={Dimensions.get("window").width}
           data={results}
           renderItem={renderItem}
-          //hasParallaxImages={true}
           pagingEnabled={true}
-          onSnapToItem={(index) => setPage(index)}
+          onSnapToItem={(index) => {
+            setPage(index);
+            mapRef?.animateToRegion(mark.coordinate, 500);
+          }}
           itemHeight={Dimensions.get("window").width * 0.7}
           ref={(carousel) => {
             carRef = carousel;

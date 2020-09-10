@@ -165,7 +165,8 @@ const MapsScreen = ({ route }) => {
           pagingEnabled={true}
           onSnapToItem={(index) => {
             setPage(index);
-            mapRef?.animateToRegion(mark.coordinate, 500);
+            //find way to animate to marker by key:
+            //mapRef?.animateToRegion(mark.coordinate, 500);
           }}
           itemHeight={Dimensions.get("window").width * 0.7}
           ref={(carousel) => {

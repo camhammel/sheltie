@@ -67,6 +67,7 @@ const MapsScreen = ({ route }) => {
   }, [markers]);
 
   const addMarkers = async () => {
+    //try using temp variables and setMarker to fix android bug
     if (loading == "false") {
       setLoading("true");
       results.map(async (org, index) => {
@@ -83,10 +84,12 @@ const MapsScreen = ({ route }) => {
         setMarkers((markers) => [
           ...markers,
           {
-            key: index + "",
+            key: index,
             coordinate: {
               latitude: coords[0].latitude,
               longitude: coords[0].longitude,
+              latitudeDelta: 0.05,
+              longitudeDelta: 0.1,
             },
             title: org.name,
           },
@@ -143,6 +146,7 @@ const MapsScreen = ({ route }) => {
       >
         {markers[0]?.key
           ? markers.map((mark) => (
+              //do something with onChangeRegion to fix onPress glitchiness
               <Marker
                 key={mark.key}
                 coordinate={mark.coordinate}

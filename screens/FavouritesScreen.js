@@ -4,6 +4,8 @@ import { useIsFocused } from "@react-navigation/native";
 import ListComponent from "../components/ListComponent";
 import petfinder from "../api/petfinder";
 
+//TODO: cache results of favourites, like in ListScreen.
+
 const FavouritesScreen = () => {
   let favIds = [0];
   let parsedIds;

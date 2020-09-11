@@ -33,7 +33,7 @@ const MapsScreen = ({ route }) => {
 
   const searchShelters = async () => {
     petfinder
-      .get(`organizations?location=${lat},${long}&limit=10&sort=distance`, {
+      .get(`organizations?location=${lat},${long}&limit=5&sort=distance`, {
         headers: {
           Authorization: `Bearer ${(
             await AsyncStorage.getItem("token")

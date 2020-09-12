@@ -1,5 +1,6 @@
 import axios from "axios";
 import { AsyncStorage } from "react-native";
+import { getId } from "../api/petfinder";
 
 const requestAccess = async () => {
   await retrieveToken();
@@ -27,8 +28,8 @@ const tokenConfig = {
   method: "post",
   data: {
     grant_type: "client_credentials",
-    client_id: "***REMOVED***",
-    client_secret: "***REMOVED***",
+    client_id: getId().key,
+    client_secret: getId().secret,
   },
 };
 

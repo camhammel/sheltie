@@ -12,7 +12,8 @@ import * as RootNavigation from "../navigationRef";
 
 const MapsScreen = ({ route }) => {
   const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState("false");
+  const [loadingMarkers, setLoadingMarkers] = useState("false");
+  const [loadingSearch, setLoadingSearch] = useState("false");
   let mapRef = useRef();
   let carRef = useRef();
   const [markers, setMarkers] = useState([]);
@@ -26,8 +27,11 @@ const MapsScreen = ({ route }) => {
   useEffect(() => {
     if (location == null || location == undefined) {
       alert("Couldn't find your location");
-    } else {
+    } else if (results.length < 1 && loadingSearch == "false") {
+      setLoadingSearch("true");
       searchShelters();
+    } else {
+      console.log("Location changed");
     }
   }, [location]);
 
@@ -42,13 +46,16 @@ const MapsScreen = ({ route }) => {
       })
       .then((response) => {
         console.log(response.data.organizations[0]);
-        if (response?.data?.organizations)
+        if (response.data.organizations) {
           setResults(response.data.organizations);
+        }
+        setLoadingSearch("false");
       })
       .catch((error) => {
         if (error.response) {
           console.log(error.response);
         }
+        setLoadingSearch("cancelled");
       });
   };
 
@@ -68,8 +75,8 @@ const MapsScreen = ({ route }) => {
   }, [markers]);
 
   const addMarkers = async () => {
-    if (loading == "false") {
-      setLoading("true");
+    if (loadingMarkers == "false") {
+      setLoadingMarkers("true");
       results.map(async (org, index) => {
         let coords = await Location.geocodeAsync(org.address.postcode);
         console.log(
@@ -96,7 +103,7 @@ const MapsScreen = ({ route }) => {
         ]);
       });
     }
-    setLoading("false");
+    setLoadingMarkers("false");
   };
 
   const renderItem = ({ item }) => {

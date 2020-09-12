@@ -7,11 +7,22 @@ import ListComponent from "../components/ListComponent";
 const ShelterListScreen = ({ navigation, route }) => {
   let { item } = route.params;
   const [results, setResults] = useState([]);
+  const [isLoading, setLoading] = useState(false);
   let query = "animals?organization=" + item.id;
 
-  const searchApi = async () => {
-    let animals = [];
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitleStyle: { color: "white" },
+      headerBackTitle: "Back",
+      headerTitle: item?.name,
+    });
+    if (results.length < 1 && !isLoading) {
+      setLoading(true);
+      searchApi();
+    }
+  }, []);
 
+  const searchApi = async () => {
     petfinder
       .get(query, {
         headers: {
@@ -21,29 +32,19 @@ const ShelterListScreen = ({ navigation, route }) => {
         },
       })
       .then((response) => {
-        console.log(response.data);
-        animals = response.data.animals;
-        setResults(response.data.animals);
+        console.log(response.data.animals);
+        //animals = response.data.animals;
+        setResults(JSON.parse(response.data.animals));
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitleStyle: { color: "white" },
-      headerBackTitle: "Back",
-      headerTitle: item?.name,
-    });
-    searchApi();
-  }, []);
   return (
-    <View>
-      <Text>{item?.id}</Text>
-      <View style={{ flex: 1 }}>
-        <ListComponent results={results} refresh={searchApi()} />
-      </View>
+    <View style={{ flex: 1 }}>
+      <ListComponent results={results} refresh={searchApi()} />
     </View>
   );
 };

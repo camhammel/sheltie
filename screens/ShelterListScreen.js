@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
-import { View, Dimensions, AsyncStorage, StyleSheet } from "react-native";
-import { Card, Text, Button } from "react-native-elements";
+import React, { useEffect, useState } from "react";
+import { View, AsyncStorage } from "react-native";
+import { Text } from "react-native-elements";
 import petfinder from "../api/petfinder";
 import ListComponent from "../components/ListComponent";
 

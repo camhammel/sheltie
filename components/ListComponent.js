@@ -38,7 +38,7 @@ const ListComponent = React.forwardRef(
         bottomDivider
         chevron
         onPress={() => {
-          navigation.navigate("PetDetail", {
+          navigation.push("PetDetail", {
             id: item.id,
             name: item.name,
             breed: item.breeds.primary,

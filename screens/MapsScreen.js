@@ -10,10 +10,17 @@ import * as RootNavigation from "../navigationRef";
 
 //TODO: use 'Zoom to Specified Markers' to focus the map after markers are loaded
 
+function find(arr, ind) {
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i].key == ind) return i;
+  }
+  return 0;
+}
+
 const MapsScreen = ({ route }) => {
   const [results, setResults] = useState([]);
-  const [loadingMarkers, setLoadingMarkers] = useState("false");
-  const [loadingSearch, setLoadingSearch] = useState("false");
+  const [loadingMarkers, setLoadingMarkers] = useState(false);
+  const [loadingSearch, setLoadingSearch] = useState(false);
   let mapRef = useRef();
   let carRef = useRef();
   const [markers, setMarkers] = useState([]);
@@ -27,13 +34,19 @@ const MapsScreen = ({ route }) => {
   useEffect(() => {
     if (location == null || location == undefined) {
       alert("Couldn't find your location");
-    } else if (results.length < 1 && loadingSearch == "false") {
-      setLoadingSearch("true");
+    } else if (results.length < 1 && !loadingSearch) {
+      setLoadingSearch(true);
       searchShelters();
     } else {
       console.log("Location changed");
     }
   }, []);
+
+  useEffect(() => {
+    // if (markers.length > 1 && !(loadingMarkers || loadingSearch)) {
+    //   find alternative for this: mapRef?.animateToRegion(markers[page]?.coordinate, 500);
+    // }
+  }, [page]);
 
   const searchShelters = async () => {
     petfinder
@@ -49,13 +62,13 @@ const MapsScreen = ({ route }) => {
         if (response.data.organizations) {
           setResults(response.data.organizations);
         }
-        setLoadingSearch("false");
+        setLoadingSearch(false);
       })
       .catch((error) => {
         if (error.response) {
           console.log(error.response);
         }
-        setLoadingSearch("cancelled");
+        setLoadingSearch(false);
       });
   };
 
@@ -75,8 +88,8 @@ const MapsScreen = ({ route }) => {
   }, [markers]);
 
   const addMarkers = async () => {
-    if (loadingMarkers == "false") {
-      setLoadingMarkers("true");
+    if (loadingMarkers == false) {
+      setLoadingMarkers(true);
       results.map(async (org, index) => {
         let coords = await Location.geocodeAsync(org.address.postcode);
         console.log(
@@ -95,15 +108,21 @@ const MapsScreen = ({ route }) => {
             coordinate: {
               latitude: coords[0].latitude,
               longitude: coords[0].longitude,
-              latitudeDelta: 0.05,
-              longitudeDelta: 0.1,
+              latitudeDelta: 0.02,
+              longitudeDelta: 0.06,
+            },
+            address: {
+              address1: org.address?.address1,
+              address2: org.address?.address2,
+              city: org.address?.city,
+              state: org.address?.state,
             },
             title: org.name,
           },
         ]);
       });
     }
-    setLoadingMarkers("false");
+    setLoadingMarkers(false);
   };
 
   const renderItem = ({ item }) => {
@@ -166,15 +185,16 @@ const MapsScreen = ({ route }) => {
         showsUserLocation
       >
         {markers.map((mark) => (
-          //do something with onChangeRegion to fix onPress glitchiness
           <Marker
             key={mark.key}
             coordinate={mark.coordinate}
             title={mark.title}
             onPress={() => {
+              //setPage(mark.key);
               mapRef?.animateToRegion(mark.coordinate, 500);
               carRef?.snapToItem(mark.key);
             }}
+            pinColor={COLORS.primarylight}
           />
         ))}
       </MapView>
@@ -190,6 +210,10 @@ const MapsScreen = ({ route }) => {
             setPage(index);
             //find way to animate to marker by key:
             //mapRef?.animateToRegion(mark.coordinate, 500);
+            mapRef?.animateToRegion(
+              markers[find(markers, index)].coordinate,
+              500
+            );
           }}
           itemHeight={Dimensions.get("window").width * 0.7}
           ref={(carousel) => {

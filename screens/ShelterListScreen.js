@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, AsyncStorage } from "react-native";
+import { View, AsyncStorage, Alert } from "react-native";
 import { Text } from "react-native-elements";
 import petfinder from "../api/petfinder";
 import ListComponent from "../components/ListComponent";
@@ -32,8 +32,19 @@ const ShelterListScreen = ({ navigation, route }) => {
         },
       })
       .then((response) => {
-        console.log(response.data.animals);
-        setResults(response.data.animals);
+        if (response.data.animals.length < 1) {
+          Alert.alert(
+            "Sorry!",
+            "Looks like this shelter doesn't currently have any animals available for adoption."
+          );
+          setTimeout(() => {
+            navigation.goBack();
+          }, 1000);
+        } else {
+          console.log(response.data.animals);
+          setResults(response.data.animals);
+        }
+
         setLoading(false);
       })
       .catch((err) => {

@@ -34,17 +34,23 @@ const ShelterListScreen = ({ navigation, route }) => {
       .then((response) => {
         console.log(response.data.animals);
         //animals = response.data.animals;
-        setResults(JSON.parse(response.data.animals));
+        setResults(response.data.animals);
         setLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       });
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <ListComponent results={results} refresh={searchApi()} />
+      <ListComponent
+        results={results}
+        refresh={() => {}}
+        loadMoreResults={() => {}}
+        isStatic={true}
+      />
     </View>
   );
 };

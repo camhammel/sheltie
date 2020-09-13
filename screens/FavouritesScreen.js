@@ -4,27 +4,18 @@ import { useIsFocused } from "@react-navigation/native";
 import ListComponent from "../components/ListComponent";
 import petfinder from "../api/petfinder";
 
-//TODO: test cache results of favourites
-
 const FavouritesScreen = () => {
   let favIds = [0];
   let parsedIds;
-  const [loading, setLoading] = useState("false");
   const [results, setResults] = useState([]);
 
   const isFocused = useIsFocused();
 
   useEffect(() => {
     (async () => {
-      if (loading == "false") {
-        setLoading("true");
-        setResults(await AsyncStorage.getItem("favouritesAnimals"));
-        favIds = await AsyncStorage.getItem("favourites");
-        parsedIds = JSON.parse(favIds);
-        if (results.length < 1 || results.length != parsedIds.length)
-          await searchFavs();
-        setLoading("false");
-      }
+      favIds = await AsyncStorage.getItem("favourites");
+      parsedIds = JSON.parse(favIds);
+      await searchFavs();
     })();
 
     return () => {};
@@ -57,12 +48,16 @@ const FavouritesScreen = () => {
 
     Promise.all(promises).then(() => {
       setResults(animals);
-      AsyncStorage.setItem("favouritesAnimals", animals);
     });
   };
   return (
     <View style={{ flex: 1 }}>
-      <ListComponent results={results} refresh={searchFavs()} />
+      <ListComponent
+        results={results}
+        refresh={() => {}}
+        loadMoreResults={() => {}}
+        isStatic={true}
+      />
     </View>
   );
 };

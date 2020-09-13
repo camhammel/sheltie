@@ -33,7 +33,6 @@ const ShelterListScreen = ({ navigation, route }) => {
       })
       .then((response) => {
         console.log(response.data.animals);
-        //animals = response.data.animals;
         setResults(response.data.animals);
         setLoading(false);
       })

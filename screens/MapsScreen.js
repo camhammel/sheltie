@@ -42,12 +42,6 @@ const MapsScreen = ({ route }) => {
     }
   }, []);
 
-  useEffect(() => {
-    // if (markers.length > 1 && !(loadingMarkers || loadingSearch)) {
-    //   find alternative for this: mapRef?.animateToRegion(markers[page]?.coordinate, 500);
-    // }
-  }, [page]);
-
   const searchShelters = async () => {
     petfinder
       .get(`organizations?location=${lat},${long}&limit=5&sort=distance`, {
@@ -58,7 +52,7 @@ const MapsScreen = ({ route }) => {
         },
       })
       .then((response) => {
-        console.log(response.data.organizations[0]);
+        //console.log(response.data.organizations[0]);
         if (response.data.organizations) {
           setResults(response.data.organizations);
         }
@@ -78,16 +72,11 @@ const MapsScreen = ({ route }) => {
 
   useEffect(() => {
     console.log("Total markers:" + markers.length);
-    console.log("First marker key: " + markers[0]?.key);
-    console.log(
-      "First marker coords: " +
-        markers[0]?.coordinate?.latitude +
-        ", " +
-        markers[0]?.coordinate?.longitude
-    );
+    //if (markers.length != results.length && !loadingMarkers)
+    //addMarkers();
   }, [markers]);
 
-  const addMarkers = async () => {
+  const addMarkers = () => {
     if (loadingMarkers == false) {
       setLoadingMarkers(true);
       results.map(async (org, index) => {
@@ -121,8 +110,12 @@ const MapsScreen = ({ route }) => {
           },
         ]);
       });
+      setLoadingMarkers(false);
+
+      console.log(
+        "markers: " + markers.length + ", results: " + results.length
+      );
     }
-    setLoadingMarkers(false);
   };
 
   const renderItem = ({ item }) => {

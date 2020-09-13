@@ -8,8 +8,10 @@ import {
 } from "react-native";
 import { Button, Text, Divider } from "react-native-elements";
 import Icon from "react-native-vector-icons/Entypo";
+import FAIcon from "react-native-vector-icons/FontAwesome";
 import { COLORS } from "../assets/colors";
 import petfinder from "../api/petfinder";
+import { navigationRef } from "../navigationRef";
 
 const ShelterInfo = ({ organization_id, pet_name }) => {
   const [shelter, setShelter] = useState(null);
@@ -124,6 +126,23 @@ const ShelterInfo = ({ organization_id, pet_name }) => {
           }}
         />
       ) : null}
+      <Button
+        title="View Pets"
+        buttonStyle={styles.viewButtonStyle}
+        titleStyle={styles.viewTitleStyle}
+        type="outline"
+        icon={
+          <FAIcon
+            name="paw"
+            size={18}
+            color={COLORS.primary}
+            style={{ alignSelf: "center" }}
+          />
+        }
+        onPress={() => {
+          navigationRef?.current?.navigate("ShelterList", { item: shelter });
+        }}
+      />
     </View>
   );
 };
@@ -153,6 +172,19 @@ const styles = StyleSheet.create({
   titleStyle: {
     paddingLeft: 5,
     paddingRight: 10,
+  },
+  viewButtonStyle: {
+    alignSelf: "center",
+    marginTop: 10,
+    marginHorizontal: 20,
+    borderRadius: 25,
+    paddingHorizontal: 20,
+    borderColor: COLORS.primary,
+  },
+  viewTitleStyle: {
+    paddingLeft: 5,
+    paddingRight: 10,
+    color: COLORS.primary,
   },
 });
 

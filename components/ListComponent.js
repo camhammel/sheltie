@@ -6,14 +6,14 @@ import { Asset } from "expo-asset";
 import { COLORS } from "../assets/colors";
 
 const defaultURI = Asset.fromModule(require("../assets/default.png")).uri;
-let isRefreshing = false;
 
 const ListComponent = React.forwardRef(
-  ({ results, loadMoreResults, refresh }, ref) => {
+  ({ results, loadMoreResults, refresh, isStatic }, ref) => {
     const [
       onEndReachedCalledDuringMomentum,
       setOnEndReachedCalledDuringMomentum,
     ] = useState(true);
+    const [isRefreshing, setRefreshing] = useState(false);
 
     const navigation = useNavigation();
     function capitalizeFirstLetter(string) {
@@ -62,7 +62,7 @@ const ListComponent = React.forwardRef(
     };
 
     const _renderSearchResultsFooter = () => {
-      return onEndReachedCalledDuringMomentum ? (
+      return onEndReachedCalledDuringMomentum && !isStatic ? (
         <View
           style={{ marginBottom: 30, marginTop: -50, alignItems: "center" }}
         >
@@ -80,9 +80,9 @@ const ListComponent = React.forwardRef(
             keyExtractor={(item, index) => index.toString()}
             keyboardShouldPersistTaps="always"
             showsVerticalScrollIndicator={false}
-            onEndReachedThreshold={0.01}
+            onEndReachedThreshold={isStatic ? 0 : 0.01}
             onEndReached={() => {
-              if (results.length >= 50) {
+              if (results.length >= 50 && !isStatic) {
                 _loadMoreData();
               }
             }}
@@ -91,14 +91,14 @@ const ListComponent = React.forwardRef(
             }}
             ListFooterComponent={_renderSearchResultsFooter()}
             onRefresh={async () => {
-              if (!isRefreshing) {
-                isRefreshing = true;
+              if (!isRefreshing && !isStatic) {
+                setRefreshing(true);
                 await refresh();
 
-                isRefreshing = false;
+                setRefreshing(false);
               }
             }}
-            refreshing={isRefreshing}
+            refreshing={isStatic ? false : isRefreshing}
             ref={ref}
           />
         </View>
@@ -117,14 +117,14 @@ const ListComponent = React.forwardRef(
             }}
             ListFooterComponent={_renderSearchResultsFooter()}
             onRefresh={async () => {
-              if (!isRefreshing) {
-                isRefreshing = true;
+              if (!isRefreshing && !isStatic) {
+                setRefreshing(true);
                 await refresh();
 
-                isRefreshing = false;
+                setRefreshing(false);
               }
             }}
-            refreshing={isRefreshing}
+            refreshing={isStatic ? false : isRefreshing}
             ref={ref}
           />
         </View>

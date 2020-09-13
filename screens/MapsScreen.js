@@ -33,7 +33,7 @@ const MapsScreen = ({ route }) => {
     } else {
       console.log("Location changed");
     }
-  }, [location]);
+  }, []);
 
   const searchShelters = async () => {
     petfinder

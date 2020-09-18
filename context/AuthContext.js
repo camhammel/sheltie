@@ -132,7 +132,6 @@ const getfavs = (dispatch) => async (email) => {
     });
     await AsyncStorage.setItem("favourites", JSON.stringify(response.data));
 
-    //dispatch({ type: "getfavs", payload: response.data });
     RootNavigation.navigate("Favourites");
   } catch (err) {}
 };

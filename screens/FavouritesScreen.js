@@ -52,7 +52,12 @@ const FavouritesScreen = () => {
   };
   return (
     <View style={{ flex: 1 }}>
-      <ListComponent results={results} refresh={searchFavs()} />
+      <ListComponent
+        results={results}
+        refresh={() => {}}
+        loadMoreResults={() => {}}
+        isStatic={true}
+      />
     </View>
   );
 };

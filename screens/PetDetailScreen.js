@@ -339,7 +339,10 @@ const PetDetailScreen = ({ route, navigation }) => {
               value={results.attributes.house_trained}
             />
             <Attribute type="shots" value={results.attributes.shots_current} />
-            <ShelterInfo results={results} />
+            <ShelterInfo
+              organization_id={results.organization_id}
+              pet_name={results.name}
+            />
             <View style={{ marginBottom: 40 }} />
           </View>
         </ScrollView>

@@ -11,6 +11,8 @@ import LoadingScreen from "./screens/LoadingScreen";
 import AccountScreen from "./screens/AccountScreen";
 import ForgotPasswordScreen from "./screens/ForgotPasswordScreen";
 import FavouritesScreen from "./screens/FavouritesScreen";
+import MapsScreen from "./screens/MapsScreen";
+import ShelterListScreen from "./screens/ShelterListScreen";
 import { Provider as AuthProvider } from "./context/AuthContext";
 import {
   Provider as TokenProvider,
@@ -168,6 +170,26 @@ function App() {
             component={FavouritesScreen}
             options={{
               title: "Favourites",
+              headerShown: true,
+              headerTintColor: "white",
+              headerStyle: { backgroundColor: COLORS.primarylight },
+            }}
+          />
+          <Stack.Screen
+            name="Maps"
+            component={MapsScreen}
+            options={{
+              title: "Shelters Near Me",
+              headerShown: true,
+              headerTintColor: "white",
+              headerStyle: { backgroundColor: COLORS.primarylight },
+            }}
+          />
+          <Stack.Screen
+            name="ShelterList"
+            component={ShelterListScreen}
+            options={{
+              title: "",
               headerShown: true,
               headerTintColor: "white",
               headerStyle: { backgroundColor: COLORS.primarylight },

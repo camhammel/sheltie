@@ -8,10 +8,12 @@ import {
 } from "react-native";
 import { Button, Text, Divider } from "react-native-elements";
 import Icon from "react-native-vector-icons/Entypo";
+import FAIcon from "react-native-vector-icons/FontAwesome";
 import { COLORS } from "../assets/colors";
 import petfinder from "../api/petfinder";
+import { navigationRef } from "../navigationRef";
 
-const ShelterInfo = ({ results }) => {
+const ShelterInfo = ({ organization_id, pet_name }) => {
   const [shelter, setShelter] = useState(null);
   let doneLoading = false;
   let isSubscribed = true;
@@ -37,7 +39,7 @@ const ShelterInfo = ({ results }) => {
 
   const getShelterDetails = async () => {
     petfinder
-      .get(`organizations/${results.organization_id}`, {
+      .get(`organizations/${organization_id}`, {
         headers: {
           Authorization: `Bearer ${(
             await AsyncStorage.getItem("token")
@@ -81,9 +83,9 @@ const ShelterInfo = ({ results }) => {
       >
         {shelter ? shelterAddress() : null}
       </Text>
-      {results.contact.email && results.contact.email.trim() ? (
+      {shelter?.email && shelter?.email?.trim() ? (
         <Button
-          title={results.contact.email}
+          title={shelter?.email}
           buttonStyle={styles.buttonStyle}
           titleStyle={styles.titleStyle}
           type="solid"
@@ -98,16 +100,16 @@ const ShelterInfo = ({ results }) => {
           onPress={() => {
             Linking.openURL(
               "mailto: " +
-                results.contact.email +
+                shelter?.email +
                 "?subject=Inquiring About " +
-                results.name
+                pet_name
             );
           }}
         />
       ) : null}
-      {results.contact.phone && results.contact.phone.trim() ? (
+      {shelter?.phone && shelter?.phone?.trim() ? (
         <Button
-          title={results.contact.phone}
+          title={shelter?.phone}
           buttonStyle={styles.buttonStyle}
           titleStyle={styles.titleStyle}
           type="solid"
@@ -120,10 +122,27 @@ const ShelterInfo = ({ results }) => {
             />
           }
           onPress={() => {
-            Linking.openURL("tel:" + results.contact.phone);
+            Linking.openURL("tel:" + shelter?.phone);
           }}
         />
       ) : null}
+      <Button
+        title="View Pets"
+        buttonStyle={styles.viewButtonStyle}
+        titleStyle={styles.viewTitleStyle}
+        type="outline"
+        icon={
+          <FAIcon
+            name="paw"
+            size={18}
+            color={COLORS.primary}
+            style={{ alignSelf: "center" }}
+          />
+        }
+        onPress={() => {
+          navigationRef?.current?.navigate("ShelterList", { item: shelter });
+        }}
+      />
     </View>
   );
 };
@@ -139,6 +158,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 12,
     borderTopLeftRadius: 12,
     marginTop: 20,
+    width: Dimensions.get("screen").width,
+    maxWidth: Dimensions.get("screen").width,
   },
   buttonStyle: {
     alignSelf: "center",
@@ -151,6 +172,19 @@ const styles = StyleSheet.create({
   titleStyle: {
     paddingLeft: 5,
     paddingRight: 10,
+  },
+  viewButtonStyle: {
+    alignSelf: "center",
+    marginTop: 10,
+    marginHorizontal: 20,
+    borderRadius: 25,
+    paddingHorizontal: 20,
+    borderColor: COLORS.primary,
+  },
+  viewTitleStyle: {
+    paddingLeft: 5,
+    paddingRight: 10,
+    color: COLORS.primary,
   },
 });
 

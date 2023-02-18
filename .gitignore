@@ -8,6 +8,5 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-petfinder.js
 # macOS
 .DS_Store

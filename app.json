@@ -2,7 +2,7 @@
   "expo": {
     "name": "Sheltie",
     "slug": "sheltie-app",
-    "version": "1.1.2",
+    "version": "1.2.1",
     "orientation": "portrait",
     "icon": "./assets/appIcon.png",
     "primaryColor": "#3F77B9",
@@ -13,10 +13,12 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "bundleIdentifier": "app.sheltie",
-      "buildNumber": "1.1.2",
+      "buildNumber": "1.2.1",
       "supportsTablet": false,
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This app uses Location to determine animal shelters closest to you for results.",
@@ -31,8 +33,11 @@
     },
     "android": {
       "package": "app.sheltie",
-      "versionCode": 12,
-      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"],
+      "versionCode": 13,
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ],
       "intentFilters": [
         {
           "action": "VIEW",
@@ -51,7 +56,10 @@
               "host": "*.sheltie.app"
             }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ]
     },
@@ -59,6 +67,11 @@
       "favicon": "./assets/appIcon.png"
     },
     "scheme": "sheltie",
-    "description": "Search for pets available for adoption from local shelters. This app uses the Petfinder API and does not claim ownership to the data provided by Petfinder. "
+    "description": "Search for pets available for adoption from local shelters. This app uses the Petfinder API and does not claim ownership to the data provided by Petfinder. ",
+    "extra": {
+      "eas": {
+        "projectId": "b02e7b71-f109-4b47-8196-fd8a10d2b529"
+      }
+    }
   }
 }

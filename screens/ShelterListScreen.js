@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View,  Alert } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Text } from "react-native-elements";
 import petfinder from "../api/petfinder";
 import ListComponent from "../components/ListComponent";
+import { storage } from "../utils/storage";
 
 const ShelterListScreen = ({ navigation, route }) => {
   let { item } = route.params;
@@ -27,9 +26,7 @@ const ShelterListScreen = ({ navigation, route }) => {
     petfinder
       .get(query, {
         headers: {
-          Authorization: `Bearer ${(
-            await AsyncStorage.getItem("token")
-          ).toString()}`,
+          Authorization: `Bearer ${storage.getString('token')}`,
         },
       })
       .then((response) => {

@@ -9,7 +9,6 @@ import {
   ImageBackground,
   Dimensions,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Text } from "react-native-elements";
 import LinearGradient from 'react-native-linear-gradient';
 import Spacer from "../components/Spacer";
@@ -19,6 +18,7 @@ import { COLORS } from "../assets/colors";
 import Icon from "react-native-vector-icons/Entypo";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as Linking from "expo-linking";
+import { storage } from "../utils/storage";
 const BgImage = require("../assets/accountPattern.png");
 
 const AccountScreen = ({ navigation }) => {
@@ -32,10 +32,8 @@ const AccountScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    (async () => {
-      setGuest(await AsyncStorage.getItem("guest"));
-      setEmail(await AsyncStorage.getItem("email"));
-    })();
+    setGuest(storage.getString("guest"));
+    setEmail(storage.getString("email"));
   }, []);
 
   if (guest == "true") {

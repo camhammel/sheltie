@@ -1,5 +1,4 @@
 import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getId } from "../api/petfinder";
 
 const requestAccess = async () => {
@@ -24,9 +23,9 @@ async function retrieveToken() {
     .request(tokenConfig)
     .then(async (response) => {
       if (response?.data?.access_token) {
-        await AsyncStorage.setItem(
+        storage.set(
           "token",
-          response.data.access_token.toString()
+          response.data.access_token
         );
       } else {
         throw new Error('Could not retrieve access token from petfinder API');

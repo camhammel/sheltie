@@ -9,7 +9,6 @@ import {
   Platform,
   Alert,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Text } from "react-native-elements";
 import petfinder from "../api/petfinder";
 import Spacer from "../components/Spacer";
@@ -27,8 +26,8 @@ import Attribute from "../components/Attribute";
 import { Context } from "../context/AuthContext";
 import ShelterInfo from "../components/ShelterInfo";
 import { navigationRef } from "../navigationRef";
+import { storage } from "../utils/storage";
 
-//const defaultURI = Asset.fromModule(require("../assets/logo.png")).uri;
 const screenWidth = Math.round(Dimensions.get("window").width);
 
 function capitalizeFirstLetter(string) {
@@ -43,7 +42,6 @@ const PetDetailScreen = ({ route, navigation }) => {
   const { id } = route.params;
   const [favourited, setFavourited] = useState(false);
   const [guest, setGuest] = useState("true");
-  //const [isEmpty, setIsEmpty] = useState("false");
   let isSubscribed = true;
 
   useEffect(() => {
@@ -55,12 +53,12 @@ const PetDetailScreen = ({ route, navigation }) => {
           headerBackTitle: "Back",
         });
       }
-      if ((await AsyncStorage.getItem("guest")) == "true" && isSubscribed) {
+      if ((storage.getBoolean("guest")) && isSubscribed) {
         setGuest("true");
       } else {
         if (isSubscribed) {
           setGuest("false");
-          setEmail(await AsyncStorage.getItem("email"));
+          setEmail(storage.getString("email"));
         }
       }
     })();
@@ -69,7 +67,6 @@ const PetDetailScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     if (results?.name) {
-      //setIsEmpty("false");
       navigation.setOptions({
         headerTitle: capitalizeFirstLetter(results?.name?.toLowerCase()),
         headerTitleStyle: {
@@ -80,14 +77,6 @@ const PetDetailScreen = ({ route, navigation }) => {
           paddingHorizontal: 15,
         },
       });
-    } else {
-      setTimeout(() => {
-        () => {
-          if (!results?.name) {
-            //setIsEmpty("true");
-          }
-        };
-      }, 3000);
     }
   }, [results]);
 
@@ -101,9 +90,7 @@ const PetDetailScreen = ({ route, navigation }) => {
     petfinder
       .get(`animals/${id}`, {
         headers: {
-          Authorization: `Bearer ${(
-            await AsyncStorage.getItem("token")
-          ).toString()}`,
+          Authorization: `Bearer ${storage.getString('token')}`,
         },
       })
       .then((response) => {

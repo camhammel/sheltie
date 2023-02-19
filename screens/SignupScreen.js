@@ -7,12 +7,12 @@ import {
   ImageBackground,
   Dimensions,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Context as AuthContext } from "../context/AuthContext";
 import NavLink from "../components/NavLink";
 import SignUpComponent from "../components/SignUpComponent";
 import Logo from "../assets/transparent_icon2.png";
+import { storage } from "../utils/storage";
 const BgImage = require("../assets/authBg-25.png");
 
 const SignupScreen = () => {
@@ -63,10 +63,8 @@ const SignupScreen = () => {
               text="Or, continue as Guest."
               routeName="List"
               clearErrorMessage={() => {
-                (async () => {
-                  await AsyncStorage.setItem("guest", "true");
-                })();
-                //navigation.navigate("List");
+                storage.set('guest', true);
+                // navigation.navigate("List");
               }}
               custStyle={{ marginBottom: 40, marginTop: 0, color: "white" }}
             />

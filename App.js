@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 import * as SplashScreen from 'expo-splash-screen';
 import { Asset } from "expo-asset";
 import * as Linking from "expo-linking";
@@ -20,6 +20,13 @@ import { navigationRef } from "./navigationRef";
 import { decode, encode } from "base-64";
 import { COLORS } from "./assets/colors";
 import { StatusBar } from "expo-status-bar";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
 
 SplashScreen.preventAutoHideAsync();
 
@@ -32,10 +39,6 @@ if (!global.atob) {
 }
 
 const Stack = createStackNavigator();
-
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
 
 function App() {
 
@@ -89,8 +92,6 @@ function App() {
       } else {
         alert("Invalid Pet ID: " + queryParams.id);
       }
-    } else {
-      //alert("Invalid path: " + path);
     }
   };
 
@@ -192,8 +193,10 @@ function App() {
 export default function AppWrapper() {
   return (
     <AuthProvider>
-      <App />
-      <StatusBar/>
+      <QueryClientProvider client={queryClient}>
+        <App />
+        <StatusBar/>
+      </QueryClientProvider>
     </AuthProvider>
   );
 }

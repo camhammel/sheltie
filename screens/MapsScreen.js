@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import MapView, { Marker } from "react-native-maps";
 import { View, Dimensions, StyleSheet } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Card, Text, Button } from "react-native-elements";
 import petfinder from "../api/petfinder";
 import * as Location from "expo-location";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import { COLORS } from "../assets/colors";
 import * as RootNavigation from "../navigationRef";
+import { storage } from "../utils/storage";
 
 //TODO: use 'Zoom to Specified Markers' to focus the map after markers are loaded
 
@@ -47,9 +47,7 @@ const MapsScreen = ({ route }) => {
     petfinder
       .get(`organizations?location=${lat},${long}&limit=5&sort=distance`, {
         headers: {
-          Authorization: `Bearer ${(
-            await AsyncStorage.getItem("token")
-          ).toString()}`,
+          Authorization: `Bearer ${storage.getString('token')}`,
         },
       })
       .then((response) => {

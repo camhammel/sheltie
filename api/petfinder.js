@@ -1,7 +1,5 @@
 import axios from "axios";
-
-let testkey = "OC8uf6jFncZnJPKiEh8JT4o4UMVG6L6ZiLljcIcix2teTjP4im";
-let testsecret = "bFj2tH6ky94XyZTzoZFmt7RFX77lPNZ1WsZh9nd5";
+import { storage } from "../utils/storage";
 
 let prodkey = "***REMOVED***";
 let prodsecret = "***REMOVED***";
@@ -17,3 +15,40 @@ export function getId() {
     return { key: prodkey, secret: prodsecret };
   }
 }
+
+export async function searchApi({ location, type, age, distance, breed, page}) {
+  let search = "";
+  
+
+  const this_search = {
+    location,
+    type,
+    age,
+    distance,
+    breed,
+  };
+
+  search = `animals?type=${type}&limit=50&location=${location.latitude},${location.longitude}&sort=distance&age=${age}&distance=${distance}&breed=${breed}&page=${page}`;
+
+  return petfinder
+    .get(search, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response) => {
+      
+      storage.set(
+        "lastpets",
+        JSON.stringify(response.data.animals)
+      );
+      storage.set("lastsearch", JSON.stringify(this_search));
+      return (response.data.animals);
+    })
+    .catch(async function (error) {
+      if (error.response.data.status == 401) {
+        requestAccess();
+      }
+      return error;
+    });
+};

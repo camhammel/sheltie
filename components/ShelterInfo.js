@@ -5,13 +5,13 @@ import {
   Linking,
   Dimensions,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Text, Divider } from "react-native-elements";
 import Icon from "react-native-vector-icons/Entypo";
 import FAIcon from "react-native-vector-icons/FontAwesome";
 import { COLORS } from "../assets/colors";
 import petfinder from "../api/petfinder";
 import { navigationRef } from "../navigationRef";
+import { storage } from "../utils/storage";
 
 const ShelterInfo = ({ organization_id, pet_name }) => {
   const [shelter, setShelter] = useState(null);
@@ -41,7 +41,7 @@ const ShelterInfo = ({ organization_id, pet_name }) => {
       .get(`organizations/${organization_id}`, {
         headers: {
           Authorization: `Bearer ${(
-            await AsyncStorage.getItem("token")
+            storage.getString("token")
           ).toString()}`,
         },
       })

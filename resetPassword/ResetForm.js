@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Text, Input, Button } from "react-native-elements";
 import { View, StyleSheet } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { COLORS } from "../assets/colors";
@@ -23,7 +22,7 @@ const ResetForm = ({ switchStage, setEmail }) => {
         setEmail(values.email);
         (async () => {
           let result = await emailExists(values.email.toString().toLowerCase());
-          if (result == true || AsyncStorage.getItem("checkEmail") == "true") {
+          if (result == true) {
             setErrorMessage("");
             if (sendCodeToEmail(values.email.toString().toLowerCase()))
               switchStage();

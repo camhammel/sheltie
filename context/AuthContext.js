@@ -1,8 +1,8 @@
 import createDataContext from "./createDataContext";
 import sheltieApi from "../api/sheltie";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as RootNavigation from "../navigationRef";
 import * as SecureStore from "expo-secure-store";
+import { storage } from "../utils/storage";
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -17,10 +17,6 @@ const authReducer = (state, action) => {
     default:
       return state;
   }
-};
-
-const clearAsyncStorage = async () => {
-  await AsyncStorage.clear();
 };
 
 const clearErrorMessage = (dispatch) => () => {
@@ -63,18 +59,18 @@ const emailExists = (dispatch) => async (email) => {
 
     return true;
   } catch (err) {
-    AsyncStorage.setItem("fpcode", null);
+    storage.set("fpcode", null);
 
     return false;
   }
 };
 
-const tryLocalSignin = (dispatch) => async () => {
-  const token = await AsyncStorage.getItem("authtoken");
+const tryLocalSignin = (dispatch) => () => {
+  const token = storage.getString("authtoken");
 
   if (token) {
     dispatch({ type: "signin", payload: token });
-    AsyncStorage.setItem("guest", "false");
+    storage.set("guest", false);
     RootNavigation.reset("List");
   } else {
     RootNavigation.reset("Signin");
@@ -85,9 +81,9 @@ const signup = (dispatch) => async ({ email, password }) => {
   //make API request to sign-up with that email and password
   try {
     const response = await sheltieApi.post("/signup", { email, password });
-    await AsyncStorage.setItem("authtoken", response.data.token);
-    await AsyncStorage.setItem("email", email);
-    AsyncStorage.setItem("guest", "false");
+    storage.set("authtoken", response.data.token);
+    storage.set("email", email);
+    storage.set("guest", false);
     dispatch({
       type: "signin",
       payload: response.data.token,
@@ -106,9 +102,9 @@ const signup = (dispatch) => async ({ email, password }) => {
 const signin = (dispatch) => async ({ email, password }) => {
   try {
     const response = await sheltieApi.post("/signin", { email, password });
-    await AsyncStorage.setItem("authtoken", response.data.token);
-    await AsyncStorage.setItem("email", email);
-    AsyncStorage.setItem("guest", "false");
+    storage.set("authtoken", response.data.token);
+    storage.set("email", email);
+    storage.set("guest", false);
     dispatch({ type: "signin", payload: response.data.token });
     RootNavigation.reset("List");
   } catch (err) {
@@ -119,8 +115,8 @@ const signin = (dispatch) => async ({ email, password }) => {
   }
 };
 
-const signout = (dispatch) => async () => {
-  await clearAsyncStorage();
+const signout = (dispatch) => () => {
+  storage.clearAll();
   dispatch({ type: "signout" });
   RootNavigation.reset("Signin");
 };
@@ -130,7 +126,7 @@ const getfavs = (dispatch) => async (email) => {
     const response = await sheltieApi.post("/getfavourites", {
       email: email,
     });
-    await AsyncStorage.setItem("favourites", JSON.stringify(response.data));
+    storage.set("favourites", JSON.stringify(response.data));
 
     RootNavigation.navigate("Favourites");
   } catch (err) {}
@@ -141,7 +137,7 @@ const checkfav = (dispatch) => async ({ email, petid }) => {
     const response = await sheltieApi.post("/getfavourites", {
       email: email,
     });
-    await AsyncStorage.setItem("favourites", JSON.stringify(response.data));
+    storage.set("favourites", JSON.stringify(response.data));
 
     if (response.data.includes(petid + "")) {
       return true;
@@ -166,7 +162,7 @@ const removefav = (dispatch) => async ({ email, petid }) => {
       email: email,
       petid: petid,
     });
-    await AsyncStorage.setItem(
+    storage.set(
       "favourites",
       JSON.stringify(response.data.favourites)
     );

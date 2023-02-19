@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { View, StyleSheet } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import ListComponent from "../components/ListComponent";
 import petfinder from "../api/petfinder";
+import { storage } from "../utils/storage";
 
 const FavouritesScreen = () => {
   let favIds = [0];
@@ -14,7 +14,7 @@ const FavouritesScreen = () => {
 
   useEffect(() => {
     (async () => {
-      favIds = await AsyncStorage.getItem("favourites");
+      favIds = storage.getString("favourites");
       parsedIds = JSON.parse(favIds);
       await searchFavs();
     })();
@@ -31,9 +31,7 @@ const FavouritesScreen = () => {
         petfinder
           .get(`animals/${parsedIds[i]}`, {
             headers: {
-              Authorization: `Bearer ${(
-                await AsyncStorage.getItem("token")
-              ).toString()}`,
+              Authorization: `Bearer ${storage.getString('token')}`,
             },
           })
           .then((response) => {

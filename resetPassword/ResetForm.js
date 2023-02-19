@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Text, Input, Button } from "react-native-elements";
-import { View, StyleSheet, AsyncStorage } from "react-native";
+import { View, StyleSheet } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { COLORS } from "../assets/colors";

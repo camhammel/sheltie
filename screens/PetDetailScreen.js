@@ -3,13 +3,13 @@ import {
   View,
   ScrollView,
   StyleSheet,
-  AsyncStorage,
   Dimensions,
   TouchableOpacity,
   Share,
   Platform,
   Alert,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Text } from "react-native-elements";
 import petfinder from "../api/petfinder";
 import Spacer from "../components/Spacer";

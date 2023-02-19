@@ -4,8 +4,8 @@ import {
   StyleSheet,
   Linking,
   Dimensions,
-  AsyncStorage,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Text, Divider } from "react-native-elements";
 import Icon from "react-native-vector-icons/Entypo";
 import FAIcon from "react-native-vector-icons/FontAwesome";
@@ -15,7 +15,6 @@ import { navigationRef } from "../navigationRef";
 
 const ShelterInfo = ({ organization_id, pet_name }) => {
   const [shelter, setShelter] = useState(null);
-  let doneLoading = false;
   let isSubscribed = true;
 
   useEffect(() => {

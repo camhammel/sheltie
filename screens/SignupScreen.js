@@ -4,21 +4,19 @@ import {
   StyleSheet,
   Image,
   useWindowDimensions,
-  AsyncStorage,
   ImageBackground,
   Dimensions,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Context as AuthContext } from "../context/AuthContext";
 import NavLink from "../components/NavLink";
-import { useNavigation } from "@react-navigation/native";
 import SignUpComponent from "../components/SignUpComponent";
 import Logo from "../assets/transparent_icon2.png";
 const BgImage = require("../assets/authBg-25.png");
 
 const SignupScreen = () => {
-  const navigation = useNavigation();
-  const { state, signup, clearErrorMessage } = useContext(AuthContext);
+  const { state,  clearErrorMessage } = useContext(AuthContext);
 
   return (
     <ImageBackground

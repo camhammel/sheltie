@@ -2,21 +2,22 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
-  AsyncStorage,
   Image,
   ScrollView,
+  Modal,
   useWindowDimensions,
   ImageBackground,
   Dimensions,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Text } from "react-native-elements";
+import LinearGradient from 'react-native-linear-gradient';
 import Spacer from "../components/Spacer";
 import { Context as AuthContext } from "../context/AuthContext";
 import Logo from "../assets/transparent_icon2.png";
 import { COLORS } from "../assets/colors";
 import Icon from "react-native-vector-icons/Entypo";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import Modal from "react-native-modal";
 import * as Linking from "expo-linking";
 const BgImage = require("../assets/accountPattern.png");
 
@@ -55,9 +56,8 @@ const AccountScreen = ({ navigation }) => {
           }}
         >
           <Modal
-            isVisible={isModalVisible}
-            hasBackdrop={true}
-            backdropOpacity={0.5}
+            visible={isModalVisible}
+            transparent
           >
             <View
               style={{
@@ -317,6 +317,7 @@ const AccountScreen = ({ navigation }) => {
                 onPress={() => {
                   navigation.navigate("Signin");
                 }}
+                ViewComponent={LinearGradient}
                 linearGradientProps={{
                   colors: [COLORS.primarylight, COLORS.primary],
                   start: { x: 0.25, y: 0.1 },
@@ -393,9 +394,8 @@ const AccountScreen = ({ navigation }) => {
       >
         <ScrollView style={styles.viewStyle}>
           <Modal
-            isVisible={isModalVisible}
-            hasBackdrop={true}
-            backdropOpacity={0.5}
+            visible={isModalVisible}
+            transparent
           >
             <View
               style={{
@@ -642,6 +642,7 @@ const AccountScreen = ({ navigation }) => {
                 title={"My Favourites"}
                 titleStyle={{ paddingLeft: 10 }}
                 onPress={() => getfavs(email)}
+                ViewComponent={LinearGradient}
                 linearGradientProps={{
                   colors: [COLORS.primarylight, COLORS.primary],
                   start: { x: 0.25, y: 0.1 },

@@ -12,7 +12,7 @@ export default axios.create({
 
 export function getId() {
   if (__DEV__) {
-    return { key: testkey, secret: testsecret };
+    return { key: prodkey, secret: prodsecret };
   } else {
     return { key: prodkey, secret: prodsecret };
   }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, FlatList, ActivityIndicator } from "react-native";
-import { ListItem } from "react-native-elements";
+import { Avatar, ListItem } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { Asset } from "expo-asset";
 import { COLORS } from "../assets/colors";
@@ -21,30 +21,25 @@ const ListComponent = React.forwardRef(
     }
 
     const renderItem = ({ item }) => (
-      <ListItem
-        title={capitalizeFirstLetter(item.name.toLowerCase())}
-        titleStyle={styles.titleStyle}
-        id={item.id}
-        subtitle={
-          item.breeds.mixed ? item.breeds.primary + " Mix" : item.breeds.primary
-        }
-        subtitleStyle={{ color: "grey" }}
-        leftAvatar={{
-          source: {
+      <ListItem id={item.id} bottomDivider onPress={() => {
+        navigation.push("PetDetail", {
+          id: item.id,
+          name: item.name,
+          breed: item.breeds.primary,
+        });
+      }}>
+        <Avatar
+          source={{
             uri: item?.photos?.[0]?.small ?? defaultURI,
-          },
-          size: "large",
-        }}
-        bottomDivider
-        chevron
-        onPress={() => {
-          navigation.push("PetDetail", {
-            id: item.id,
-            name: item.name,
-            breed: item.breeds.primary,
-          });
-        }}
-      />
+          }} size="large"/>
+        <ListItem.Content>
+          <ListItem.Title style={styles.titleStyle}>{capitalizeFirstLetter(item.name.toLowerCase())}</ListItem.Title>
+          <ListItem.Subtitle style={{ color: "grey" }}>{
+            item.breeds.mixed ? item.breeds.primary + " Mix" : item.breeds.primary
+          }</ListItem.Subtitle>
+        </ListItem.Content>
+        <ListItem.Chevron />
+      </ListItem>
     );
 
     const _loadMoreData = () => {

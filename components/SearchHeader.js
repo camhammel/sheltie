@@ -29,9 +29,7 @@ const SearchHeader = ({ onPress, location }) => {
             title={"Search Filters"}
             titleStyle={{ color: COLORS.white, paddingLeft: 10 }}
             buttonStyle={styles.signoutButtonStyle}
-            onPress={() => {
-              onPress();
-            }}
+            onPress={onPress}
             icon={
               <FAIcon
                 name="filter"
@@ -116,9 +114,7 @@ const SearchHeader = ({ onPress, location }) => {
             title={"Search Filters"}
             titleStyle={{ color: COLORS.white, paddingLeft: 10 }}
             buttonStyle={styles.signoutButtonStyle}
-            onPress={() => {
-              onPress();
-            }}
+            onPress={onPress}
             icon={
               <FAIcon
                 name="filter"

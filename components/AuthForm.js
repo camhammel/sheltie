@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Button, Image, Text, Input } from "react-native-elements";
+import LinearGradient from 'react-native-linear-gradient';
 import { View, StyleSheet } from "react-native";
 import Logo from "../assets/icon.png";
 import Spacer from "./Spacer";
-import { COLORS } from "../assets/colors";
 
 const AuthForm = ({ headerText, buttonLabel, errorMessage, onSubmit }) => {
   const [email, setEmail] = useState("");
@@ -48,6 +48,7 @@ const AuthForm = ({ headerText, buttonLabel, errorMessage, onSubmit }) => {
         type="solid"
         title={buttonLabel}
         onPress={() => onSubmit({ email, password })}
+        ViewComponent={LinearGradient}
         linearGradientProps={{
           colors: ["#FE96BE", "#F171A8"],
           start: { x: 0.25, y: 0.1 },

@@ -1,6 +1,6 @@
 import createDataContext from "./createDataContext";
 import sheltieApi from "../api/sheltie";
-import { AsyncStorage } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as RootNavigation from "../navigationRef";
 import * as SecureStore from "expo-secure-store";
 

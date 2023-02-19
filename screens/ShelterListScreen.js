@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { View, AsyncStorage, Alert } from "react-native";
+import { View,  Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Text } from "react-native-elements";
 import petfinder from "../api/petfinder";
 import ListComponent from "../components/ListComponent";

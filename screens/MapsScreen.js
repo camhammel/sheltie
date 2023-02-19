@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import MapView, { Marker } from "react-native-maps";
-import { View, Dimensions, AsyncStorage, StyleSheet } from "react-native";
+import { View, Dimensions, StyleSheet } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Card, Text, Button } from "react-native-elements";
 import petfinder from "../api/petfinder";
 import * as Location from "expo-location";

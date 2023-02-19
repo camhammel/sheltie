@@ -22,7 +22,7 @@ const ListComponent = React.forwardRef(
 
     const renderItem = ({ item }) => (
       <ListItem id={item.id} bottomDivider onPress={() => {
-        navigation.push("PetDetail", {
+        navigation.navigate("PetDetail", {
           id: item.id,
           name: item.name,
           breed: item.breeds.primary,

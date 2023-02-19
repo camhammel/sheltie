@@ -13,10 +13,12 @@ import NavLink from "../components/NavLink";
 import SignUpComponent from "../components/SignUpComponent";
 import Logo from "../assets/transparent_icon2.png";
 import { storage } from "../utils/storage";
+import { useNavigation } from "@react-navigation/native";
 const BgImage = require("../assets/authBg-25.png");
 
 const SignupScreen = () => {
   const { state,  clearErrorMessage } = useContext(AuthContext);
+  const navigation = useNavigation();
 
   return (
     <ImageBackground
@@ -64,7 +66,7 @@ const SignupScreen = () => {
               routeName="List"
               clearErrorMessage={() => {
                 storage.set('guest', true);
-                // navigation.navigate("List");
+                navigation.navigate("List");
               }}
               custStyle={{ marginBottom: 40, marginTop: 0, color: "white" }}
             />

@@ -10,16 +10,28 @@ import Location from 'expo-location';
 import ListComponent from "../components/ListComponent";
 import SearchHeader from "../components/SearchHeader";
 import petfinder from "../api/petfinder";
+import { useQuery } from "@tanstack/react-query";
 
 const ListScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
-  const [results, setResults] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [searchFilters, setSearchFilters] = useState(null);
   const flatListRef = useRef();
+
+  const updateFilters = (filters) => {
+    setSearchFilters(filters);
+  }
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+  const { data: results, isLoading } = useQuery({ 
+    queryKey: ['getPets', {
+      filters: searchFilters
+    }], 
+    queryFn: petfinder.get() 
+  });
 
   useEffect(() => {
     if (customLocation != "") {
@@ -73,7 +85,6 @@ const ListScreen = ({ navigation }) => {
       let location2 = await Location.getLastKnownPositionAsync({});
       if (location2 !== null)
         setLocation(location2);
-
       
     })();
   }, []);
@@ -96,9 +107,9 @@ const ListScreen = ({ navigation }) => {
         />
       </View>
       <View style={{ flex: 1 }}>
-        {results ? (
-          <Text style={styles.resultStyle}>{results.length} results</Text>
-        ) : null}
+        {isLoading 
+        ? <Text style={styles.resultStyle}>Loading...</Text>
+        : <Text style={styles.resultStyle}>{results.length} results</Text>}
         <ListComponent
           results={results}
           loadMoreResults={loadMoreResults}
@@ -106,7 +117,7 @@ const ListScreen = ({ navigation }) => {
           ref={flatListRef}
         />
       </View>
-      <SearchModal isVisible={isModalVisible}/>
+      <SearchModal isVisible={isModalVisible} onSaveChanges={updateFilters} />
     </View>
   );
 };

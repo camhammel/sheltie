@@ -8,7 +8,7 @@ import MySlider from './MySlider';
 import { storage } from '../utils/storage';
 
 export default SearchModal = (props) => {
-    const { isVisible } = props;
+    const { isVisible, onSaveChanges } = props;
 
     const [dropdownVisible, setDropdownVisible] = useState('');
     const [customLocation, setCustomLocation] = useState('');
@@ -38,6 +38,16 @@ export default SearchModal = (props) => {
           })
           .catch((error));
     };
+
+    const compileFilters = () => {
+        return {
+            customLocation,
+            distance,
+            age,
+            type,
+            breed
+        }
+    }
 
     useEffect(() => {
         setBreedOptions(getBreedOptions(type !== '' ? type : 'dog'));
@@ -222,6 +232,7 @@ export default SearchModal = (props) => {
                                 setBreed([]);
                                 setAge([]);
                                 setType("Dog");
+                                onSaveChanges(compileFilters());
                             }}
                             containerStyle={{
                                 marginTop: 20,
@@ -236,6 +247,7 @@ export default SearchModal = (props) => {
                             title="Search"
                             onPress={() => {
                                 searchApi();
+                                onSaveChanges(compileFilters());
                                 toggleModal();
                             }}
                             containerStyle={{

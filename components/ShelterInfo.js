@@ -10,12 +10,13 @@ import Icon from "react-native-vector-icons/Entypo";
 import FAIcon from "react-native-vector-icons/FontAwesome";
 import { COLORS } from "../assets/colors";
 import petfinder from "../api/petfinder";
-import { navigationRef } from "../navigationRef";
 import { storage } from "../utils/storage";
+import { useNavigation } from "@react-navigation/native";
 
 const ShelterInfo = ({ organization_id, pet_name }) => {
   const [shelter, setShelter] = useState(null);
   let isSubscribed = true;
+  const navigation = useNavigation();
 
   useEffect(() => {
     (async () => {
@@ -139,7 +140,7 @@ const ShelterInfo = ({ organization_id, pet_name }) => {
           />
         }
         onPress={() => {
-          navigationRef?.current?.navigate("ShelterList", { item: shelter });
+          navigation.navigate("ShelterList", { item: shelter });
         }}
       />
     </View>

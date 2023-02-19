@@ -19,6 +19,7 @@ import { Provider as AuthProvider } from "./context/AuthContext";
 import { navigationRef } from "./navigationRef";
 import { decode, encode } from "base-64";
 import { COLORS } from "./assets/colors";
+import { StatusBar } from "expo-status-bar";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -192,6 +193,7 @@ export default function AppWrapper() {
   return (
     <AuthProvider>
       <App />
+      <StatusBar/>
     </AuthProvider>
   );
 }

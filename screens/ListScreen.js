@@ -310,6 +310,12 @@ const ListScreen = ({ navigation }) => {
         <View
           style={{
             borderRadius: 15,
+            margin: 20,
+            shadowColor: '#000',
+            shadowOpacity: 0.25,
+            shadowOffset: { height: 10, width: 10 },
+            shadowRadius: 4,
+            elevation: 5,
             height: useWindowDimensions().height * 0.85,
             backgroundColor: "white",
           }}

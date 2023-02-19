@@ -66,65 +66,35 @@ const ListComponent = React.forwardRef(
       ) : null;
     };
 
-    if (loadMoreResults != null) {
-      return (
-        <View style={styles.container}>
-          <FlatList
-            data={results}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-            keyboardShouldPersistTaps="always"
-            showsVerticalScrollIndicator={false}
-            onEndReachedThreshold={isStatic ? 0 : 0.01}
-            onEndReached={() => {
-              if (results.length >= 50 && !isStatic) {
-                _loadMoreData();
-              }
-            }}
-            onMomentumScrollBegin={() => {
-              _onMomentumScrollBegin();
-            }}
-            ListFooterComponent={_renderSearchResultsFooter()}
-            onRefresh={async () => {
-              if (!isRefreshing && !isStatic) {
-                setRefreshing(true);
-                await refresh();
-
-                setRefreshing(false);
-              }
-            }}
-            refreshing={isStatic ? false : isRefreshing}
-            ref={ref}
-          />
-        </View>
-      );
-    } else {
-      return (
-        <View style={styles.container}>
-          <FlatList
-            data={results}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-            keyboardShouldPersistTaps="always"
-            showsVerticalScrollIndicator={false}
-            onMomentumScrollBegin={() => {
-              _onMomentumScrollBegin();
-            }}
-            ListFooterComponent={_renderSearchResultsFooter()}
-            onRefresh={async () => {
-              if (!isRefreshing && !isStatic) {
-                setRefreshing(true);
-                await refresh();
-
-                setRefreshing(false);
-              }
-            }}
-            refreshing={isStatic ? false : isRefreshing}
-            ref={ref}
-          />
-        </View>
-      );
-    }
+    return (
+      <View style={styles.container}>
+        <FlatList
+          data={results}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          showsVerticalScrollIndicator={false}
+          onEndReachedThreshold={isStatic ? 0 : 0.01}
+          onEndReached={() => {
+            if (loadMoreResults != null && (results.length >= 50 && !isStatic)) {
+              _loadMoreData();
+            }
+          }}
+          onMomentumScrollBegin={() => {
+            _onMomentumScrollBegin();
+          }}
+          ListFooterComponent={_renderSearchResultsFooter()}
+          onRefresh={async () => {
+            if (!isRefreshing && !isStatic) {
+              setRefreshing(true);
+              await refresh();
+              setRefreshing(false);
+            }
+          }}
+          refreshing={isStatic ? false : isRefreshing}
+          ref={ref}
+        />
+      </View>
+    );
   }
 );
 

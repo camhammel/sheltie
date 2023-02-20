@@ -81,14 +81,18 @@ const signup = (dispatch) => async ({ email, password }) => {
   //make API request to sign-up with that email and password
   try {
     const response = await sheltieApi.post("/signup", { email, password });
-    storage.set("authtoken", response.data.token);
-    storage.set("email", email);
-    storage.set("guest", false);
-    dispatch({
-      type: "signin",
-      payload: response.data.token,
-    });
-    RootNavigation.reset("List");
+    if (response.data.token) {
+      storage.set("authtoken", response.data.token);
+      storage.set("email", email);
+      storage.set("guest", false);
+      dispatch({
+        type: "signin",
+        payload: response.data.token,
+      });
+      RootNavigation.reset("List");
+    } else {
+      console.error('could not complete sign up.');
+    }
   } catch (err) {
     if (err.message == "Request failed with status code 422") {
       dispatch({
@@ -102,11 +106,15 @@ const signup = (dispatch) => async ({ email, password }) => {
 const signin = (dispatch) => async ({ email, password }) => {
   try {
     const response = await sheltieApi.post("/signin", { email, password });
-    storage.set("authtoken", response.data.token);
-    storage.set("email", email);
-    storage.set("guest", false);
-    dispatch({ type: "signin", payload: response.data.token });
-    RootNavigation.reset("List");
+    if (response.data.token) {
+      storage.set("authtoken", response.data.token);
+      storage.set("email", email);
+      storage.set("guest", false);
+      dispatch({ type: "signin", payload: response.data.token });
+      RootNavigation.reset("List");
+    } else {
+      console.error('could not complete sign in.');
+    }
   } catch (err) {
     dispatch({
       type: "add_error",
@@ -126,9 +134,10 @@ const getfavs = (dispatch) => async (email) => {
     const response = await sheltieApi.post("/getfavourites", {
       email: email,
     });
-    storage.set("favourites", JSON.stringify(response.data));
-
-    RootNavigation.navigate("Favourites");
+    if (response.data) {
+      storage.set("favourites", JSON.stringify(response.data));
+      RootNavigation.navigate("Favourites");
+    }
   } catch (err) {}
 };
 
@@ -137,10 +146,14 @@ const checkfav = (dispatch) => async ({ email, petid }) => {
     const response = await sheltieApi.post("/getfavourites", {
       email: email,
     });
-    storage.set("favourites", JSON.stringify(response.data));
-
-    if (response.data.includes(petid + "")) {
-      return true;
+    if (response.data) {
+      storage.set("favourites", JSON.stringify(response.data));
+  
+      if (response.data.includes(petid + "")) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
       return false;
     }
@@ -162,10 +175,13 @@ const removefav = (dispatch) => async ({ email, petid }) => {
       email: email,
       petid: petid,
     });
-    storage.set(
-      "favourites",
-      JSON.stringify(response.data.favourites)
-    );
+
+    if (response.data.favourites) {
+      storage.set(
+        "favourites",
+        JSON.stringify(response.data.favourites)
+      );
+    }
   } catch (err) {}
 };
 

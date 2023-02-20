@@ -8,7 +8,7 @@ import { COLORS } from "../assets/colors";
 const defaultURI = Asset.fromModule(require("../assets/default.png")).uri;
 
 const ListComponent = React.forwardRef(
-  ({ results, loadMoreResults, refresh, isStatic }, ref) => {
+  ({ results, hasMoreResults, loadMoreResults, refresh, isStatic }, ref) => {
     const [
       onEndReachedCalledDuringMomentum,
       setOnEndReachedCalledDuringMomentum,
@@ -21,7 +21,7 @@ const ListComponent = React.forwardRef(
     }
 
     const renderItem = ({ item }) => (
-      <ListItem id={item.id} bottomDivider onPress={() => {
+      <ListItem id={item?.id} bottomDivider onPress={() => {
         navigation.navigate("PetDetail", {
           id: item.id,
           name: item.name,
@@ -71,11 +71,11 @@ const ListComponent = React.forwardRef(
         <FlatList
           data={results}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item?.id}
           showsVerticalScrollIndicator={false}
           onEndReachedThreshold={isStatic ? 0 : 0.01}
           onEndReached={() => {
-            if (loadMoreResults != null && (results.length >= 50 && !isStatic)) {
+            if (hasMoreResults && !isStatic) {
               _loadMoreData();
             }
           }}

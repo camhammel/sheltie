@@ -38,8 +38,6 @@ const MapsScreen = ({ route }) => {
     } else if (results.length < 1 && !loadingSearch) {
       setLoadingSearch(true);
       searchShelters();
-    } else {
-      console.log("Location changed");
     }
   }, []);
 
@@ -51,7 +49,6 @@ const MapsScreen = ({ route }) => {
         },
       })
       .then((response) => {
-        //console.log(response.data.organizations[0]);
         if (response.data.organizations) {
           setResults(response.data.organizations);
         }
@@ -59,7 +56,7 @@ const MapsScreen = ({ route }) => {
       })
       .catch((error) => {
         if (error.response) {
-          console.log(error.response);
+          console.error(error.response);
         }
         setLoadingSearch(false);
       });
@@ -69,26 +66,11 @@ const MapsScreen = ({ route }) => {
     addMarkers();
   }, [results]);
 
-  useEffect(() => {
-    console.log("Total markers:" + markers.length);
-    //if (markers.length != results.length && !loadingMarkers)
-    //addMarkers();
-  }, [markers]);
-
   const addMarkers = () => {
     if (loadingMarkers == false) {
       setLoadingMarkers(true);
       results.map(async (org, index) => {
         let coords = await Location.geocodeAsync(org.address.postcode);
-        console.log(
-          index +
-            ": " +
-            org.name +
-            ": " +
-            coords[0].latitude +
-            "," +
-            coords[0].longitude
-        );
         setMarkers((markers) => [
           ...markers,
           {
@@ -110,10 +92,6 @@ const MapsScreen = ({ route }) => {
         ]);
       });
       setLoadingMarkers(false);
-
-      console.log(
-        "markers: " + markers.length + ", results: " + results.length
-      );
     }
   };
 

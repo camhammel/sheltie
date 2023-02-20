@@ -52,7 +52,6 @@ const SearchHeader = ({ onPress, location }) => {
         >
           <Button
             onPress={() => {
-              //TODO: attach params from location.lat and location.long
               RootNavigation.navigate("Maps", { location });
             }}
             buttonStyle={{

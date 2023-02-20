@@ -18,38 +18,8 @@ const ShelterListScreen = ({ navigation, route }) => {
     });
     if (results.length < 1 && !isLoading) {
       setLoading(true);
-      searchApi();
     }
   }, []);
-
-  const searchApi = async () => {
-    petfinder
-      .get(query, {
-        headers: {
-          Authorization: `Bearer ${storage.getString('token')}`,
-        },
-      })
-      .then((response) => {
-        if (response.data.animals.length < 1) {
-          Alert.alert(
-            "Sorry!",
-            "Looks like this shelter doesn't currently have any animals available for adoption."
-          );
-          setTimeout(() => {
-            navigation.goBack();
-          }, 1000);
-        } else {
-          console.log(response.data.animals);
-          setResults(response.data.animals);
-        }
-
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
-  };
 
   return (
     <View style={{ flex: 1 }}>

@@ -52,9 +52,7 @@ const ShelterInfo = ({ organization_id, pet_name }) => {
           doneLoading = true;
         }
       })
-      .catch(function (error) {
-        if (error.response) {
-        }
+      .catch((error) => {
       });
   };
 

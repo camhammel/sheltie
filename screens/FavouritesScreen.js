@@ -38,10 +38,7 @@ const FavouritesScreen = () => {
             // do something with response
             animals.push(response.data.animal);
           })
-          .catch((error) => {
-            if (error.response) {
-            }
-          })
+          .catch((error) => {})
       );
     }
 

@@ -1,8 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
-import * as SplashScreen from 'expo-splash-screen';
+import React, { useEffect, useState } from "react";
 import { View } from 'react-native';
 import { Asset } from "expo-asset";
-import * as Linking from "expo-linking";
 import * as Font from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -18,73 +16,49 @@ import MapsScreen from "./screens/MapsScreen";
 import ShelterListScreen from "./screens/ShelterListScreen";
 import { Provider as AuthProvider } from "./context/AuthContext";
 import { navigationRef, isReadyRef } from "./navigationRef";
-import { decode, encode } from "base-64";
 import { COLORS } from "./assets/colors";
 import { StatusBar } from "expo-status-bar";
 import {
   QueryClient,
   QueryClientProvider,
-  useQuery,
 } from '@tanstack/react-query'
 
 const queryClient = new QueryClient()
 
-// SplashScreen.preventAutoHideAsync();
-
-if (!global.btoa) {
-  global.btoa = encode;
-}
-
-if (!global.atob) {
-  global.atob = decode;
-}
-
 const Stack = createStackNavigator();
 
 function App() {
-  const [isAppReady, setIsAppReady] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+
+  async function prepare() {
+    try {
+      await Font.loadAsync({
+        Yellowtail: require("./assets/fonts/Yellowtail-Regular.ttf"),
+      });
+  
+      const images = [
+        require("./assets/default.png"),
+        require("./assets/authBg-25.png"),
+        require("./assets/transparent_icon2.png"),
+        require("./assets/accountPattern.png"),
+      ];
+      const cacheImages = images.map((image) => {
+        return Asset.fromModule(image).downloadAsync();
+      });
+
+      return Promise.all(cacheImages);
+    } catch (e) {
+      console.warn(e);
+    }
+  }
 
   useEffect(() => {
+    prepare();
+
     return () => {
       isReadyRef.current = false;
     }
   }, [])
-
-  useEffect(() => {
-
-    // async function prepare() {
-    //   try {
-    //     await Font.loadAsync({
-    //       Yellowtail: require("./assets/fonts/Yellowtail-Regular.ttf"),
-    //     });
-    
-    //     const images = [
-    //       require("./assets/default.png"),
-    //       require("./assets/authBg-25.png"),
-    //       require("./assets/transparent_icon2.png"),
-    //       require("./assets/accountPattern.png"),
-    //     ];
-    //     const cacheImages = images.map((image) => {
-    //       return Asset.fromModule(image).downloadAsync();
-    //     });
-    //     await Promise.all(cacheImages);
-    //   } catch (e) {
-    //     console.warn(e);
-    //   } finally {
-    //     setIsAppReady(true);
-    //   }
-    // }
-
-    // prepare();
-
-  }, []);
-
-
-  // const onLayoutRootView = useCallback(async () => {
-  //   if (isAppReady) {
-  //     await SplashScreen.hideAsync();
-  //   }
-  // }, [isAppReady])
 
   const linking = {
     prefixes: ['https://*.sheltie.app', 'https://sheltie.app'],
@@ -96,8 +70,8 @@ function App() {
   };
 
   return (
-      <NavigationContainer ref={navigationRef} linking={linking} onReady={() => { console.log('isReady!'); isReadyRef.current = true; }}>
-        <Stack.Navigator initialRouteName="Loading">
+      <NavigationContainer ref={navigationRef} linking={linking} onReady={() => { isReadyRef.current = true; setIsReady(true); }}>
+        {isReady && <Stack.Navigator initialRouteName="Loading">
           <Stack.Screen
             name="Loading"
             component={LoadingScreen}
@@ -185,7 +159,7 @@ function App() {
               headerStyle: { backgroundColor: COLORS.primarylight },
             }}
           />
-        </Stack.Navigator>
+        </Stack.Navigator>}
       </NavigationContainer>
   );
 }
@@ -195,7 +169,7 @@ export default function AppWrapper() {
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
         <App />
-        <StatusBar/>
+        <StatusBar />
       </QueryClientProvider>
     </AuthProvider>
   );

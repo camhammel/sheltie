@@ -13,7 +13,6 @@ import NavLink from "../components/NavLink";
 import SignUpComponent from "../components/SignUpComponent";
 import Logo from "../assets/transparent_icon2.png";
 import { storage } from "../utils/storage";
-import { useNavigation } from "@react-navigation/native";
 const BgImage = require("../assets/authBg-25.png");
 
 const SignupScreen = () => {

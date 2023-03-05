@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { Text } from "react-native-elements";
 import { COLORS } from "../assets/colors";
 import Slider from "@react-native-community/slider";
@@ -19,9 +19,6 @@ const MySlider = ({ distance, setDistance }) => {
         DISTANCE - {distance}mi
       </Text>
       <Slider
-        style={{
-          marginHorizontal: 20,
-        }}
         minimumValue={0}
         step={25}
         minimumTrackTintColor={COLORS.primarylight}

@@ -106,39 +106,14 @@ const PetDetailScreen = ({ route, navigation }) => {
   };
 
   const onShare = async () => {
-    if (Platform.OS === "android") {
-      try {
-        const result = await Share.share({
-          message: `I was browsing Sheltie and found ${results.name}! https://sheltie.app/pet?id=${results.id}`,
-          title: `Meet ${results.name}`,
-        });
-
-        if (result.action === Share.sharedAction) {
-          //alert("Post Shared");
-        } else if (result.action === Share.dismissedAction) {
-          // dismissed
-          //alert("Post cancelled");
-        }
-      } catch (error) {
-        alert(error.message);
-      }
-    } else if (Platform.OS === "ios") {
-      try {
-        const result = await Share.share({
-          message: `I was browsing Sheltie and found ${results.name}!`,
-          title: `Meet ${results.name}`,
-          url: `https://sheltie.app/pet?id=${results.id}`,
-        });
-
-        if (result.action === Share.sharedAction) {
-          //alert("Post Shared");
-        } else if (result.action === Share.dismissedAction) {
-          // dismissed
-          //alert("Post cancelled");
-        }
-      } catch (error) {
-        alert(error.message);
-      }
+    try {
+      await Share.share({
+        message: `I was browsing Sheltie and found ${results.name}!`,
+        title: `Meet ${results.name}`,
+        url: Platform.OS === "ios" ? `https://sheltie.app/pet?id=${results.id}` : undefined,
+      });
+    } catch (error) {
+      alert(error.message);
     }
   };
 
@@ -158,7 +133,6 @@ const PetDetailScreen = ({ route, navigation }) => {
     );
   };
 
-  //if (isEmpty == "false") {
   return (
     <View>
       {results ? (
@@ -347,7 +321,6 @@ const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
     marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-    //backgroundColor: COLORS.extralight,
     borderRadius: 10,
   },
   image: {

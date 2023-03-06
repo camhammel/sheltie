@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { View,  Alert } from "react-native";
-import petfinder from "../api/petfinder";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import React, { useEffect } from "react";
+import { View } from "react-native";
+import { getShelterAnimals } from "../api/petfinder";
 import ListComponent from "../components/ListComponent";
-import { storage } from "../utils/storage";
 
 const ShelterListScreen = ({ navigation, route }) => {
   let { item } = route.params;
-  const [results, setResults] = useState([]);
-  const [isLoading, setLoading] = useState(false);
-  let query = "animals?organization=" + item.id;
+  const shelterId = item.id;
 
   useEffect(() => {
     navigation.setOptions({
@@ -16,17 +14,21 @@ const ShelterListScreen = ({ navigation, route }) => {
       headerBackTitle: "Back",
       headerTitle: item?.name,
     });
-    if (results.length < 1 && !isLoading) {
-      setLoading(true);
-    }
   }, []);
+
+  const { data: results, isLoading, refetch, fetchNextPage } = useInfiniteQuery({ 
+    queryKey: ['getShelterPets', { shelterId }], 
+    queryFn: ({ pageParam = 1 }) => getShelterAnimals({ pageParam, id: shelterId }),
+    getNextPageParam: (lastPage) => (lastPage?.data?.pagination?.current_page + 1) || 1,
+    select: (data) => data.pages.flatMap((page) => page.data.animals)
+  });
 
   return (
     <View style={{ flex: 1 }}>
       <ListComponent
         results={results}
-        refresh={() => {}}
-        loadMoreResults={() => {}}
+        refresh={() => {refetch()}}
+        loadMoreResults={() => {fetchNextPage()}}
         isStatic={true}
       />
     </View>

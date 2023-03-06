@@ -17,7 +17,11 @@ const ListComponent = React.forwardRef(
 
     const navigation = useNavigation();
     function capitalizeFirstLetter(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
+      if (string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      } else {
+        return '';
+      }
     }
 
     const renderItem = ({ item }) => (
@@ -33,9 +37,9 @@ const ListComponent = React.forwardRef(
             uri: item?.photos?.[0]?.small ?? defaultURI,
           }} size="large"/>
         <ListItem.Content>
-          <ListItem.Title style={styles.titleStyle}>{capitalizeFirstLetter(item.name.toLowerCase())}</ListItem.Title>
+          <ListItem.Title style={styles.titleStyle}>{capitalizeFirstLetter(item.name?.toLowerCase())}</ListItem.Title>
           <ListItem.Subtitle style={{ color: "grey" }}>{
-            item.breeds.mixed ? item.breeds.primary + " Mix" : item.breeds.primary
+            (item.breeds?.mixed ? item.breeds.primary + " Mix" : item.breeds?.primary) || 'Unknown'
           }</ListItem.Subtitle>
         </ListItem.Content>
         <ListItem.Chevron />

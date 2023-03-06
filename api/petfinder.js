@@ -74,3 +74,24 @@ export async function searchApi({ location, type, age, distance, breed, pagePara
       baseURL: "https://api.petfinder.com/v2/"
     })
 };
+
+export async function getShelterAnimals({ id, pageParam = 1}) {
+  await retrieveToken();
+  const token = storage.getString('token');
+  
+  const this_search = {
+    limit: 20,
+    organization: id,
+    page: pageParam
+  };
+
+  let filtered = Object.fromEntries(Object.entries(this_search).filter(([_, v]) => v != null && v != [] && v != ''));
+
+  return axios
+    .get(`animals?${new URLSearchParams(filtered).toString()}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      baseURL: "https://api.petfinder.com/v2/"
+    })
+};

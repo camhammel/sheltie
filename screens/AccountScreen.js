@@ -50,7 +50,6 @@ const AccountScreen = ({ navigation }) => {
           style={styles.viewStyle}
           contentContainerStyle={{
             alignItems: "center",
-            //justifyContent: "flex-start",
           }}
         >
           <Modal
@@ -346,8 +345,8 @@ const AccountScreen = ({ navigation }) => {
                     marginBottom: 5,
                   }}
                 >
-                  Contact:{" "}
-                  <Text style={{ fontWeight: "bold" }}> help@sheltie.app </Text>
+                  Contact:
+                  <Text style={{ fontWeight: "bold", color: 'white' }}> help@sheltie.app </Text>
                 </Text>
               </TouchableOpacity>
               <Text
@@ -717,9 +716,8 @@ const AccountScreen = ({ navigation }) => {
                     }}
                   >
                     Contact:{" "}
-                    <Text style={{ fontWeight: "bold" }}>
-                      {" "}
-                      help@sheltie.app{" "}
+                    <Text style={{ fontWeight: "bold", color: 'white' }}>
+                      help@sheltie.app
                     </Text>
                   </Text>
                 </TouchableOpacity>
@@ -784,7 +782,6 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: Dimensions.get("window").height,
     paddingBottom: 20,
-    //backgroundColor: COLORS.primarydark,
   },
 });
 

@@ -22,6 +22,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const queryClient = new QueryClient()
 
@@ -70,6 +71,7 @@ function App() {
   };
 
   return (
+    <SafeAreaProvider>
       <NavigationContainer ref={navigationRef} linking={linking} onReady={() => { isReadyRef.current = true; setIsReady(true); }}>
         {isReady && <Stack.Navigator initialRouteName="Loading">
           <Stack.Screen
@@ -161,6 +163,7 @@ function App() {
           />
         </Stack.Navigator>}
       </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 

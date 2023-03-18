@@ -18,7 +18,6 @@
       "**/*"
     ],
     "ios": {
-      "jsEngine": "jsc",
       "bundleIdentifier": "app.sheltie",
       "buildNumber": "1.2.2",
       "supportsTablet": false,

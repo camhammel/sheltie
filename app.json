@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/appIcon.png",
     "primaryColor": "#3F77B9",
+    "jsEngine": "hermes",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "cover"
@@ -17,6 +18,7 @@
       "**/*"
     ],
     "ios": {
+      "jsEngine": "jsc",
       "bundleIdentifier": "app.sheltie",
       "buildNumber": "1.2.2",
       "supportsTablet": false,

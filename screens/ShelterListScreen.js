@@ -27,6 +27,7 @@ const ShelterListScreen = ({ navigation, route }) => {
     <View style={{ flex: 1 }}>
       <ListComponent
         results={results}
+        loading={isLoading}
         refresh={() => {refetch()}}
         loadMoreResults={() => {fetchNextPage()}}
         isStatic={true}

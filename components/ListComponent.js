@@ -8,7 +8,7 @@ import { COLORS } from "../assets/colors";
 const defaultURI = Asset.fromModule(require("../assets/default.png")).uri;
 
 const ListComponent = React.forwardRef(
-  ({ results, hasMoreResults, loadMoreResults, refresh, isStatic }, ref) => {
+  ({ results, hasMoreResults, loadMoreResults, loading, refresh, isStatic }, ref) => {
     const [
       onEndReachedCalledDuringMomentum,
       setOnEndReachedCalledDuringMomentum,
@@ -26,7 +26,7 @@ const ListComponent = React.forwardRef(
 
     const renderItem = ({ item }) => (
       <ListItem id={item?.id} bottomDivider onPress={() => {
-        navigation.navigate("PetDetail", {
+        navigation.push("PetDetail", {
           id: item.id,
           name: item.name,
           breed: item.breeds.primary,

@@ -27,6 +27,7 @@ import { Context } from "../context/AuthContext";
 import ShelterInfo from "../components/ShelterInfo";
 import { navigationRef } from "../navigationRef";
 import { storage } from "../utils/storage";
+import { HeaderBackButton } from '@react-navigation/stack';
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 
@@ -48,10 +49,23 @@ const PetDetailScreen = ({ route, navigation }) => {
     (async () => {
       await detailApi(id);
       if (isSubscribed) {
-        navigation.setOptions({
-          headerTitleStyle: { color: "transparent" },
-          headerBackTitle: "Back",
-        });
+        if (!navigation.canGoBack) {
+          navigation.setOptions({
+            headerTitleStyle: { color: "transparent" },
+            headerBackTitle: "Back",
+            headerLeft: (props) => (
+              <HeaderBackButton 
+                {...props}
+                onPress={()=> navigation.navigate('List')}
+              />
+            ) 
+          });
+        } else {
+          navigation.setOptions({
+            headerTitleStyle: { color: "transparent" },
+            headerBackTitle: "Back"
+          });
+        }
       }
       if ((storage.getBoolean("guest")) && isSubscribed) {
         setGuest("true");

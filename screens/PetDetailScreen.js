@@ -110,7 +110,7 @@ const PetDetailScreen = ({ route, navigation }) => {
       await Share.share({
         message: `I was browsing Sheltie and found ${results.name}!`,
         title: `Meet ${results.name}`,
-        url: Platform.OS === "ios" ? `https://sheltie.app/pet?id=${results.id}` : undefined,
+        url: Platform.OS === "ios" ? `https://sheltie.app/pet/${results.id}` : undefined,
       });
     } catch (error) {
       alert(error.message);

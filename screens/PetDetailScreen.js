@@ -101,10 +101,13 @@ const PetDetailScreen = ({ route, navigation }) => {
   }, [email]);
 
   const detailApi = async (id) => {
+    await retrieveToken();
+    const token = storage.getString('token');
+
     petfinder
       .get(`animals/${id}`, {
         headers: {
-          Authorization: `Bearer ${storage.getString('token')}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {

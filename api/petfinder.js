@@ -27,7 +27,7 @@ const tokenConfig = {
   },
 };
 
-async function retrieveToken() {
+export async function retrieveToken() {
   const instance = axios.create();
 
   instance

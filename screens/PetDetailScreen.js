@@ -10,7 +10,7 @@ import {
   Alert,
 } from "react-native";
 import { Text } from "react-native-elements";
-import petfinder from "../api/petfinder";
+import petfinder, { retrieveToken } from "../api/petfinder";
 import Spacer from "../components/Spacer";
 import TagComponent from "../components/TagComponent";
 import { COLORS } from "../assets/colors";

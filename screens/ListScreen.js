@@ -64,7 +64,7 @@ const ListScreen = ({ navigation }) => {
     queryKey: ['getPets', searchFilters], 
     queryFn: ({ pageParam = 1 }) => searchApi({ pageParam, ...searchFilters }),
     getNextPageParam: (lastPage) => (lastPage?.data?.pagination?.current_page + 1) || 1,
-    initialData: (() => {
+    placeholderData: (() => {
       return storage.getString("lastresults") ? (JSON.parse(storage.getString("lastresults"))) : null
     }),
     onSuccess: (data) => {

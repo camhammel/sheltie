@@ -8,30 +8,18 @@ export default axios.create({
   baseURL: "https://api.petfinder.com/v2/",
 });
 
-export function getId() {
-  if (__DEV__) {
-    return { key: prodkey, secret: prodsecret };
-  } else {
-    return { key: prodkey, secret: prodsecret };
-  }
-}
-
-const tokenConfig = {
-  baseURL: "https://api.petfinder.com/v2/",
-  url: "oauth2/token",
-  method: "post",
-  data: {
-    grant_type: "client_credentials",
-    client_id: getId().key,
-    client_secret: getId().secret,
-  },
-};
-
 export async function retrieveToken() {
-  const instance = axios.create();
-
-  instance
-    .request(tokenConfig)
+  axios.create()
+    .request({
+      baseURL: "https://api.petfinder.com/v2/",
+      url: "oauth2/token",
+      method: "post",
+      data: {
+        grant_type: "client_credentials",
+        client_id: prodkey,
+        client_secret: prodsecret,
+      },
+    })
     .then(async (response) => {
       if (response?.data?.access_token) {
         storage.set(

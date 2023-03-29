@@ -23,6 +23,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { retrieveToken } from "./api/petfinder";
 
 const queryClient = new QueryClient()
 
@@ -46,6 +47,8 @@ function App() {
       const cacheImages = images.map((image) => {
         return Asset.fromModule(image).downloadAsync();
       });
+
+      await retrieveToken();
 
       return Promise.all(cacheImages);
     } catch (e) {

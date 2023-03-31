@@ -43,41 +43,35 @@ const PetDetailScreen = ({ route, navigation }) => {
   const { id } = route.params;
   const [favourited, setFavourited] = useState(false);
   const [guest, setGuest] = useState("true");
-  let isSubscribed = true;
 
   useEffect(() => {
     (async () => {
       await detailApi(id);
-      if (isSubscribed) {
-        if (!navigation.canGoBack) {
-          navigation.setOptions({
-            headerTitleStyle: { color: "transparent" },
-            headerBackTitle: "Back",
-            headerLeft: (props) => (
-              <HeaderBackButton 
-                {...props}
-                onPress={()=> navigation.navigate('List')}
-              />
-            ) 
-          });
-        } else {
-          navigation.setOptions({
-            headerTitleStyle: { color: "transparent" },
-            headerBackTitle: "Back"
-          });
-        }
+      if (!navigation.canGoBack) {
+        navigation.setOptions({
+          headerTitleStyle: { color: "transparent" },
+          headerLeft: (props) => (
+            <HeaderBackButton 
+              {...props}
+              label="Back"
+              onPress={()=> navigation.navigate('List')}
+            />
+          ) 
+        });
+      } else {
+        navigation.setOptions({
+          headerTitleStyle: { color: "transparent" },
+          headerBackTitle: "Back"
+        });
       }
-      if ((storage.getBoolean("guest")) && isSubscribed) {
+      if (storage.getBoolean("guest")) {
         setGuest("true");
       } else {
-        if (isSubscribed) {
-          setGuest("false");
-          setEmail(storage.getString("email"));
-        }
+        setGuest("false");
+        setEmail(storage.getString("email"));
       }
     })();
-    return () => (isSubscribed = false);
-  }, []);
+  }, [route.params.id]);
 
   useEffect(() => {
     if (results?.name) {
@@ -111,9 +105,7 @@ const PetDetailScreen = ({ route, navigation }) => {
         },
       })
       .then((response) => {
-        if (isSubscribed) {
-          setResults(response.data.animal);
-        }
+        setResults(response.data.animal);
       })
       .catch(function (error) {
         //setIsEmpty("true");

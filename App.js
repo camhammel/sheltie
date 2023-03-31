@@ -48,8 +48,6 @@ function App() {
         return Asset.fromModule(image).downloadAsync();
       });
 
-      await retrieveToken();
-
       return Promise.all(cacheImages);
     } catch (e) {
       console.warn(e);
@@ -58,7 +56,7 @@ function App() {
 
   useEffect(() => {
     prepare();
-
+    retrieveToken();
     return () => {
       isReadyRef.current = false;
     }

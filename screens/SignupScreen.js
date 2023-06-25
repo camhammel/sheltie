@@ -15,9 +15,8 @@ import Logo from "../assets/transparent_icon2.png";
 import { storage } from "../utils/storage";
 const BgImage = require("../assets/authBg-25.png");
 
-const SignupScreen = () => {
+const SignupScreen = ({ navigation }) => {
   const { state,  clearErrorMessage } = useContext(AuthContext);
-  const navigation = useNavigation();
 
   return (
     <ImageBackground

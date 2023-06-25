@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { StyleSheet, View, useWindowDimensions } from "react-native";
-import { Input, Button, Text } from "react-native-elements";
+import { View, useWindowDimensions } from "react-native";
+import { Input, Button } from "react-native-elements";
 import { Context as AuthContext } from "../context/AuthContext";
 import Icon from "react-native-vector-icons/Entypo";
 import { Formik } from "formik";
@@ -34,7 +34,6 @@ export default function SignInComponent({ state, clearErrorMessage }) {
         {(props) => (
           <View>
             <Input
-              //label="Email"
               placeholder="Email address"
               placeholderTextColor={COLORS.white}
               onChangeText={props.handleChange("email")}
@@ -44,7 +43,6 @@ export default function SignInComponent({ state, clearErrorMessage }) {
               autoCapitalize="none"
               inputStyle={styles.inputStyle}
               inputContainerStyle={styles.containerStyle}
-              labelStyle={styles.labelStyle}
               errorMessage={
                 props.touched.email &&
                 (props.errors.email || state.errorMessage)
@@ -61,24 +59,20 @@ export default function SignInComponent({ state, clearErrorMessage }) {
                   name="email"
                   size={20}
                   color={COLORS.white}
-                  //borderWidth={1}
-                  //borderColor={COLORS.white}
                 />
               }
             />
             <Input
-              //label="Password"
               placeholder="Password"
               placeholderTextColor={COLORS.white}
               onChangeText={props.handleChange("password")}
               value={props.values.password}
-              textContentType="newPassword"
+              textContentType="password"
               autoCorrect={false}
               autoCapitalize="none"
               secureTextEntry
               inputStyle={styles.inputStyle}
               inputContainerStyle={styles.containerStyle}
-              labelStyle={styles.labelStyle}
               errorMessage={props.touched.password && props.errors.password}
               errorStyle={{
                 marginLeft: 15,
@@ -89,8 +83,6 @@ export default function SignInComponent({ state, clearErrorMessage }) {
                   name="lock"
                   size={20}
                   color={COLORS.white}
-                  //borderWidth={1}
-                  //borderColor={COLORS.white}
                 />
               }
             />

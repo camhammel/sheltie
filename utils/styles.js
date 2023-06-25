@@ -22,15 +22,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 5,
     borderBottomWidth: 1,
     borderColor: COLORS.white,
-    opacity: 0.65,
     alignSelf: "center",
   },
-  // labelStyle: {
-  //   color: COLORS.white,
-  //   marginLeft: 10,
-  //   marginBottom: 5,
-  //   marginTop: 5,
-  //   opacity: 0.8,
-  //   marginHorizontal: 25,
-  // },
 });

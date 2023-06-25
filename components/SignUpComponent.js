@@ -66,8 +66,6 @@ export default function SignUpComponent({ state, clearErrorMessage }) {
                   name="email"
                   size={20}
                   color={COLORS.white}
-                  //borderWidth={1}
-                  //borderColor={COLORS.white}
                 />
               }
             />
@@ -80,7 +78,6 @@ export default function SignUpComponent({ state, clearErrorMessage }) {
               secureTextEntry
               inputStyle={styles.inputStyle}
               inputContainerStyle={styles.containerStyle}
-              labelStyle={styles.labelStyle}
               errorMessage={props.touched.password && props.errors.password}
               errorStyle={{
                 marginLeft: 15,
@@ -91,8 +88,6 @@ export default function SignUpComponent({ state, clearErrorMessage }) {
                   name="lock"
                   size={20}
                   color={COLORS.white}
-                  //borderWidth={1}
-                  //borderColor={COLORS.white}
                 />
               }
             />
@@ -101,10 +96,10 @@ export default function SignUpComponent({ state, clearErrorMessage }) {
               placeholderTextColor={COLORS.white}
               onChangeText={props.handleChange("confirmPassword")}
               value={props.values.confirmPassword}
+              textContentType="password"
               secureTextEntry
               inputStyle={styles.inputStyle}
               inputContainerStyle={styles.containerStyle}
-              labelStyle={styles.labelStyle}
               errorMessage={
                 props.touched.confirmPassword && props.errors.confirmPassword
               }
@@ -117,8 +112,6 @@ export default function SignUpComponent({ state, clearErrorMessage }) {
                   name="lock"
                   size={20}
                   color={COLORS.white}
-                  //borderWidth={1}
-                  //borderColor={COLORS.white}
                 />
               }
             />
@@ -127,7 +120,7 @@ export default function SignUpComponent({ state, clearErrorMessage }) {
               onPress={props.handleSubmit}
               buttonStyle={{
                 backgroundColor: "transparent",
-                width: useWindowDimensions().width / 2,
+                width: '100%',
                 alignSelf: "center",
                 borderRadius: 25,
                 borderColor: COLORS.white,

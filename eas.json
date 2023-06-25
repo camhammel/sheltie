@@ -17,6 +17,7 @@
       }
     },
     "production": {
+      "channel": "master",
       "ios": {
         "resourceClass": "m1-medium"
       }

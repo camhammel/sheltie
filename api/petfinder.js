@@ -1,9 +1,6 @@
 import axios from "axios";
 import { storage } from "../utils/storage";
 
-let prodkey = "***REMOVED***";
-let prodsecret = "***REMOVED***";
-
 export default axios.create({
   baseURL: "https://api.petfinder.com/v2/",
 });
@@ -16,8 +13,8 @@ export async function retrieveToken() {
       method: "post",
       data: {
         grant_type: "client_credentials",
-        client_id: prodkey,
-        client_secret: prodsecret,
+        client_id: process.env.PETFINDER_KEY,
+        client_secret: process.env.PETFINDER_SECRET,
       },
     })
     .then(async (response) => {

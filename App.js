@@ -24,6 +24,7 @@ import {
 } from '@tanstack/react-query'
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { retrieveToken } from "./api/petfinder";
+import 'dotenv/config'
 
 const queryClient = new QueryClient()
 

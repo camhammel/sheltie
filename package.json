@@ -16,7 +16,6 @@
     "axios": "^0.21.2",
     "base-64": "^0.1.0",
     "curl": "^0.1.4",
-    "dotenv": "^16.3.1",
     "expo": "47.0.0",
     "expo-font": "~11.0.1",
     "expo-linking": "~3.3.1",
@@ -55,7 +54,10 @@
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
-    "babel-preset-expo": "~9.2.1"
+    "babel-preset-expo": "~9.2.1",
+    "crypto": "^1.0.1",
+    "os": "^0.1.2",
+    "path": "^0.12.7"
   },
   "private": true,
   "name": "sheltie",

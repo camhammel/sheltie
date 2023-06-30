@@ -1,62 +1,64 @@
 import axios from "axios";
+import dayjs from "dayjs";
 import { storage } from "../utils/storage";
-
+// import { PETFINDER_KEY, PETFINDER_SECRET } from '@env';
+const PETFINDER_KEY = "***REMOVED***";
+const PETFINDER_SECRET = "***REMOVED***";
 
 const petfinderApi = axios.create({
   baseURL: "https://api.petfinder.com/v2/",
-});
+})
 
 petfinderApi.interceptors.request.use(
-  async config => {
-    const token = storage.getString('token')
-    config.headers = { 
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/json',
+  function(config) {
+    if (storage) {
+      const token = storage.getString('token');
+      if (token) {
+        config.headers = { 
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+        }
+      }
     }
     return config;
   },
-  error => {
+  function(error) {
+    console.log('error', error);
     Promise.reject(error)
-})
+});
 
-petfinderApi.interceptors.response.use((response) => {
-  return response
-}, async function (error) {
-  const originalRequest = error.config;
-  if (error.response.status === 403 && !originalRequest._retry) {
+petfinderApi.interceptors.response.use(undefined, async function(error) {
+  const originalRequest = error?.config;
+  if (error?.response?.status === 401 && !originalRequest._retry) {
     originalRequest._retry = true;
-    const access_token = await retrieveToken();            
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
+    const access_token = await retrieveToken();
+    petfinderApi.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
     return petfinderApi(originalRequest);
   }
   return Promise.reject(error);
 })
 
-export default petfinderApi;
-
 export async function retrieveToken() {
-  return petfinderApi
-    .post({
-      url: "oauth2/token",
-      data: {
+  console.log('retrieving token...', PETFINDER_KEY, PETFINDER_SECRET);
+  return await petfinderApi
+    .post("oauth2/token", {
         grant_type: "client_credentials",
-        client_id: process.env.PETFINDER_KEY,
-        client_secret: process.env.PETFINDER_SECRET,
+        client_id: PETFINDER_KEY,
+        client_secret: PETFINDER_SECRET,
       },
-    })
-    .then(async (response) => {
+    )
+    .then(function(response) {
+      console.log('response', response);
       if (response?.data?.access_token) {
         storage.set(
           "token",
           response.data.access_token
         );
         return response.data.access_token;
-      } else {
-        console.error('could not retrieve access token from petfinder API', response);
       }
     })
-    .catch((error) => {
-      console.error('error', error);
+    .catch(function(error) {
+      console.error('error when fetching token', error);
     });
 }
 
@@ -90,3 +92,5 @@ export async function getShelterAnimals({ id, pageParam = 1}) {
   return petfinderApi
     .get(`animals?${new URLSearchParams(filtered).toString()}`)
 };
+
+export default petfinderApi;

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { View } from 'react-native';
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
@@ -23,7 +22,6 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { retrieveToken } from "./api/petfinder";
 
 const queryClient = new QueryClient()
 
@@ -56,7 +54,6 @@ function App() {
 
   useEffect(() => {
     prepare();
-    retrieveToken();
     return () => {
       isReadyRef.current = false;
     }

@@ -24,24 +24,20 @@ export default SearchModal = (props) => {
     const [breed, setBreed] = useState([]);
     const [breedOptions, setBreedOptions] = useState([]);
 
-    const getBreedOptions = async (type = 'dog') => {
-        const token = storage.getString("token");
+    const getBreedOptions = (type = 'dog') => {
         var breedSearch = `types/${type}/breeds`;
-  
-        return await petfinder
-          .get(breedSearch, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
+        return petfinder.get(breedSearch)
           .then((response) => {
-            return (response.data.breeds.map((breed) => ({
+            console.log('response');
+            return (response?.data?.breeds?.map((breed) => ({
                 label: breed.name,
                 value: breed.name,
               })
             ))
           })
-          .catch((error) => {});
+          .catch((error) => {
+            console.log('could not get breeds', error);
+          });
     };
 
     const compileFilters = () => {

@@ -68,7 +68,7 @@ const ListScreen = ({ navigation }) => {
       return storage.getString("lastresults") ? (JSON.parse(storage.getString("lastresults"))) : null
     }),
     onSuccess: (data) => {
-      if (data.pages[0].data.animals) {
+      if (data?.pages?.[0].data?.animals) {
         storage.set('lastresults', JSON.stringify(data));
         storage.set('lastsearch', JSON.stringify(searchFilters));
       }
@@ -84,16 +84,12 @@ const ListScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (results && results.pages[0]?.data?.animals) {
+    if (results?.pages?.[0]?.data?.animals) {
       const relevantData = results.pages.map((page) => page?.data?.animals);
       setPagination(results.pages[results.pages.length - 1].data?.pagination);
       setAnimals(_uniqBy(relevantData.flat(1), 'id'));
     }
   }, [results])
-
-  const refresh = () => {
-    refetch();
-  }
 
   const setFiltersFromStorage = () => {
     let temp2 = JSON.parse(storage.getString("lastsearch"));
@@ -140,7 +136,7 @@ const ListScreen = ({ navigation }) => {
           results={animals}
           hasMoreResults={pagination.current_page < pagination.total_pages}
           loadMoreResults={() => fetchNextPage()}
-          refresh={refresh}
+          refresh={refetch}
           ref={flatListRef}
         />
       </View>

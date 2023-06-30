@@ -8,6 +8,7 @@ import {
   useWindowDimensions,
   ImageBackground,
   Dimensions,
+  TouchableOpacity
 } from "react-native";
 import { Button, Text } from "react-native-elements";
 import LinearGradient from 'react-native-linear-gradient';
@@ -16,7 +17,6 @@ import { Context as AuthContext } from "../context/AuthContext";
 import Logo from "../assets/transparent_icon2.png";
 import { COLORS } from "../assets/colors";
 import Icon from "react-native-vector-icons/Entypo";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import * as Linking from "expo-linking";
 import { storage } from "../utils/storage";
 const BgImage = require("../assets/accountPattern.png");

@@ -29,11 +29,7 @@ const FavouritesScreen = () => {
     for (let i = 0; i < parsedIds.length; i++) {
       promises.push(
         petfinder
-          .get(`animals/${parsedIds[i]}`, {
-            headers: {
-              Authorization: `Bearer ${storage.getString('token')}`,
-            },
-          })
+          .get(`animals/${parsedIds[i]}`)
           .then((response) => {
             // do something with response
             animals.push(response.data.animal);

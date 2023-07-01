@@ -62,16 +62,18 @@ function App() {
   const linking = {
     prefixes: ['https://*.sheltie.app', 'https://sheltie.app'],
     config: {
+      initialRouteName: 'List',
       screens: {
+        List: 'List',
         PetDetail: 'pet/:id'
-      }
+      },
     }
   };
 
   return (
     <SafeAreaProvider>
       <NavigationContainer ref={navigationRef} linking={linking} onReady={() => { isReadyRef.current = true; setIsReady(true); }}>
-        {isReady && <Stack.Navigator initialRouteName="Loading">
+        <Stack.Navigator initialRouteName="Loading">
           <Stack.Screen
             name="Loading"
             component={LoadingScreen}
@@ -159,7 +161,7 @@ function App() {
               headerStyle: { backgroundColor: COLORS.primarylight },
             }}
           />
-        </Stack.Navigator>}
+        </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
   );

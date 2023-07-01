@@ -39,7 +39,6 @@ petfinderApi.interceptors.response.use(undefined, async function(error) {
 })
 
 export async function retrieveToken() {
-  console.log('retrieving token...', PETFINDER_KEY, PETFINDER_SECRET);
   return await petfinderApi
     .post("oauth2/token", {
         grant_type: "client_credentials",
@@ -48,7 +47,6 @@ export async function retrieveToken() {
       },
     )
     .then(function(response) {
-      console.log('response', response);
       if (response?.data?.access_token) {
         storage.set(
           "token",

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useLayoutEffect, useContext } from "react";
 import {
   View,
   ScrollView,
@@ -10,7 +10,7 @@ import {
   Alert,
 } from "react-native";
 import { Text } from "react-native-elements";
-import petfinder, { retrieveToken } from "../api/petfinder";
+import petfinder from "../api/petfinder";
 import Spacer from "../components/Spacer";
 import TagComponent from "../components/TagComponent";
 import { COLORS } from "../assets/colors";
@@ -27,7 +27,7 @@ import { Context } from "../context/AuthContext";
 import ShelterInfo from "../components/ShelterInfo";
 import { navigationRef } from "../navigationRef";
 import { storage } from "../utils/storage";
-import { HeaderBackButton } from '@react-navigation/stack';
+import { HeaderBackButton } from '@react-navigation/elements';
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 
@@ -44,17 +44,20 @@ const PetDetailScreen = ({ route, navigation }) => {
   const [favourited, setFavourited] = useState(false);
   const [guest, setGuest] = useState("true");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     (async () => {
       await detailApi(id);
-      if (!navigation.canGoBack) {
+      if (!navigation.canGoBack()) {
         navigation.setOptions({
           headerTitleStyle: { color: "transparent" },
           headerLeft: (props) => (
             <HeaderBackButton 
               {...props}
               label="Back"
-              onPress={()=> navigation.navigate('List')}
+              onPress={()=> navigation.reset({
+                index: 0,
+                routes: [{ name: 'List' }],
+              })}
             />
           ) 
         });
@@ -73,7 +76,7 @@ const PetDetailScreen = ({ route, navigation }) => {
     })();
   }, [route.params.id]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (results?.name) {
       navigation.setOptions({
         headerTitle: capitalizeFirstLetter(results?.name?.toLowerCase()),
@@ -88,22 +91,15 @@ const PetDetailScreen = ({ route, navigation }) => {
     }
   }, [results]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     (async () => {
       setFavourited(await checkfav({ email, petid: id }));
     })();
   }, [email]);
 
   const detailApi = async (id) => {
-    await retrieveToken();
-    const token = storage.getString('token');
-
     petfinder
-      .get(`animals/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get(`animals/${id}`)
       .then((response) => {
         setResults(response.data.animal);
       })

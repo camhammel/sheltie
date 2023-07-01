@@ -19,24 +19,22 @@ import { COLORS } from "../assets/colors";
 import Icon from "react-native-vector-icons/Entypo";
 import * as Linking from "expo-linking";
 import { storage } from "../utils/storage";
-const BgImage = require("../assets/accountPattern.png");
+import BgImage from "../assets/accountPattern.png";
 
 const AccountScreen = ({ navigation }) => {
   const { signout, getfavs } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
-  const [guest, setGuest] = useState("true");
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
   useEffect(() => {
-    setGuest(storage.getString("guest"));
     setEmail(storage.getString("email"));
   }, []);
 
-  if (guest == "true") {
+  if (!email) {
     return (
       <ImageBackground
         source={BgImage}

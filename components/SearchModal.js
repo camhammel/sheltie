@@ -28,7 +28,6 @@ export default SearchModal = (props) => {
         var breedSearch = `types/${type}/breeds`;
         return petfinder.get(breedSearch)
           .then((response) => {
-            console.log('response');
             return (response?.data?.breeds?.map((breed) => ({
                 label: breed.name,
                 value: breed.name,

@@ -20,7 +20,7 @@ export default {
   ],
   ios: {
     bundleIdentifier: "app.sheltie",
-    buildNumber: "1.2.4",
+    buildNumber: "1.2.5",
     supportsTablet: false,
     infoPlist: {
       NSLocationWhenInUseUsageDescription: "This app uses Location to determine animal shelters closest to you for results.",

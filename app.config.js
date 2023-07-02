@@ -72,7 +72,9 @@ export default {
   extra: {
     eas: {
       projectId: "b02e7b71-f109-4b47-8196-fd8a10d2b529"
-    }
+    },
+    PETFINDER_KEY: process.env.PETFINDER_KEY,
+    PETFINDER_SECRET: process.env.PETFINDER_SECRET
   },
   runtimeVersion: "exposdk:47.0.0",
   plugins: [

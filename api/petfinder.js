@@ -1,9 +1,7 @@
 import axios from "axios";
-import dayjs from "dayjs";
 import { storage } from "../utils/storage";
-// import { PETFINDER_KEY, PETFINDER_SECRET } from '@env';
-const PETFINDER_KEY = "***REMOVED***";
-const PETFINDER_SECRET = "***REMOVED***";
+import Constants from 'expo-constants';
+const { PETFINDER_KEY, PETFINDER_SECRET } = Constants?.expoConfig?.extra;
 
 const petfinderApi = axios.create({
   baseURL: "https://api.petfinder.com/v2/",

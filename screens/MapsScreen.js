@@ -43,11 +43,7 @@ const MapsScreen = ({ route }) => {
 
   const searchShelters = async () => {
     petfinder
-      .get(`organizations?location=${lat},${long}&limit=5&sort=distance`, {
-        headers: {
-          Authorization: `Bearer ${storage.getString('token')}`,
-        },
-      })
+      .get(`organizations?location=${lat},${long}&limit=5&sort=distance`)
       .then((response) => {
         if (response.data.organizations) {
           setResults(response.data.organizations);

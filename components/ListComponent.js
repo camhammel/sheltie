@@ -75,6 +75,7 @@ const ListComponent = React.forwardRef(
         <FlatList
           data={results}
           renderItem={renderItem}
+          initialNumToRender={20}
           keyExtractor={(item) => item?.id}
           showsVerticalScrollIndicator={false}
           onEndReachedThreshold={isStatic ? 0 : 0.01}

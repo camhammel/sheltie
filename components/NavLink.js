@@ -1,12 +1,10 @@
 import React from "react";
-import { Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import * as RootNavigation from "../navigationRef";
 import * as Linking from "expo-linking";
 
-let mb;
-
 const NavLink = ({ text, routeName, clearErrorMessage, custStyle }) => {
-  if (routeName.substring(0, 4) === "http") {
+  if (routeName?.substring(0, 4) === "http") {
     return (
       <TouchableOpacity
         onPress={() => {

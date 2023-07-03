@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { AppState, Platform } from "react-native";
+import React, { useEffect } from "react";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
@@ -20,6 +21,7 @@ import { StatusBar } from "expo-status-bar";
 import {
   QueryClient,
   QueryClientProvider,
+  focusManager
 } from '@tanstack/react-query'
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -28,8 +30,6 @@ const queryClient = new QueryClient()
 const Stack = createStackNavigator();
 
 function App() {
-  const [isReady, setIsReady] = useState(false);
-
   async function prepare() {
     try {
       await Font.loadAsync({
@@ -70,9 +70,21 @@ function App() {
     }
   };
 
+  function onAppStateChange(status) {
+    if (Platform.OS !== 'web') {
+      focusManager.setFocused(status === 'active')
+    }
+  }
+  
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', onAppStateChange)
+  
+    return () => subscription.remove()
+  }, [])
+
   return (
     <SafeAreaProvider>
-      <NavigationContainer ref={navigationRef} linking={linking} onReady={() => { isReadyRef.current = true; setIsReady(true); }}>
+      <NavigationContainer ref={navigationRef} linking={linking} onReady={() => { isReadyRef.current = true; }}>
         <Stack.Navigator initialRouteName="Loading">
           <Stack.Screen
             name="Loading"

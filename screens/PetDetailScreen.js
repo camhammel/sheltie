@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useContext } from "react";
+import React, { useState, useLayoutEffect, useEffect, useContext } from "react";
 import {
   View,
   ScrollView,
@@ -28,16 +28,17 @@ import ShelterInfo from "../components/ShelterInfo";
 import { navigationRef } from "../navigationRef";
 import { storage } from "../utils/storage";
 import { HeaderBackButton } from '@react-navigation/elements';
+import { useQuery } from "@tanstack/react-query";
+import AppSkeleton from "../components/Skeleton";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 
-function capitalizeFirstLetter(string) {
+function capitalizeFirstLetter(string = '') {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 const PetDetailScreen = ({ route, navigation }) => {
   const { addfav, checkfav, removefav } = useContext(Context);
-  const [results, setResults] = useState(null);
   const [page, setPage] = useState(0);
   const [email, setEmail] = useState("");
   const { id } = route.params;
@@ -46,7 +47,6 @@ const PetDetailScreen = ({ route, navigation }) => {
 
   useLayoutEffect(() => {
     (async () => {
-      await detailApi(id);
       if (!navigation.canGoBack()) {
         navigation.setOptions({
           headerTitleStyle: { color: "transparent" },
@@ -77,38 +77,35 @@ const PetDetailScreen = ({ route, navigation }) => {
   }, [route.params.id]);
 
   useLayoutEffect(() => {
-    if (results?.name) {
-      navigation.setOptions({
-        headerTitle: capitalizeFirstLetter(results?.name?.toLowerCase()),
-        headerTitleStyle: {
-          color: "white",
-          fontFamily: "Yellowtail",
-          fontSize: 28,
-          paddingVertical: 5,
-          paddingHorizontal: 15,
-        },
-      });
-    }
-  }, [results]);
-
-  useLayoutEffect(() => {
     (async () => {
       setFavourited(await checkfav({ email, petid: id }));
     })();
   }, [email]);
 
-  const detailApi = async (id) => {
-    petfinder
+  const { data: results, isLoading } = useQuery({
+    queryKey: ['getPet', id],
+    queryFn: () => petfinder
       .get(`animals/${id}`)
-      .then((response) => {
-        setResults(response.data.animal);
-      })
-      .catch(function (error) {
-        //setIsEmpty("true");
-        if (error.response) {
-        }
-      });
-  };
+      .then((response) => response.data.animal)
+      .catch((error) => error)
+  });
+
+  useEffect(() => {
+    updateHeader(results?.name);
+  }, [results])
+
+  const updateHeader = (name = '') => {
+    navigation.setOptions({
+      headerTitle: capitalizeFirstLetter(name.toLowerCase()),
+      headerTitleStyle: {
+        color: "white",
+        fontFamily: "Yellowtail",
+        fontSize: 28,
+        paddingVertical: 5,
+        paddingHorizontal: 15,
+      },
+    });
+  }
 
   const onShare = async () => {
     try {
@@ -312,7 +309,23 @@ const PetDetailScreen = ({ route, navigation }) => {
             <View style={{ marginBottom: 40 }} />
           </View>
         </ScrollView>
-      ) : null}
+      )
+      : (
+        <View style={{ margin: 16, maxHeight: '100%' }}>
+          <View style={{ marginHorizontal: 16 }}>
+            <AppSkeleton height={styles.item.height + 60} style={{ borderRadius: 16 }} />
+          </View>
+          <AppSkeleton height={8} width='50%' style={{ alignSelf: 'center', marginTop: 8 }} />
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 32 }}>
+            <AppSkeleton height={48} width='60%' />
+            <AppSkeleton height={48} width='20%' />
+          </View>
+          <AppSkeleton height={24} width='60%' style={{ marginTop: 8 }} />
+          <AppSkeleton height={24} width='40%' style={{ marginTop: 8 }} />
+          <AppSkeleton height='100%' width='100%' style={{ marginTop: 16 }} />
+        </View>
+      )
+    }
     </View>
   );
   //}
@@ -326,7 +339,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
     marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-    borderRadius: 10,
+    borderRadius: 16,
   },
   image: {
     ...StyleSheet.absoluteFillObject,

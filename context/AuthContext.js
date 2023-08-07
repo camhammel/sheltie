@@ -3,6 +3,7 @@ import sheltieApi from "../api/sheltie";
 import * as RootNavigation from "../navigationRef";
 import * as SecureStore from "expo-secure-store";
 import { storage } from "../utils/storage";
+import _uniqBy from 'lodash/uniqBy'
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -137,13 +138,13 @@ const getfavs = (dispatch) => async (email) => {
       }
     });
     if (response.data) {
-      storage.set("favourites", JSON.stringify(response.data.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))));
+      storage.set("favourites", JSON.stringify(_uniqBy(response.data, ({ id }) => id)));
       RootNavigation.navigate("Favourites");
     }
   } catch (err) {
-    console.error(err);
+    console.error('err', err);
   }
-};
+};  
 
 const checkfav = (dispatch) => async ({ email, petid }) => {
   try {

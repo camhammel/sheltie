@@ -20,6 +20,7 @@ const FavouritesScreen = () => {
       <ListComponent
         results={results}
         refresh={() => {}}
+        hasMoreResults={false}
         loadMoreResults={() => {}}
       />
     </View>

@@ -18,6 +18,7 @@ import { Provider as AuthProvider } from "./context/AuthContext";
 import { navigationRef, isReadyRef } from "./navigationRef";
 import { COLORS } from "./assets/colors";
 import { StatusBar } from "expo-status-bar";
+// import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {
   QueryClient,
   QueryClientProvider,
@@ -83,99 +84,101 @@ function App() {
   }, [])
 
   return (
-    <SafeAreaProvider>
-      <NavigationContainer ref={navigationRef} linking={linking} onReady={() => { isReadyRef.current = true; }}>
-        <Stack.Navigator initialRouteName="Loading">
-          <Stack.Screen
-            name="Loading"
-            component={LoadingScreen}
-            options={{ title: "Loading", headerShown: false }}
-          />
-          <Stack.Screen
-            name="Signup"
-            component={SignupScreen}
-            options={{
-              title: "Sign Up",
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="Signin"
-            component={SigninScreen}
-            options={{ title: "Sign In", headerShown: false }}
-          />
-          <Stack.Screen
-            name="ForgotPassword"
-            component={ForgotPasswordScreen}
-            options={{
-              title: "Forgot Password",
-              headerShown: true,
-              headerTintColor: "white",
-              headerStyle: { backgroundColor: COLORS.primarylight },
-            }}
-          />
-          <Stack.Screen
-            name="List"
-            component={ListScreen}
-            options={{
-              title: "Nearby Pets for Adoption",
-              headerLeft: null,
-              headerTintColor: "white",
-              headerStyle: { backgroundColor: COLORS.primarylight },
-            }}
-          />
-          <Stack.Screen
-            name="PetDetail"
-            component={PetDetailScreen}
-            options={{
-              headerTintColor: "white",
-              headerStyle: { backgroundColor: COLORS.primarylight },
-              headerTitle: "",
-            }}
-          />
-          <Stack.Screen
-            name="Account"
-            component={AccountScreen}
-            options={{
-              title: "Account",
-              headerShown: true,
-              headerTintColor: "white",
-              headerStyle: { backgroundColor: COLORS.primarylight },
-            }}
-          />
-          <Stack.Screen
-            name="Favourites"
-            component={FavouritesScreen}
-            options={{
-              title: "Favourites",
-              headerShown: true,
-              headerTintColor: "white",
-              headerStyle: { backgroundColor: COLORS.primarylight },
-            }}
-          />
-          <Stack.Screen
-            name="Maps"
-            component={MapsScreen}
-            options={{
-              title: "Shelters Near Me",
-              headerShown: true,
-              headerTintColor: "white",
-              headerStyle: { backgroundColor: COLORS.primarylight },
-            }}
-          />
-          <Stack.Screen
-            name="ShelterList"
-            component={ShelterListScreen}
-            options={{
-              title: "",
-              headerShown: true,
-              headerTintColor: "white",
-              headerStyle: { backgroundColor: COLORS.primarylight },
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaProvider>
+    // <GestureHandlerRootView style={{flex: 1}}>
+      <SafeAreaProvider>
+        <NavigationContainer ref={navigationRef} linking={linking} onReady={() => { isReadyRef.current = true; }}>
+          <Stack.Navigator initialRouteName="Loading">
+            <Stack.Screen
+              name="Loading"
+              component={LoadingScreen}
+              options={{ title: "Loading", headerShown: false }}
+            />
+            <Stack.Screen
+              name="Signup"
+              component={SignupScreen}
+              options={{
+                title: "Sign Up",
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="Signin"
+              component={SigninScreen}
+              options={{ title: "Sign In", headerShown: false }}
+            />
+            <Stack.Screen
+              name="ForgotPassword"
+              component={ForgotPasswordScreen}
+              options={{
+                title: "Forgot Password",
+                headerShown: true,
+                headerTintColor: "white",
+                headerStyle: { backgroundColor: COLORS.primarylight },
+              }}
+            />
+            <Stack.Screen
+              name="List"
+              component={ListScreen}
+              options={{
+                title: "Nearby Pets for Adoption",
+                headerLeft: null,
+                headerTintColor: "white",
+                headerStyle: { backgroundColor: COLORS.primarylight },
+              }}
+            />
+            <Stack.Screen
+              name="PetDetail"
+              component={PetDetailScreen}
+              options={{
+                headerTintColor: "white",
+                headerStyle: { backgroundColor: COLORS.primarylight },
+                headerTitle: "",
+              }}
+            />
+            <Stack.Screen
+              name="Account"
+              component={AccountScreen}
+              options={{
+                title: "Account",
+                headerShown: true,
+                headerTintColor: "white",
+                headerStyle: { backgroundColor: COLORS.primarylight },
+              }}
+            />
+            <Stack.Screen
+              name="Favourites"
+              component={FavouritesScreen}
+              options={{
+                title: "Favourites",
+                headerShown: true,
+                headerTintColor: "white",
+                headerStyle: { backgroundColor: COLORS.primarylight },
+              }}
+            />
+            <Stack.Screen
+              name="Maps"
+              component={MapsScreen}
+              options={{
+                title: "Shelters Near Me",
+                headerShown: true,
+                headerTintColor: "white",
+                headerStyle: { backgroundColor: COLORS.primarylight },
+              }}
+            />
+            <Stack.Screen
+              name="ShelterList"
+              component={ShelterListScreen}
+              options={{
+                title: "",
+                headerShown: true,
+                headerTintColor: "white",
+                headerStyle: { backgroundColor: COLORS.primarylight },
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    // </GestureHandlerRootView>
   );
 }
 

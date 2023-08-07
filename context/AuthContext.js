@@ -131,14 +131,18 @@ const signout = (dispatch) => () => {
 
 const getfavs = (dispatch) => async (email) => {
   try {
-    const response = await sheltieApi.post("/getfavourites", {
-      email: email,
+    const response = await sheltieApi.get("/getfavourites", {
+      params: {
+        email
+      }
     });
     if (response.data) {
-      storage.set("favourites", JSON.stringify(response.data));
+      storage.set("favourites", JSON.stringify(response.data.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))));
       RootNavigation.navigate("Favourites");
     }
-  } catch (err) {}
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const checkfav = (dispatch) => async ({ email, petid }) => {
@@ -146,7 +150,7 @@ const checkfav = (dispatch) => async ({ email, petid }) => {
     const response = await sheltieApi.post("/getfavourites", {
       email: email,
     });
-    if (response.data) {
+    if (response.data) {    
       storage.set("favourites", JSON.stringify(response.data));
   
       if (response.data.includes(petid + "")) {

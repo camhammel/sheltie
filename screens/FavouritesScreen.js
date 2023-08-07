@@ -13,14 +13,11 @@ const FavouritesScreen = () => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    (async () => {
-      favIds = storage.getString("favourites");
-      parsedIds = JSON.parse(favIds);
-      await searchFavs();
-    })();
+    favIds = storage.getString("favourites");
+    parsedIds = JSON.parse(favIds);
+    searchFavs();
 
     return () => {};
-    //Update the state you want to be updated
   }, [isFocused]);
 
   const searchFavs = async () => {
@@ -39,7 +36,7 @@ const FavouritesScreen = () => {
     }
 
     Promise.all(promises).then(() => {
-      setResults(animals);
+      setResults(animals.sort((a, b) => a?.id.localeCompare(b?.id, undefined, { numeric: true })));
     });
   };
   return (
@@ -48,7 +45,6 @@ const FavouritesScreen = () => {
         results={results}
         refresh={() => {}}
         loadMoreResults={() => {}}
-        isStatic={true}
       />
     </View>
   );

@@ -7,10 +7,6 @@ export default {
   icon: "./assets/appIcon.png",
   primaryColor: "#3F77B9",
   jsEngine: "hermes",
-  splash: {
-    image: "./assets/splash.png",
-    resizeMode: "cover"
-  },
   updates: {
     fallbackToCacheTimeout: 0,
     url: "https://u.expo.dev/b02e7b71-f109-4b47-8196-fd8a10d2b529"
@@ -22,6 +18,10 @@ export default {
     bundleIdentifier: "app.sheltie",
     buildNumber: "1.2.5",
     supportsTablet: false,
+    splash: {
+      image: "./assets/splash.png",
+      resizeMode: "cover"
+    },
     infoPlist: {
       NSLocationWhenInUseUsageDescription: "This app uses Location to determine animal shelters closest to you for results.",
       NSLocationAlwaysAndWhenInUseUsageDescription: "This app uses Location to determine animal shelters closest to you for results."
@@ -39,6 +39,10 @@ export default {
     permissions: [
       "ACCESS_COARSE_LOCATION"
     ],
+    splash: {
+      image: "./assets/splash.png",
+      resizeMode: "cover"
+    },
     intentFilters: [
       {
         action: "VIEW",

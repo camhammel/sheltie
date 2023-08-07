@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Modal, Text, useWindowDimensions, StyleSheet } from 'react-native';
+import { View, Modal, Text, useWindowDimensions, StyleSheet, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -61,7 +61,8 @@ export default SearchModal = (props) => {
             <SafeAreaProvider>
                 <View style={styles.backdrop}>
                     <SafeAreaView>
-                        <View style={{ padding: 16,
+                        <View style={{ 
+                            padding: 16,
                             borderRadius: 15,
                             margin: 16,
                             shadowColor: '#000',
@@ -186,6 +187,7 @@ export default SearchModal = (props) => {
                                     placeholder="Any breed"
                                     multiple={true}
                                     mode="BADGE"
+                                    searchable={Platform.OS === 'android'}
                                     showBadgeDot={false}
                                     min={0}
                                     max={5}
@@ -194,6 +196,7 @@ export default SearchModal = (props) => {
                                     onOpen={() => {
                                         setDropdownVisible('breed');
                                     }}
+                                    listMode={Platform.OS === 'android' ? "MODAL" : "SCROLLVIEW"}
                                     onClose={() => setDropdownVisible('')}
                                 />
                             </View>

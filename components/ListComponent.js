@@ -29,7 +29,7 @@ const ListComponent = React.forwardRef(
         navigation.push("PetDetail", {
           id: item.id,
           name: item.name,
-          breed: item.breeds.primary,
+          breed: item.breeds?.primary,
         });
       }}>
         <Avatar

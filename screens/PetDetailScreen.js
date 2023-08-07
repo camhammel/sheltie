@@ -193,10 +193,12 @@ const PetDetailScreen = ({ route, navigation }) => {
                 <TouchableOpacity
                   onPress={() => {
                     if (guest !== "true") {
+                      const { id, name, breeds, photos: allPhotos } = results;
+                      const photos = { small: [allPhotos.small[0]] }
                       {
                         favourited
                           ? removefav({ email, petid: results.id })
-                          : addfav({ email, petid: results.id });
+                          : addfav({ email, pet: { id, name, breeds, photos } });
                       }
                       setFavourited(!favourited);
                     } else {

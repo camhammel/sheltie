@@ -164,11 +164,11 @@ const checkfav = (dispatch) => async ({ email, petid }) => {
   } catch (err) {}
 };
 
-const addfav = (dispatch) => async ({ email, petid }) => {
+const addfav = (dispatch) => async ({ email, pet }) => {
   try {
     await sheltieApi.post("/addfav", {
-      email: email,
-      petid: petid,
+      email,
+      pet: JSON.stringify(pet)
     });
   } catch (err) {}
 };

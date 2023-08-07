@@ -147,30 +147,31 @@ const getfavs = (dispatch) => async (email) => {
 
 const checkfav = (dispatch) => async ({ email, petid }) => {
   try {
-    const response = await sheltieApi.post("/getfavourites", {
-      email: email,
+    const response = await sheltieApi.get("/getfavourites", {
+      params: {
+        email
+      }
     });
     if (response.data) {    
       storage.set("favourites", JSON.stringify(response.data));
-  
-      if (response.data.includes(petid + "")) {
-        return true;
-      } else {
-        return false;
-      }
+      return !!response.data.find(({ id }) => String(id) == String(petid))
     } else {
       return false;
     }
-  } catch (err) {}
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const addfav = (dispatch) => async ({ email, pet }) => {
   try {
     await sheltieApi.post("/addfav", {
       email,
-      pet: JSON.stringify(pet)
+      pet
     });
-  } catch (err) {}
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const removefav = (dispatch) => async ({ email, petid }) => {

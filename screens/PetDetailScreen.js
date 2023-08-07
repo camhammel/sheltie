@@ -78,7 +78,8 @@ const PetDetailScreen = ({ route, navigation }) => {
 
   useLayoutEffect(() => {
     (async () => {
-      setFavourited(await checkfav({ email, petid: id }));
+      if (email && id)
+        setFavourited(await checkfav({ email, petid: id }));
     })();
   }, [email]);
 
@@ -194,10 +195,10 @@ const PetDetailScreen = ({ route, navigation }) => {
                   onPress={() => {
                     if (guest !== "true") {
                       const { id, name, breeds, photos: allPhotos } = results;
-                      const photos = { small: [allPhotos.small[0]] }
+                      const photos = [{ small: allPhotos[0].small }]
                       {
                         favourited
-                          ? removefav({ email, petid: results.id })
+                          ? removefav({ email, petid: id })
                           : addfav({ email, pet: { id, name, breeds, photos } });
                       }
                       setFavourited(!favourited);

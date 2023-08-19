@@ -16,7 +16,7 @@ export default {
   ],
   ios: {
     bundleIdentifier: "app.sheltie",
-    buildNumber: "1.2.5",
+    buildNumber: "1.3.0",
     supportsTablet: false,
     splash: {
       image: "./assets/splash.png",
@@ -35,7 +35,7 @@ export default {
   },
   android: {
     package: "app.sheltie",
-    versionCode: 16,
+    versionCode: 17,
     permissions: [
       "ACCESS_COARSE_LOCATION"
     ],
@@ -80,7 +80,7 @@ export default {
     PETFINDER_KEY: process.env.PETFINDER_KEY,
     PETFINDER_SECRET: process.env.PETFINDER_SECRET
   },
-  runtimeVersion: "exposdk:47.0.0",
+  runtimeVersion: "exposdk:48.0.6",
   plugins: [
     [
       "expo-updates",

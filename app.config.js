@@ -2,7 +2,7 @@ export default {
   name: "Sheltie",
   slug: "sheltie-app",
   owner: "camhammel",
-  version: "1.2.4",
+  version: "1.2.5",
   orientation: "portrait",
   icon: "./assets/appIcon.png",
   primaryColor: "#3F77B9",
@@ -16,7 +16,7 @@ export default {
   ],
   ios: {
     bundleIdentifier: "app.sheltie",
-    buildNumber: "1.3.0",
+    buildNumber: "1.3.1",
     supportsTablet: false,
     splash: {
       image: "./assets/splash.png",
@@ -35,7 +35,7 @@ export default {
   },
   android: {
     package: "app.sheltie",
-    versionCode: 17,
+    versionCode: 18,
     permissions: [
       "ACCESS_COARSE_LOCATION"
     ],

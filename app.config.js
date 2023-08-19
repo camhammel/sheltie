@@ -16,7 +16,7 @@ export default {
   ],
   ios: {
     bundleIdentifier: "app.sheltie",
-    buildNumber: "1.3.1",
+    buildNumber: "1.2.5",
     supportsTablet: false,
     splash: {
       image: "./assets/splash.png",

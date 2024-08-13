@@ -59,9 +59,9 @@ PODS:
   - glog (0.3.5)
   - hermes-engine (0.70.8)
   - libevent (2.1.12)
-  - MMKV (1.3.0):
-    - MMKVCore (~> 1.3.0)
-  - MMKVCore (1.3.0)
+  - MMKV (1.3.9):
+    - MMKVCore (~> 1.3.9)
+  - MMKVCore (1.3.9)
   - RCT-Folly (2021.07.22.00):
     - boost
     - DoubleConversion
@@ -643,8 +643,8 @@ SPEC CHECKSUMS:
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: 0b19f33a9c2ec1dbdede3232606eeb1101db4cec
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MMKV: 9c6c3fa4ddd849f28c7b9a5c9d23aab84f14ee35
-  MMKVCore: 9bb7440b170181ac5b81f542ac258103542e693d
+  MMKV: 817ba1eea17421547e01e087285606eb270a8dcb
+  MMKVCore: af055b00e27d88cd92fad301c5fecd1ff9b26dd9
   RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
   RCTRequired: 35a7977a5a3cb2d3830c3fef7352b7b116115829
   RCTTypeSafety: 259790fb8b16c94e57e0d3d1e2479e69a2b93f50
@@ -686,4 +686,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 3eae00d38db0449525afabdc237db608d3ac4470
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.12.0

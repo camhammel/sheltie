@@ -26,7 +26,7 @@ const clearErrorMessage = (dispatch) => () => {
 
 const updatePassword = (dispatch) => async ({ email, password }) => {
   try {
-    await sheltieApi.post("/resetpassword", {
+    await sheltieApi.post("resetpassword", {
       email: email.toString().toLowerCase(),
       password: password,
     });
@@ -42,7 +42,7 @@ const sendCodeToEmail = (dispatch) => async (email) => {
   await SecureStore.setItemAsync("fpcode", prng);
 
   try {
-    await sheltieApi.post("/sendEmailCode", {
+    await sheltieApi.post("sendEmailCode", {
       email: email.toString().toLowerCase(),
       code: prng,
     });
@@ -54,7 +54,7 @@ const sendCodeToEmail = (dispatch) => async (email) => {
 
 const emailExists = (dispatch) => async (email) => {
   try {
-    await sheltieApi.post("/getfavourites", {
+    await sheltieApi.post("getfavourites", {
       email: email.toString().toLowerCase(),
     });
 
@@ -81,7 +81,7 @@ const tryLocalSignin = (dispatch) => () => {
 const signup = (dispatch) => async ({ email, password }) => {
   //make API request to sign-up with that email and password
   try {
-    const response = await sheltieApi.post("/signup", { email, password });
+    const response = await sheltieApi.post("signup", { email, password });
     if (response.data.token) {
       storage.set("authtoken", response.data.token);
       storage.set("email", email);
@@ -106,7 +106,7 @@ const signup = (dispatch) => async ({ email, password }) => {
 
 const signin = (dispatch) => async ({ email, password }) => {
   try {
-    const response = await sheltieApi.post("/signin", { email, password });
+    const response = await sheltieApi.post("signin", { email, password });
     if (response.data.token) {
       storage.set("authtoken", response.data.token);
       storage.set("email", email);
@@ -132,7 +132,7 @@ const signout = (dispatch) => () => {
 
 const getfavs = (dispatch) => async (email) => {
   try {
-    const response = await sheltieApi.get("/getfavourites", {
+    const response = await sheltieApi.get("getfavourites", {
       params: {
         email
       }
@@ -148,7 +148,7 @@ const getfavs = (dispatch) => async (email) => {
 
 const checkfav = (dispatch) => async ({ email, petid }) => {
   try {
-    const response = await sheltieApi.get("/getfavourites", {
+    const response = await sheltieApi.get("getfavourites", {
       params: {
         email
       }
@@ -166,7 +166,7 @@ const checkfav = (dispatch) => async ({ email, petid }) => {
 
 const addfav = (dispatch) => async ({ email, pet }) => {
   try {
-    await sheltieApi.post("/addfav", {
+    await sheltieApi.post("addfav", {
       email,
       pet
     });
@@ -177,7 +177,7 @@ const addfav = (dispatch) => async ({ email, pet }) => {
 
 const removefav = (dispatch) => async ({ email, petid }) => {
   try {
-    const response = await sheltieApi.post("/removefav", {
+    const response = await sheltieApi.post("removefav", {
       email: email,
       petid: petid,
     });

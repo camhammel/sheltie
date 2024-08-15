@@ -39,7 +39,7 @@ const ShelterInfo = ({ organization_id, pet_name }) => {
 
   const getShelterDetails = async () => {
     petfinder
-      .get(`organizations/${organization_id}`)
+      .get(`petfinder/organizations/${organization_id}`)
       .then((response) => {
         if (isSubscribed) {
           setShelter(response.data.organization);

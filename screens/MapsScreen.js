@@ -43,7 +43,7 @@ const MapsScreen = ({ route }) => {
 
   const searchShelters = async () => {
     petfinder
-      .get(`organizations?location=${lat},${long}&limit=5&sort=distance`)
+      .get(`petfinder/organizations?location=${lat},${long}&limit=5&sort=distance`)
       .then((response) => {
         if (response.data.organizations) {
           setResults(response.data.organizations);

@@ -25,7 +25,7 @@ export default SearchModal = (props) => {
     const [breedOptions, setBreedOptions] = useState([]);
 
     const getBreedOptions = (type = 'dog') => {
-        var breedSearch = `types/${type}/breeds`;
+        var breedSearch = `petfinder/types/${type}/breeds`;
         return petfinder.get(breedSearch)
           .then((response) => {
             return (response?.data?.breeds?.map((breed) => ({

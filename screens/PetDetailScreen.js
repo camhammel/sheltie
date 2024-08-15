@@ -86,12 +86,13 @@ const PetDetailScreen = ({ route, navigation }) => {
   const { data: results, isLoading } = useQuery({
     queryKey: ['getPet', id],
     queryFn: () => petfinder
-      .get(`animals/${id}`)
+      .get(`petfinder/animals/${id}`)
       .then((response) => response.data.animal)
       .catch((error) => error)
   });
 
   useEffect(() => {
+    console.log('results', results);
     updateHeader(results?.name);
   }, [results])
 
@@ -138,11 +139,12 @@ const PetDetailScreen = ({ route, navigation }) => {
 
   return (
     <View>
-      {results ? (
+      {results && results !== undefined ? (
         <ScrollView
           showsVerticalScrollIndicator={false}
           backgroundColor="white"
         >
+          {results.photos?.length > 0 && (
           <View style={{ backgroundColor: COLORS.white }}>
             <Carousel
               sliderWidth={screenWidth}
@@ -164,6 +166,7 @@ const PetDetailScreen = ({ route, navigation }) => {
               containerStyle={{ paddingVertical: 0, paddingTop: 20 }}
             />
           </View>
+          )}
           <View>
             <View
               style={{
@@ -240,7 +243,7 @@ const PetDetailScreen = ({ route, navigation }) => {
                 style={{ marginLeft: 15, alignSelf: "center" }}
               />
               <Text style={{ fontSize: 20, marginLeft: 8 }}>
-                {results.breeds.primary} {results.breeds.mixed ? "Mix" : null}
+                {results.breeds?.primary} {results.breeds?.mixed ? "Mix" : null}
               </Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
@@ -251,7 +254,7 @@ const PetDetailScreen = ({ route, navigation }) => {
                 style={{ marginLeft: 15, alignSelf: "center" }}
               />
               <Text style={{ fontSize: 20, marginLeft: 5 }}>
-                {results.contact.address.city}, {results.contact.address.state}
+                {results.contact?.address.city}, {results.contact?.address.state}
               </Text>
             </View>
             <TagComponent tags={results.tags} />
@@ -294,17 +297,17 @@ const PetDetailScreen = ({ route, navigation }) => {
             </Text>
             <Attribute type="size" value={results.size} />
             <Attribute type="age" value={results.age} />
-            <Attribute type="declawed" value={results.attributes.declawed} />
+            <Attribute type="declawed" value={results.attributes?.declawed} />
             <Attribute
               type="spayed"
-              value={results.attributes.spayed_neutered}
+              value={results.attributes?.spayed_neutered}
               gender={results.gender}
             />
             <Attribute
               type="house_trained"
-              value={results.attributes.house_trained}
+              value={results.attributes?.house_trained}
             />
-            <Attribute type="shots" value={results.attributes.shots_current} />
+            <Attribute type="shots" value={results.attributes?.shots_current} />
             <ShelterInfo
               organization_id={results.organization_id}
               pet_name={results.name}

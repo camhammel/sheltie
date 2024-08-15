@@ -71,6 +71,7 @@ const ListScreen = ({ navigation }) => {
       if (data?.pages?.[0].data?.animals) {
         storage.set('lastresults', JSON.stringify(data));
         storage.set('lastsearch', JSON.stringify(searchFilters));
+        console.log("Results: ", data.pages[0].data.animals[0]?.id);
       }
     },
     enabled: !!searchFilters.location && !!searchFilters.location.latitude

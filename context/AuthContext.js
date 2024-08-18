@@ -3,7 +3,7 @@ import sheltieApi from "../api/sheltie";
 import * as RootNavigation from "../navigationRef";
 import * as SecureStore from "expo-secure-store";
 import { storage } from "../utils/storage";
-import _uniqBy from 'lodash/uniqBy'
+import _uniqBy from "lodash/uniqBy";
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -24,17 +24,19 @@ const clearErrorMessage = (dispatch) => () => {
   dispatch({ type: "clear_error_message", payload: "" });
 };
 
-const updatePassword = (dispatch) => async ({ email, password }) => {
-  try {
-    await sheltieApi.post("resetpassword", {
-      email: email.toString().toLowerCase(),
-      password: password,
-    });
-    return true;
-  } catch (err) {
-    return false;
-  }
-};
+const updatePassword =
+  (dispatch) =>
+  async ({ email, password }) => {
+    try {
+      await sheltieApi.post("resetpassword", {
+        email: email.toString().toLowerCase(),
+        password: password,
+      });
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
 
 const sendCodeToEmail = (dispatch) => async (email) => {
   let prng = Math.random();
@@ -54,7 +56,7 @@ const sendCodeToEmail = (dispatch) => async (email) => {
 
 const emailExists = (dispatch) => async (email) => {
   try {
-    await sheltieApi.post("getfavourites", {
+    await sheltieApi.get("getfavourites", {
       email: email.toString().toLowerCase(),
     });
 
@@ -78,51 +80,55 @@ const tryLocalSignin = (dispatch) => () => {
   }
 };
 
-const signup = (dispatch) => async ({ email, password }) => {
-  //make API request to sign-up with that email and password
-  try {
-    const response = await sheltieApi.post("signup", { email, password });
-    if (response.data.token) {
-      storage.set("authtoken", response.data.token);
-      storage.set("email", email);
-      storage.set("guest", false);
-      dispatch({
-        type: "signin",
-        payload: response.data.token,
-      });
-      RootNavigation.reset("List");
-    } else {
-      console.error('could not complete sign up.');
+const signup =
+  (dispatch) =>
+  async ({ email, password }) => {
+    //make API request to sign-up with that email and password
+    try {
+      const response = await sheltieApi.post("signup", { email, password });
+      if (response.data.token) {
+        storage.set("authtoken", response.data.token);
+        storage.set("email", email);
+        storage.set("guest", false);
+        dispatch({
+          type: "signin",
+          payload: response.data.token,
+        });
+        RootNavigation.reset("List");
+      } else {
+        console.error("could not complete sign up.");
+      }
+    } catch (err) {
+      if (err.message == "Request failed with status code 422") {
+        dispatch({
+          type: "add_error",
+          payload: "That email is already in use.",
+        });
+      }
     }
-  } catch (err) {
-    if (err.message == "Request failed with status code 422") {
+  };
+
+const signin =
+  (dispatch) =>
+  async ({ email, password }) => {
+    try {
+      const response = await sheltieApi.post("signin", { email, password });
+      if (response.data.token) {
+        storage.set("authtoken", response.data.token);
+        storage.set("email", email);
+        storage.set("guest", false);
+        dispatch({ type: "signin", payload: response.data.token });
+        RootNavigation.reset("List");
+      } else {
+        console.error("could not complete sign in.");
+      }
+    } catch (err) {
       dispatch({
         type: "add_error",
-        payload: "That email is already in use.",
+        payload: "Something went wrong during signin.",
       });
     }
-  }
-};
-
-const signin = (dispatch) => async ({ email, password }) => {
-  try {
-    const response = await sheltieApi.post("signin", { email, password });
-    if (response.data.token) {
-      storage.set("authtoken", response.data.token);
-      storage.set("email", email);
-      storage.set("guest", false);
-      dispatch({ type: "signin", payload: response.data.token });
-      RootNavigation.reset("List");
-    } else {
-      console.error('could not complete sign in.');
-    }
-  } catch (err) {
-    dispatch({
-      type: "add_error",
-      payload: "Something went wrong during signin.",
-    });
-  }
-};
+  };
 
 const signout = (dispatch) => () => {
   storage.clearAll();
@@ -134,62 +140,68 @@ const getfavs = (dispatch) => async (email) => {
   try {
     const response = await sheltieApi.get("getfavourites", {
       params: {
-        email
-      }
+        email,
+      },
     });
     if (response.data) {
-      storage.set("favourites", JSON.stringify(_uniqBy(response.data, ({ id }) => id)));
+      storage.set(
+        "favourites",
+        JSON.stringify(_uniqBy(response.data, ({ id }) => id))
+      );
       RootNavigation.navigate("Favourites");
     }
   } catch (err) {
-    console.error('err', err);
+    console.error("err", err);
   }
-};  
+};
 
-const checkfav = (dispatch) => async ({ email, petid }) => {
-  try {
-    const response = await sheltieApi.get("getfavourites", {
-      params: {
-        email
+const checkfav =
+  (dispatch) =>
+  async ({ email, petid }) => {
+    try {
+      const response = await sheltieApi.get("getfavourites", {
+        params: {
+          email,
+        },
+      });
+      if (response.data) {
+        storage.set("favourites", JSON.stringify(response.data));
+        return !!response.data.find(({ id }) => String(id) == String(petid));
+      } else {
+        return false;
       }
-    });
-    if (response.data) {    
-      storage.set("favourites", JSON.stringify(response.data));
-      return !!response.data.find(({ id }) => String(id) == String(petid))
-    } else {
-      return false;
+    } catch (err) {
+      console.error(err);
     }
-  } catch (err) {
-    console.error(err);
-  }
-};
+  };
 
-const addfav = (dispatch) => async ({ email, pet }) => {
-  try {
-    await sheltieApi.post("addfav", {
-      email,
-      pet
-    });
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-const removefav = (dispatch) => async ({ email, petid }) => {
-  try {
-    const response = await sheltieApi.post("removefav", {
-      email: email,
-      petid: petid,
-    });
-
-    if (response.data.favourites) {
-      storage.set(
-        "favourites",
-        JSON.stringify(response.data.favourites)
-      );
+const addfav =
+  (dispatch) =>
+  async ({ email, pet }) => {
+    try {
+      await sheltieApi.post("addfav", {
+        email,
+        pet,
+      });
+    } catch (err) {
+      console.error(err);
     }
-  } catch (err) {}
-};
+  };
+
+const removefav =
+  (dispatch) =>
+  async ({ email, petid }) => {
+    try {
+      const response = await sheltieApi.post("removefav", {
+        email: email,
+        petid: petid,
+      });
+
+      if (response.data.favourites) {
+        storage.set("favourites", JSON.stringify(response.data.favourites));
+      }
+    } catch (err) {}
+  };
 
 export const { Provider, Context } = createDataContext(
   authReducer,

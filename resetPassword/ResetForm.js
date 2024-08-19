@@ -12,7 +12,7 @@ const resetSchema = yup.object({
 });
 
 const ResetForm = ({ switchStage, setEmail }) => {
-  const { emailExists, sendCodeToEmail } = useContext(AuthContext);
+  const { sendCodeToEmail } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState("");
 
   return (
@@ -21,15 +21,14 @@ const ResetForm = ({ switchStage, setEmail }) => {
       onSubmit={(values) => {
         setEmail(values.email);
         (async () => {
-          let result = await emailExists(values.email.toString().toLowerCase());
-          if (result == true) {
+          try {
+            await sendCodeToEmail(values.email.toString().toLowerCase());
             setErrorMessage("");
-            if (sendCodeToEmail(values.email.toString().toLowerCase()))
-              switchStage();
-            else {
+            switchStage();
+          } catch (e) {
+            if (e.response.status == 404 || e.response.status == 401) {
+              setErrorMessage("Email not found");
             }
-          } else {
-            setErrorMessage("Sorry, that email doesn't exist.");
           }
         })();
       }}

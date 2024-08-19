@@ -54,20 +54,6 @@ const sendCodeToEmail = (dispatch) => async (email) => {
   }
 };
 
-const emailExists = (dispatch) => async (email) => {
-  try {
-    await sheltieApi.get("getfavourites", {
-      email: email.toString().toLowerCase(),
-    });
-
-    return true;
-  } catch (err) {
-    storage.set("fpcode", null);
-
-    return false;
-  }
-};
-
 const tryLocalSignin = (dispatch) => () => {
   const token = storage.getString("authtoken");
 
@@ -215,7 +201,6 @@ export const { Provider, Context } = createDataContext(
     addfav,
     removefav,
     checkfav,
-    emailExists,
     sendCodeToEmail,
     updatePassword,
   },

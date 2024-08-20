@@ -27,13 +27,13 @@ import { Context } from "../context/AuthContext";
 import ShelterInfo from "../components/ShelterInfo";
 import { navigationRef } from "../navigationRef";
 import { storage } from "../utils/storage";
-import { HeaderBackButton } from '@react-navigation/elements';
+import { HeaderBackButton } from "@react-navigation/elements";
 import { useQuery } from "@tanstack/react-query";
 import AppSkeleton from "../components/Skeleton";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 
-function capitalizeFirstLetter(string = '') {
+function capitalizeFirstLetter(string = "") {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
@@ -51,20 +51,22 @@ const PetDetailScreen = ({ route, navigation }) => {
         navigation.setOptions({
           headerTitleStyle: { color: "transparent" },
           headerLeft: (props) => (
-            <HeaderBackButton 
+            <HeaderBackButton
               {...props}
               label="Back"
-              onPress={()=> navigation.reset({
-                index: 0,
-                routes: [{ name: 'List' }],
-              })}
+              onPress={() =>
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "List" }],
+                })
+              }
             />
-          ) 
+          ),
         });
       } else {
         navigation.setOptions({
           headerTitleStyle: { color: "transparent" },
-          headerBackTitle: "Back"
+          headerBackTitle: "Back",
         });
       }
       if (storage.getBoolean("guest")) {
@@ -78,25 +80,35 @@ const PetDetailScreen = ({ route, navigation }) => {
 
   useLayoutEffect(() => {
     (async () => {
-      if (email && id)
-        setFavourited(await checkfav({ email, petid: id }));
+      if (email && id) setFavourited(await checkfav({ email, petid: id }));
     })();
   }, [email]);
 
-  const { data: results, isLoading } = useQuery({
-    queryKey: ['getPet', id],
-    queryFn: () => petfinder
-      .get(`petfinder/animals/${id}`)
-      .then((response) => response.data.animal)
-      .catch((error) => error)
+  const { data: results, isError } = useQuery({
+    queryKey: ["getPet", id],
+    queryFn: () => petfinder.get(`petfinder/animals/${id}`),
+    select: (data) => data?.animal,
   });
 
   useEffect(() => {
-    console.log('results', results);
     updateHeader(results?.name);
-  }, [results])
+  }, [results]);
 
-  const updateHeader = (name = '') => {
+  useEffect(() => {
+    if (isError) {
+      handleFetchPetError();
+    }
+  }, [isError]);
+
+  async function handleFetchPetError() {
+    Alert.alert(
+      "Error",
+      "Failed to fetch pet details. This pet may no longer be available."
+    );
+    await navigation.navigate("List");
+  }
+
+  const updateHeader = (name = "") => {
     navigation.setOptions({
       headerTitle: capitalizeFirstLetter(name.toLowerCase()),
       headerTitleStyle: {
@@ -107,14 +119,17 @@ const PetDetailScreen = ({ route, navigation }) => {
         paddingHorizontal: 15,
       },
     });
-  }
+  };
 
   const onShare = async () => {
     try {
       await Share.share({
         message: `I was browsing Sheltie and found ${results.name}!`,
         title: `Meet ${results.name}`,
-        url: Platform.OS === "ios" ? `https://sheltie.app/pet/${results.id}` : undefined,
+        url:
+          Platform.OS === "ios"
+            ? `https://sheltie.app/pet/${results.id}`
+            : undefined,
       });
     } catch (error) {
       alert(error.message);
@@ -145,27 +160,27 @@ const PetDetailScreen = ({ route, navigation }) => {
           backgroundColor="white"
         >
           {results.photos?.length > 0 && (
-          <View style={{ backgroundColor: COLORS.white }}>
-            <Carousel
-              sliderWidth={screenWidth}
-              sliderHeight={screenWidth}
-              itemWidth={screenWidth - 60}
-              data={results.photos}
-              renderItem={renderItem}
-              hasParallaxImages={true}
-              pagingEnabled={true}
-              onSnapToItem={(index) => setPage(index)}
-            />
-            <Pagination
-              dotsLength={results.photos.length}
-              activeDotIndex={page}
-              inactiveDotColor={COLORS.primarylight}
-              dotColor={COLORS.primary}
-              inactiveDotOpacity={0.4}
-              inactiveDotScale={0.6}
-              containerStyle={{ paddingVertical: 0, paddingTop: 20 }}
-            />
-          </View>
+            <View style={{ backgroundColor: COLORS.white }}>
+              <Carousel
+                sliderWidth={screenWidth}
+                sliderHeight={screenWidth}
+                itemWidth={screenWidth - 60}
+                data={results.photos}
+                renderItem={renderItem}
+                hasParallaxImages={true}
+                pagingEnabled={true}
+                onSnapToItem={(index) => setPage(index)}
+              />
+              <Pagination
+                dotsLength={results.photos.length}
+                activeDotIndex={page}
+                inactiveDotColor={COLORS.primarylight}
+                dotColor={COLORS.primary}
+                inactiveDotOpacity={0.4}
+                inactiveDotScale={0.6}
+                containerStyle={{ paddingVertical: 0, paddingTop: 20 }}
+              />
+            </View>
           )}
           <View>
             <View
@@ -198,11 +213,14 @@ const PetDetailScreen = ({ route, navigation }) => {
                   onPress={() => {
                     if (guest !== "true") {
                       const { id, name, breeds, photos: allPhotos } = results;
-                      const photos = [{ small: allPhotos[0].small }]
+                      const photos = [{ small: allPhotos[0].small }];
                       {
                         favourited
                           ? removefav({ email, petid: id })
-                          : addfav({ email, pet: { id, name, breeds, photos } });
+                          : addfav({
+                              email,
+                              pet: { id, name, breeds, photos },
+                            });
                       }
                       setFavourited(!favourited);
                     } else {
@@ -254,7 +272,8 @@ const PetDetailScreen = ({ route, navigation }) => {
                 style={{ marginLeft: 15, alignSelf: "center" }}
               />
               <Text style={{ fontSize: 20, marginLeft: 5 }}>
-                {results.contact?.address.city}, {results.contact?.address.state}
+                {results.contact?.address.city},{" "}
+                {results.contact?.address.state}
               </Text>
             </View>
             <TagComponent tags={results.tags} />
@@ -315,23 +334,35 @@ const PetDetailScreen = ({ route, navigation }) => {
             <View style={{ marginBottom: 40 }} />
           </View>
         </ScrollView>
-      )
-      : (
-        <View style={{ margin: 16, maxHeight: '100%' }}>
+      ) : (
+        <View style={{ margin: 16, maxHeight: "100%" }}>
           <View style={{ marginHorizontal: 16 }}>
-            <AppSkeleton height={styles.item.height + 60} style={{ borderRadius: 16 }} />
+            <AppSkeleton
+              height={styles.item.height + 60}
+              style={{ borderRadius: 16 }}
+            />
           </View>
-          <AppSkeleton height={8} width='50%' style={{ alignSelf: 'center', marginTop: 8 }} />
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 32 }}>
-            <AppSkeleton height={48} width='60%' />
-            <AppSkeleton height={48} width='20%' />
+          <AppSkeleton
+            height={8}
+            width="50%"
+            style={{ alignSelf: "center", marginTop: 8 }}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "100%",
+              marginTop: 32,
+            }}
+          >
+            <AppSkeleton height={48} width="60%" />
+            <AppSkeleton height={48} width="20%" />
           </View>
-          <AppSkeleton height={24} width='60%' style={{ marginTop: 8 }} />
-          <AppSkeleton height={24} width='40%' style={{ marginTop: 8 }} />
-          <AppSkeleton height='100%' width='100%' style={{ marginTop: 16 }} />
+          <AppSkeleton height={24} width="60%" style={{ marginTop: 8 }} />
+          <AppSkeleton height={24} width="40%" style={{ marginTop: 8 }} />
+          <AppSkeleton height="100%" width="100%" style={{ marginTop: 16 }} />
         </View>
-      )
-    }
+      )}
     </View>
   );
   //}

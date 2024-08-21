@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  View,
-  StyleSheet,
-  Alert,
-} from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import { Text } from "react-native-elements";
-import _uniqBy from 'lodash/uniqBy';
-import * as Location from 'expo-location';
-import { storage } from '../utils/storage';
+import _uniqBy from "lodash/uniqBy";
+import * as Location from "expo-location";
+import { storage } from "../utils/storage";
 import ListComponent from "../components/ListComponent";
 import SearchModal from "../components/SearchModal";
 import SearchHeader from "../components/SearchHeader";
@@ -21,9 +17,9 @@ const ListScreen = ({ navigation }) => {
   const [searchFilters, setSearchFilters] = useState({
     distance: 150,
     age: [],
-    type: 'Dog',
+    type: "Dog",
     breed: [],
-    location: null
+    location: null,
   });
   const [pagination, setPagination] = useState({
     count_per_page: 20,
@@ -42,11 +38,19 @@ const ListScreen = ({ navigation }) => {
       }
 
       let location2 = await Location.getCurrentPositionAsync({});
-      if(location2) {
-        setGpsLocation({ latitude: location2.coords.latitude, longitude: location2.coords.longitude });
-        setSearchFilters((prevFilters) => ( { ...prevFilters, location: { latitude: location2.coords.latitude, longitude: location2.coords.longitude } }));
+      if (location2) {
+        setGpsLocation({
+          latitude: location2.coords.latitude,
+          longitude: location2.coords.longitude,
+        });
+        setSearchFilters((prevFilters) => ({
+          ...prevFilters,
+          location: {
+            latitude: location2.coords.latitude,
+            longitude: location2.coords.longitude,
+          },
+        }));
       }
-      
     })();
   }, []);
 
@@ -54,27 +58,34 @@ const ListScreen = ({ navigation }) => {
     filters.location = await resolveCoords(gpsLocation, filters.customLocation);
     setSearchFilters(filters);
     setModalVisible(false);
-  }
+  };
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
-  const { data: results, isLoading, refetch, fetchNextPage } = useInfiniteQuery({ 
-    queryKey: ['getPets', searchFilters], 
+  const {
+    data: results,
+    isLoading,
+    refetch,
+    fetchNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["getPets", searchFilters],
     queryFn: ({ pageParam = 1 }) => searchApi({ pageParam, ...searchFilters }),
-    getNextPageParam: (lastPage) => (lastPage?.data?.pagination?.current_page + 1) || 1,
-    placeholderData: (() => {
-      return storage.getString("lastresults") ? (JSON.parse(storage.getString("lastresults"))) : null
-    }),
+    getNextPageParam: (lastPage) =>
+      lastPage?.data?.pagination?.current_page + 1 || 1,
+    placeholderData: () => {
+      return storage.getString("lastresults")
+        ? JSON.parse(storage.getString("lastresults"))
+        : null;
+    },
     onSuccess: (data) => {
       if (data?.pages?.[0].data?.animals) {
-        storage.set('lastresults', JSON.stringify(data));
-        storage.set('lastsearch', JSON.stringify(searchFilters));
-        console.log("Results: ", data.pages[0].data.animals[0]?.id);
+        storage.set("lastresults", JSON.stringify(data));
+        storage.set("lastsearch", JSON.stringify(searchFilters));
       }
     },
-    enabled: !!searchFilters.location && !!searchFilters.location.latitude
+    enabled: !!searchFilters.location && !!searchFilters.location.latitude,
   });
 
   useEffect(() => {
@@ -88,13 +99,13 @@ const ListScreen = ({ navigation }) => {
     if (results?.pages?.[0]?.data?.animals) {
       const relevantData = results.pages.map((page) => page?.data?.animals);
       setPagination(results.pages[results.pages.length - 1].data?.pagination);
-      setAnimals(_uniqBy(relevantData.flat(1), 'id'));
+      setAnimals(_uniqBy(relevantData.flat(1), "id"));
     }
-  }, [results])
+  }, [results]);
 
   const setFiltersFromStorage = () => {
     let temp2 = JSON.parse(storage.getString("lastsearch"));
-    if ((temp2) != null) {
+    if (temp2 != null) {
       setCustomLocation(temp2.location);
       setAge(temp2.age);
       setDistance(temp2.distance);
@@ -110,7 +121,7 @@ const ListScreen = ({ navigation }) => {
         );
       }, 750);
     }
-  }
+  };
 
   return (
     <View style={{ justifyContent: "flex-start", flex: 1, borderWidth: 0 }}>
@@ -130,9 +141,13 @@ const ListScreen = ({ navigation }) => {
         />
       </View>
       <View style={{ flex: 1 }}>
-        {isLoading 
-        ? <Text style={styles.resultStyle}>Loading...</Text>
-        : <Text style={styles.resultStyle}>{pagination.total_count} results</Text>}
+        {isLoading ? (
+          <Text style={styles.resultStyle}>Loading...</Text>
+        ) : (
+          <Text style={styles.resultStyle}>
+            {pagination.total_count} results
+          </Text>
+        )}
         <ListComponent
           results={animals}
           hasMoreResults={pagination.current_page < pagination.total_pages}

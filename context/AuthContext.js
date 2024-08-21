@@ -122,24 +122,23 @@ const signout = (dispatch) => () => {
   RootNavigation.reset("Signin");
 };
 
-const getfavs = (dispatch) => async (email) => {
-  try {
-    const response = await sheltieApi.get("getfavourites", {
-      params: {
-        email,
-      },
-    });
-    if (response.data) {
-      storage.set(
-        "favourites",
-        JSON.stringify(_uniqBy(response.data, ({ id }) => id))
-      );
-      RootNavigation.navigate("Favourites");
+const getfavs =
+  (dispatch) =>
+  async (email, shouldNavigate = true) => {
+    try {
+      const response = await sheltieApi.get("getfavourites", {
+        params: {
+          email,
+        },
+      });
+      if (response.data) {
+        storage.set("favourites", JSON.stringify(_uniqBy(response.data, "id")));
+        if (shouldNavigate) RootNavigation.navigate("Favourites");
+      }
+    } catch (err) {
+      console.error("err", err);
     }
-  } catch (err) {
-    console.error("err", err);
-  }
-};
+  };
 
 const checkfav =
   (dispatch) =>
@@ -164,45 +163,59 @@ const checkfav =
 const addfav =
   (dispatch) =>
   async ({ email, pet }) => {
+    const token = storage.getString("authtoken");
     try {
-      await sheltieApi.post("addfav", {
-        email,
-        pet,
-      });
+      await sheltieApi.post(
+        "addfav",
+        {
+          email,
+          pet,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "*/*",
+          },
+        }
+      );
     } catch (err) {
-      console.error(err);
+      console.error(err.toString());
     }
   };
 
 const removefav =
   (dispatch) =>
   async ({ email, petid }) => {
+    const token = storage.getString("authtoken");
     try {
-      const response = await sheltieApi.post("removefav", {
-        email: email,
-        petid: petid,
-      });
+      const response = await sheltieApi.post(
+        "removefav",
+        {
+          email,
+          petid,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-      if (response.data.favourites) {
+      if (response.data?.favourites) {
         storage.set("favourites", JSON.stringify(response.data.favourites));
       }
-    } catch (err) {}
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-export const { Provider, Context } = createDataContext(
-  authReducer,
-  {
-    signup,
-    signin,
-    signout,
-    clearErrorMessage,
-    tryLocalSignin,
-    getfavs,
-    addfav,
-    removefav,
-    checkfav,
-    sendCodeToEmail,
-    updatePassword,
-  },
-  { authToken: null, errorMessage: "" }
-);
+export const { Provider, Context } = createDataContext(authReducer, {
+  signup,
+  signin,
+  signout,
+  clearErrorMessage,
+  tryLocalSignin,
+  getfavs,
+  addfav,
+  removefav,
+  checkfav,
+  sendCodeToEmail,
+  updatePassword,
+});

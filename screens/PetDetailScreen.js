@@ -84,10 +84,17 @@ const PetDetailScreen = ({ route, navigation }) => {
     })();
   }, [email]);
 
-  const { data: results, isError } = useQuery({
+  const {
+    data: results,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ["getPet", id],
     queryFn: () => petfinder.get(`petfinder/animals/${id}`),
-    select: (data) => data?.animal,
+    select: (data) => {
+      return data?.data?.animal;
+    },
+    enabled: !!id,
   });
 
   useEffect(() => {
@@ -101,6 +108,7 @@ const PetDetailScreen = ({ route, navigation }) => {
   }, [isError]);
 
   async function handleFetchPetError() {
+    console.error("Failed to fetch pet details", error);
     Alert.alert(
       "Error",
       "Failed to fetch pet details. This pet may no longer be available."
